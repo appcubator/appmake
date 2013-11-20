@@ -1,7 +1,15 @@
-var mustache = require('mustache');
+/* Takes the final app data representation and renders it out to templates. */
+var mustache = require('mustache'),
+    path = require('path'),
+    fs = require('fs');
+
+templates = {
+    routes : new EJS({url: '/templates/routes.js.template'})
+  , appjs : fs.readFileSync(path.join(__dirname, 'templates/app.js'))
+};
 
 // packages.json
-exports.packages = function(packages) { return "this is packages.json" };
+exports.packages = function(packages) { return JSON.stringify(packages, null, 4); };
 
 // the js code for a mongoose model
 exports.modeljs = function(model) { return "// schema, staticmethods, instancemethods" };
@@ -16,7 +24,7 @@ exports.css = function(css) { return "body { background-color: red }" };
 exports.template = function(template) { return "<p>This is a sample template for a page</p>" };
 
 // page rendering logic
-exports.routes = function(routes) { return "// repeat: http url, method, functions" };
+exports.routes = function(routes) { return templates.routes.render(routes); };
 
 // js code for http server and registers routes
-exports.app = function() { return "// this is app.js main code (binds routes)" };
+exports.app = function() { return templates.appjs };
