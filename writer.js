@@ -22,8 +22,22 @@ function validatefname(fname) {
 
 /* Write the app to the dirpath (pass the path) */
 function write(app, dirpath, callback) {
-    var filesToWrite = []; // [ [ filepath, content ] ]
-    var _writeFile = function(filepath, content) { filesToWrite.push([filepath, content]) };
+
+    var filesWritten = 0;
+    var filesToWrite = 0;
+    var _writeFile = function(filepath, content) {
+        filesToWrite ++;
+        mkdirp.mkdirp(path.dirname(filepath), function(err) {
+            if (err) throw err;
+            fs.writeFile(filepath, content, function(err2) {
+                if (err2) throw err2;
+                if ((filesWritten + 1) == filesToWrite) {
+                    callback();
+                }
+                filesWritten ++;
+            });
+        });
+    };
 
     // packages.json
     _writeFile(_j(dirpath, 'packages.json'), templates.packages(app.packages));
@@ -59,29 +73,6 @@ function write(app, dirpath, callback) {
 
     // app
     _writeFile(_j(dirpath, 'app.js'), templates.app());
-
-
-    var filesWritten = 0;
-    for (var i = 0; i < filesToWrite.length; i++) {
-        var _flushFile = function() {
-            var filepath = filesToWrite[i][0],
-                content = filesToWrite[i][1];
-
-            mkdirp.mkdirp(path.dirname(filepath), function(err) {
-                if (err) throw err;
-                fs.writeFile(filepath, content, function(err2) {
-                    if (err2) throw err2;
-                    if ((filesWritten + 1) == filesToWrite.length) {
-                        callback();
-                    }
-                    filesWritten ++;
-                });
-            });
-        };
-
-        _flushFile();
-    }
-
 }
 
 function writeTemp(app, cb) {
