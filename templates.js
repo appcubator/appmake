@@ -1,10 +1,10 @@
 /* Takes the final app data representation and renders it out to templates. */
-var mustache = require('mustache'),
+var ejs = require('ejs'),
     path = require('path'),
     fs = require('fs');
 
 templates = {
-    routes : new EJS({url: '/templates/routes.js.template'})
+    routes : ejs.compile({url: '/templates/routes.js.template'})
   , appjs : fs.readFileSync(path.join(__dirname, 'templates/app.js'))
 };
 
@@ -24,7 +24,7 @@ exports.css = function(css) { return "body { background-color: red }" };
 exports.template = function(template) { return "<p>This is a sample template for a page</p>" };
 
 // page rendering logic
-exports.routes = function(routes) { return templates.routes.render(routes); };
+exports.routes = function(routes) { return templates.routes(routes); };
 
 // js code for http server and registers routes
 exports.app = function() { return templates.appjs };
