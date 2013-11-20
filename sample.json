@@ -1,0 +1,12 @@
+{
+    "packages":{
+        "express":"3.4.4"
+    },
+    "modules":{
+        "custom.txt": "muahahah"
+    },
+    "models": [{"name":"Book"}],
+    "templates": [{"name":"Homepage"}],
+    "routes": [{}],
+    "css": {}
+}
