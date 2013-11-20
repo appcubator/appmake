@@ -25,13 +25,15 @@ function write(app, dirpath, callback) {
 
     var filesWritten = 0;
     var filesToWrite = 0;
-    var _writeFile = function(filepath, content) {
+    var doneDispatching = false;
+    var _writeFile = function(filepath, content, lastcall) {
         filesToWrite ++;
+        if (lastcall) doneDispatching = true;
         mkdirp.mkdirp(path.dirname(filepath), function(err) {
             if (err) throw err;
             fs.writeFile(filepath, content, function(err2) {
                 if (err2) throw err2;
-                if ((filesWritten + 1) == filesToWrite) {
+                if (doneDispatching && ((filesWritten + 1) == filesToWrite)) {
                     callback();
                 }
                 filesWritten ++;
@@ -72,7 +74,8 @@ function write(app, dirpath, callback) {
     _writeFile(_j(dirpath, 'routes.js'), templates.routes(app.routes));
 
     // app
-    _writeFile(_j(dirpath, 'app.js'), templates.app());
+    _writeFile(_j(dirpath, 'app.js'), templates.app(), true);
+
 }
 
 function writeTemp(app, cb) {
