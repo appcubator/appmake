@@ -1,0 +1,25 @@
+{
+    "packages":{
+        "express":"3.4.4",
+        "flickr":"0.1.0"
+    },
+    "modules":{
+        "custom.txt": "muahahah"
+    },
+    "models": [{ "name": "Picture",
+                 "requires": ["flickr"],
+                 "fields": {
+                     "datePicked": "Date",
+                     "url": "String"
+                     },
+                 "instancemethods": {
+                     "updateUrl": "function(newUrl, cb) {this.url = newUrl;\nthis.save(function(e, d){cb(e,d)})}"
+                     },
+                 "staticmethods": {
+                     "randomNFromFlickr": "function(searchQ, limit, cb) {var fcli = new flickr.Flickr('YOUR_CONSUMER_KEY/API_KEY', 'YOUR_CONSUMER_SECRET');\n fcli.executeAPIRequest('flickr.photos.search',{text: searchQ, per_page: limit}, false, function(e, d){cb(e, d)});}"
+                     }
+                 }],
+    "templates": [{"name":"Homepage"}],
+    "routes": [{}],
+    "css": {}
+}
