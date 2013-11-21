@@ -4,7 +4,8 @@ var ejs = require('ejs'),
     fs = require('fs');
 
 templates = {
-    routes : ejs.compile({url: '/templates/routes.js.template'})
+    routes : ejs.compile({url: '/templates/routes.js'})
+  , model : ejs.compile({url: '/templates/model.js'})
   , appjs : fs.readFileSync(path.join(__dirname, 'templates/app.js'))
 };
 
@@ -12,7 +13,7 @@ templates = {
 exports.packages = function(packages) { return JSON.stringify(packages, null, 4); };
 
 // the js code for a mongoose model
-exports.modeljs = function(model) { return "// schema, staticmethods, instancemethods" };
+exports.modeljs = function(model) { return templates.model(model); };
 
 // the client js file
 exports.js = function(models) { return "alert('helloworld');" };
