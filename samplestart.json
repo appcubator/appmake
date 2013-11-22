@@ -19,7 +19,13 @@
                      "randomNFromFlickr": "function(searchQ, limit, cb) {var fcli = new flickr.Flickr('YOUR_CONSUMER_KEY/API_KEY', 'YOUR_CONSUMER_SECRET');\n fcli.executeAPIRequest('flickr.photos.search',{text: searchQ, per_page: limit}, false, function(e, d){cb(e, d)});}"
                      }
                  }],
-    "templates": [{"name":"Homepage"}],
-    "routes": [{}],
+    "templates": [{ "name":"Homepage",
+                    "layoutStrategy":"rowcol",
+                    "uielements": [{"html": "<h1>Hello World</h1>",
+                                    "css": "/*hello css*/",
+                                    "js": "// hello js"}]}],
+    "routes": [{ "method": "GET",
+                 "pattern": "/",
+                 "code": "function (req, res) { res.send(templates['Homepage']); }"}],
     "css": {}
 }
