@@ -7,8 +7,8 @@ function bindTo(app) {
 
   <% for(var i = 0; i < routes.length; i ++) { %>
   <% var route = routes[i]; %>
-  app.<%= route.method %>(<% route.urlpattern %>, function(req, res){
-    <%= route.fncode %>
+  app.<%= route.method.toLowerCase() %>('<%= route.pattern %>', function(req, res){
+    <%= route.code %>
   });
   <% } %>
 

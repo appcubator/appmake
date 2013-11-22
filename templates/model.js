@@ -4,8 +4,8 @@ var Schema = mongoose.Schema;
 
 
 var <%= model.name %>Schema = new Schema({
-<% for(var i = 0; i < fields.length; i ++) { %>
-<% var field = fields[i]; %>
+<% for(var i = 0; i < model.fields.length; i ++) { %>
+<% var field = model.fields[i]; %>
   <%= field.name %>:  <%= field.type %>,
 <% } %>
 });
