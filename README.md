@@ -14,4 +14,8 @@ every model has an explicit list of requirements.
 
 
 
+syntax validation of code in the tree.
+code -> to the right places
+
+
 

@@ -41,8 +41,8 @@ function write(app, dirpath, callback) {
         });
     };
 
-    // packages.json
-    _writeFile(_j(dirpath, 'packages.json'), templates.packages(app.packages));
+    // package.json
+    _writeFile(_j(dirpath, 'package.json'), templates.packages(app.packages));
 
     // custom modules
     for (var filepath in app.modules) {
@@ -61,7 +61,7 @@ function write(app, dirpath, callback) {
     for (var i = 0; i < app.templates.length; i++) {
         var template = app.templates[i];
         validatefname(template.name + '.ejs');
-        _writeFile(_j(dirpath, 'templates', template.name + '.ejs'), templates.template(template, template.layoutStrategy));
+        _writeFile(_j(dirpath, 'views', template.name + '.ejs'), templates.template(template, template.layoutStrategy));
     }
 
     // css

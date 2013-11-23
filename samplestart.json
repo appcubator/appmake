@@ -26,6 +26,6 @@
                                     "js": "// hello js"}]}],
     "routes": [{ "method": "GET",
                  "pattern": "/",
-                 "code": "function (req, res) { res.send(templates['Homepage']); }"}],
+                 "code": "function (req, res) {\nres.render('Homepage.ejs');\n}"}],
     "css": {}
 }
