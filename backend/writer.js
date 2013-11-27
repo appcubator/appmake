@@ -1,13 +1,8 @@
-#!/usr/bin/env node
 var temp = require("temp"),
     path = require('path'),
     fs = require('fs'),
     mkdirp = require('mkdirp'),
     templates = require("./templates");
-
-
-// uncomment this to remove the tempfiles after writing:
-// temp.track();
 
 var _j = path.join;
 
@@ -84,17 +79,5 @@ function writeTemp(app, cb) {
     });
 }
 
-if (require.main === module) {
-    process.stdin.resume();
-
-    var jsonStrings = [];
-
-    process.stdin.on('data', function(chunk) {
-        jsonStrings.push(chunk);
-    });
-
-    process.stdin.on('end', function() {
-        var app = JSON.parse(jsonStrings.join(''));
-        writeTemp(app, function(x) { return process.stdout.write(x) });
-    });
-}
+exports.write = write;
+exports.writeTemp = writeTemp;

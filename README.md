@@ -1,21 +1,31 @@
 appmake
 =======
 
-Appstate compiler frontend and utilities.
+Turns a JSON into a web app.
 
-App state w unexpanded macros
+The format of the app JSON is documented in the wiki.
 
-every model has an explicit list of requirements.
-
-1. expansion of uielements/models into their code
-2. create routes for exposed model methods
-3. post rmi route-ification
+1. Schema is checked and warnings may be issued
+2. Code generators in the JSON are expanded
+3. Code from JSON is used to generate a nodejs web application
 
 
+The resulting web application can be easily deployed on an appcubator server.
 
 
-syntax validation of code in the tree.
-code -> to the right places
+Getting started
+---------------
 
+In an empty directory, cd and run:
+
+    appcubator make examples.flickrpics .
+
+To run,
+
+    node app.js
+
+To deploy, run the following command. Note that it will ask you to authenticate:
+
+    appcubator deploy .
 
 
