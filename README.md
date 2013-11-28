@@ -18,7 +18,7 @@ Getting started
 
 In an empty directory, cd and run:
 
-    appcubator make examples.flickrpics .
+    ./appmake.js compile examples.flickrpics .
 
 To run,
 
@@ -26,6 +26,6 @@ To run,
 
 To deploy, run the following command. Note that it will ask you to authenticate:
 
-    appcubator deploy .
+    ./appmake.js deploy .
 
 
