@@ -1,6 +1,7 @@
 var fs = require("fs"),
     path = require("path"),
-    _ = require("underscore");
+    _ = require("underscore"),
+    vm = require("vm");
 
 function loadDir(dirPath) {
     // load contents of directory into a path-content mapping
@@ -13,20 +14,21 @@ function loadDir(dirPath) {
 // pass the type, value to be the type, and locString which is just some string to help with debugging location of the error.
 function assertType(typeString, value, locString) {
     var valueType = typeof(value);
+    var errorMsg = 'Found: "' + valueType + '", expected "' + typeString + '" (' + value + ' in ' + locString + ')';
     if (valueType != typeString)
-        throw { errcode: 'TypeError', message: 'Found: "' + valueType '", expected "'+typeString+'" ('+value+' in '+locString+')' };
+        throw { errcode: 'TypeError', message: errorMsg };
 }
 // if value undefined, throws error to define the value called varName.
 function assertExists(value, varName) {
     var valueType = typeof(value);
+    var errorMsg = 'Please expose variable \'' + varName + '\'';
     if (valueType != typeof('undefined'))
-        throw { errcode: 'TypeError', message: 'Please expose variable \''+varName+'\'' };
+        throw { errcode: 'TypeError', message: errorMsg };
 }
 
 function parseModel(modelName, content) {
-    // potentially insecure: the content code could require fs module and wreak havoc.
-    // do not run untrusted code on server without proper jailing.
-    var model = eval("'use strict'; " + content + "; {fields:fields, instancemethods:instancemethods, staticmethods:staticmethods}")
+    // potentially insecure: safely running untrusted code requires a separate process.
+    var model = vm.runInNewContext("'use strict'; " + content + "; {fields:fields, instancemethods:instancemethods, staticmethods:staticmethods}");
 
     assertExists(model.fields, 'fields');
     assertExists(model.instancemethods, 'instancemethods');
@@ -65,7 +67,7 @@ function parseTemplate(templateName, content) {
         }
         var uieSlice = subContent.slice(openIndex + 5, closeIndex);
         uieStrings.push(uieSlice);
-        var subContent = subContent.slice(closeIndex + 6);
+        subContent = subContent.slice(closeIndex + 6);
         openIndex = subContent.indexOf('<uie>');
     }
 
@@ -75,12 +77,12 @@ function parseTemplate(templateName, content) {
             closeHTML = uieString.indexOf('</html>'),
             openJS = uieString.indexOf('<js>'),
             closeJS = uieString.indexOf('</js>'),
-            openJS = uieString.indexOf('<css>'),
-            closeJS = uieString.indexOf('</css>');
+            openCSS = uieString.indexOf('<css>'),
+            closeCSS = uieString.indexOf('</css>');
         var html = uieString.slice(openHTML + 6, closeHTML),
             js = uieString.slice(openJS + 4, closeJS),
             css = uieString.slice(openCSS + 5, closeCSS);
-        return {html:html, js:js, css:css}
+        return {html:html, js:js, css:css};
     }
 
     var uielements = _.map(uieStrings, parseUIEString);
@@ -89,9 +91,8 @@ function parseTemplate(templateName, content) {
 }
 
 function parseRoutes(content) {
-    // potentially insecure: the content code could require fs module and wreak havoc.
-    // do not run untrusted code on server without proper jailing.
-    var routes = eval("'use strict'; " + content + "; routes")
+    // potentially insecure: safely running untrusted code requires a separate process.
+    var routes = vm.runInNewContext("'use strict'; " + content + "; routes");
 
     assertExists(routes, 'routes');
 
