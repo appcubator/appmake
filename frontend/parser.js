@@ -16,12 +16,21 @@ function assertType(typeString, value, locString) {
     if (valueType != typeString)
         throw { errcode: 'TypeError', message: 'Found: "' + valueType '", expected "'+typeString+'" ('+value+' in '+locString+')' };
 }
+// if value undefined, throws error to define the value called varName.
+function assertExists(value, varName) {
+    var valueType = typeof(value);
+    if (valueType != typeof('undefined'))
+        throw { errcode: 'TypeError', message: 'Please expose variable \''+varName+'\'' };
+}
 
 function parseModel(modelName, content) {
     // potentially insecure: the content code could require fs module and wreak havoc.
     // do not run untrusted code on server without proper jailing.
     var model = eval("'use strict'; " + content + "; {fields:fields, instancemethods:instancemethods, staticmethods:staticmethods}")
-    // TODO validate that content exposes the right variables
+
+    assertExists(model.fields, 'fields');
+    assertExists(model.instancemethods, 'instancemethods');
+    assertExists(model.staticmethods, 'staticmethods');
 
     // validate schema of model
     for (var fieldName in model.fields) {
@@ -41,11 +50,59 @@ function parseModel(modelName, content) {
 function parseTemplate(templateName, content) {
     // TODO parse HTML/XML syntax that I have yet to decide.
     // return the list of uielements (this is assuming rowcol strategy)
+
+    // Parsing algorithm:
+    // find <uie>
+    // find </uie>
+    // take a slice, push, and search again.
+    // then parse all uielements strings into objects.
+    var subContent = content;
+    var openIndex = content.indexOf('<uie>'), closeIndex, uieStrings;
+    while (openIndex != -1) {
+        closeIndex = subContent.indexOf('</uie>');
+        if (closeIndex == -1) {
+            // TODO throw unmatched <uie> tag
+        }
+        var uieSlice = subContent.slice(openIndex + 5, closeIndex);
+        uieStrings.push(uieSlice);
+        var subContent = subContent.slice(closeIndex + 6);
+        openIndex = subContent.indexOf('<uie>');
+    }
+
+    function parseUIEString(uieString) {
+        // for now, there is a html, css, and js section. TODO layout?
+        var openHTML = uieString.indexOf('<html>'),
+            closeHTML = uieString.indexOf('</html>'),
+            openJS = uieString.indexOf('<js>'),
+            closeJS = uieString.indexOf('</js>'),
+            openJS = uieString.indexOf('<css>'),
+            closeJS = uieString.indexOf('</css>');
+        var html = uieString.slice(openHTML + 6, closeHTML),
+            js = uieString.slice(openJS + 4, closeJS),
+            css = uieString.slice(openCSS + 5, closeCSS);
+        return {html:html, js:js, css:css}
+    }
+
+    var uielements = _.map(uieStrings, parseUIEString);
+    return uielements;
+
 }
 
 function parseRoutes(content) {
-    // TODO eval and grab the routes variable.
-    // typecheck and convert functions to strings.
+    // potentially insecure: the content code could require fs module and wreak havoc.
+    // do not run untrusted code on server without proper jailing.
+    var routes = eval("'use strict'; " + content + "; routes")
+
+    assertExists(routes, 'routes');
+
+    _.each(routes, function(route, index) {
+        assertType('string', route.method, 'routes.'+index+'.method');
+        assertType('string', route.pattern, 'routes.'+index+'.pattern');
+        assertType('function', route.code, 'routes.'+index+'.code');
+        route.code = route.code.toString();
+    });
+
+    return routes;
 }
 
 function parseGenerator(generatorName, content) {
@@ -86,6 +143,7 @@ exports.parseDir = function (dirPath) {
 
     app.routes = parseRoutes(dirContents['routes.js']);
 
+    /* TODO Will implement generators after it works without it.
     app.generators = {};
     for (var generatorName in dirContents.generators) {
         if (!generatorName.endsWith('.js'))
@@ -96,7 +154,7 @@ exports.parseDir = function (dirPath) {
         // TODO validate generatorName
 
         app.generators[generatorName] = parseGenerator(generatorName, dirContents.generators[generatorName]);
-    }
+    } */
 
     // TODO figure out this CSS thing
 
