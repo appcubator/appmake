@@ -25,9 +25,9 @@
   "templates": {
     "Homepage": [
       {
-        "html": "<h1>Hello World</h1>\n    <script>\n    // hello js\n    </script>\n    <style>\n    /* hello css */\n    </style>",
-        "js": "  <h1>Hello World</h1>\n    <script>\n    // hello js\n    </script>\n    <style>\n    /* hello css */\n    </style>",
-        "css": " <h1>Hello World</h1>\n    <script>\n    // hello js\n    </script>\n    <style>\n    /* hello css */\n    </style>"
+        "html": "\n    <h1>Hello World</h1>\n    ",
+        "js": "\n    // hello js\n    ",
+        "css": "\n    /* hello css */\n    "
       }
     ]
   },
