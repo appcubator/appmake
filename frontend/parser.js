@@ -9,6 +9,22 @@ function loadDir(dirPath) {
         // string = file content
         // if obj, it recursively refers to the contents of a subdirectory
 
+    var contents = {};
+
+    _.each(fs.readdirSync(dirPath), function(filename){
+        if (filename.charAt(0) === '.')
+            // skip hidden files
+            return;
+        var filepath = path.join(dirPath, filename);
+        var fileStat = fs.statSync(filepath);
+        if (fileStat.isFile()) {
+            contents[filename] = fs.readFileSync(filepath).toString();
+        } else if (fileStat.isDirectory()) {
+            contents[filename] = loadDir(filepath);
+        }
+    });
+
+    return contents;
 }
 
 // pass the type, value to be the type, and locString which is just some string to help with debugging location of the error.
@@ -16,14 +32,14 @@ function assertType(typeString, value, locString) {
     var valueType = typeof(value);
     var errorMsg = 'Found: "' + valueType + '", expected "' + typeString + '" (' + value + ' in ' + locString + ')';
     if (valueType != typeString)
-        throw { errcode: 'TypeError', message: errorMsg };
+        throw errorMsg;
 }
 // if value undefined, throws error to define the value called varName.
 function assertExists(value, varName) {
     var valueType = typeof(value);
     var errorMsg = 'Please expose variable \'' + varName + '\'';
-    if (valueType != typeof('undefined'))
-        throw { errcode: 'TypeError', message: errorMsg };
+    if (valueType == typeof('undefined'))
+        throw errorMsg;
 }
 
 function parseModel(modelName, content) {
@@ -112,15 +128,15 @@ function parseGenerator(generatorName, content) {
 exports.parseDir = function (dirPath) {
 
     var dirContents = loadDir(dirPath);
-    // var app = { packages:{}, modules:{}, models:{}, templates:{}, routes:[], generators:{}};
     var app = {};
 
-    app.packages = JSON.parse(dirContents.packages);
+    app.packages = JSON.parse(dirContents['requires.json']);
     app.modules = dirContents.modules; // TODO change the spec to be this nested object, it better represents a tree.
 
     app.models = {};
     for (var modelName in dirContents.models) {
-        if (!modelName.endsWith('.js'))
+        // if not modelName.endsWith(.js)
+        if (modelName.indexOf('.js') !== (modelName.length - 1 - 3))
             continue; // TODO maybe print a warning?
 
         // take off the '.js' ending to get model name
@@ -132,7 +148,8 @@ exports.parseDir = function (dirPath) {
 
     app.templates = {};
     for (var templateName in dirContents.templates) {
-        if (!templateName.endsWith('.ejs'))
+        //if (!templateName.endsWith('.ejs'))
+        if (templateName.indexOf('.ejs') !== (templateName.length - 1 - 4))
             continue; // TODO maybe print a warning?
 
         // take off the '.ejs' ending to get template name

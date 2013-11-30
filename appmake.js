@@ -42,6 +42,7 @@ if (require.main === module) {
             var app = parser.parseDir(srcDir);
 
             fs.writeFileSync(destJsonPath, JSON.stringify(app, null, 2));
+            break;
 
         case "compile":
             if (process.argv.length < 5) {
