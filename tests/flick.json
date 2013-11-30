@@ -1,0 +1,41 @@
+{
+  "packages": {
+    "express": "3.4.4",
+    "flickr": "0.1.0"
+  },
+  "modules": {
+    "custom": {
+      "custom.txt": "this is custom code\n"
+    }
+  },
+  "models": {
+    "Picture": {
+      "fields": {
+        "datePicked": "Date",
+        "url": "String"
+      },
+      "instancemethods": {
+        "updateUrl": "function (newUrl, cb) {\n      this.url = newUrl;\n      this.save(function(e, d){cb(e,d);});\n    }"
+      },
+      "staticmethods": {
+        "function (searchQ, limit, cb) {\n      var flickr = require(\"flickr\");\n      var fcli = new flickr.Flickr('cbe3f7f6cbf9d13ad243a1e1afec902d', '5c3f9a33e088ef60');\n      fcli.executeAPIRequest('flickr.photos.search', {text: searchQ, per_page: limit},\n                               false, function(e, d){cb(e, d);});\n    }": "function (searchQ, limit, cb) {\n      var flickr = require(\"flickr\");\n      var fcli = new flickr.Flickr('cbe3f7f6cbf9d13ad243a1e1afec902d', '5c3f9a33e088ef60');\n      fcli.executeAPIRequest('flickr.photos.search', {text: searchQ, per_page: limit},\n                               false, function(e, d){cb(e, d);});\n    }"
+      }
+    }
+  },
+  "templates": {
+    "Homepage": [
+      {
+        "html": "<h1>Hello World</h1>\n    <script>\n    // hello js\n    </script>\n    <style>\n    /* hello css */\n    </style>",
+        "js": "  <h1>Hello World</h1>\n    <script>\n    // hello js\n    </script>\n    <style>\n    /* hello css */\n    </style>",
+        "css": " <h1>Hello World</h1>\n    <script>\n    // hello js\n    </script>\n    <style>\n    /* hello css */\n    </style>"
+      }
+    ]
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "pattern": "/",
+      "code": "function (req, res) {\n        res.render('Homepage.ejs');\n    }"
+    }
+  ]
+}

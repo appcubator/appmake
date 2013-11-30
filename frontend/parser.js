@@ -44,7 +44,7 @@ function assertExists(value, varName) {
 
 function parseModel(modelName, content) {
     // potentially insecure: safely running untrusted code requires a separate process.
-    var model = vm.runInNewContext("'use strict'; " + content + "; {fields:fields, instancemethods:instancemethods, staticmethods:staticmethods}");
+    var model = vm.runInNewContext(content + "; var __noconflictplz__ = {fields:fields, instancemethods:instancemethods, staticmethods:staticmethods}; __noconflictplz__");
 
     assertExists(model.fields, 'fields');
     assertExists(model.instancemethods, 'instancemethods');
@@ -52,13 +52,16 @@ function parseModel(modelName, content) {
 
     // validate schema of model
     for (var fieldName in model.fields) {
-        assert('string', fieldName, 'model.'+modelName+'.fields');
+        assertType('string', fieldName, 'model.'+modelName+'.fields');
     }
-    for (var im in model.instancemethods) {
+    for (var imName in model.instancemethods) {
+        assertType('string', imName, 'model.'+modelName+'.instancemethods');
+        var im = model.instancemethods[imName];
         assertType('function', im, 'model.'+modelName+'.instancemethods');
-        model.instancemethods[im] = im.toString(); // convert the function to its source code for serialization
+        model.instancemethods[imName] = im.toString(); // convert the function to its source code for serialization
     }
-    for (var is in model.staticmethods) {
+    for (var isName in model.staticmethods) {
+        var is = model.staticmethods[isName];
         assertType('function', is, 'model.'+modelName+'.staticmethods');
         model.staticmethods[is] = is.toString(); // convert the function to its source code for serialization
     }
@@ -75,7 +78,9 @@ function parseTemplate(templateName, content) {
     // take a slice, push, and search again.
     // then parse all uielements strings into objects.
     var subContent = content;
-    var openIndex = content.indexOf('<uie>'), closeIndex, uieStrings;
+    var openIndex = content.indexOf('<uie>'),
+        closeIndex,
+        uieStrings = [];
     while (openIndex != -1) {
         closeIndex = subContent.indexOf('</uie>');
         if (closeIndex == -1) {
@@ -136,27 +141,31 @@ exports.parseDir = function (dirPath) {
     app.models = {};
     for (var modelName in dirContents.models) {
         // if not modelName.endsWith(.js)
-        if (modelName.indexOf('.js') !== (modelName.length - 1 - 3))
-            continue; // TODO maybe print a warning?
+        if (modelName.indexOf('.js') !== (modelName.length -  3)) {
+            console.log("[parser] Skipping non-js file: " + modelName);
+            continue;
+        }
 
         // take off the '.js' ending to get model name
         modelName = modelName.substr(0, modelName.length - 3);
         // TODO validate modelName
 
-        app.models[modelName] = parseModel(modelName, dirContents.models[modelName]);
+        app.models[modelName] = parseModel(modelName, dirContents.models[modelName + '.js']);
     }
 
     app.templates = {};
     for (var templateName in dirContents.templates) {
         //if (!templateName.endsWith('.ejs'))
-        if (templateName.indexOf('.ejs') !== (templateName.length - 1 - 4))
+        if (templateName.indexOf('.ejs') !== (templateName.length  - 4)) {
+            console.log("[parser] Skipping non-ejs file: " + templateName);
             continue; // TODO maybe print a warning?
+        }
 
         // take off the '.ejs' ending to get template name
         templateName = templateName.substr(0, templateName.length - 4);
         // TODO validate templateName
 
-        app.templates[templateName] = parseTemplate(templateName, dirContents.templates[templateName]);
+        app.templates[templateName] = parseTemplate(templateName, dirContents.templates[templateName + '.ejs']);
     }
 
     app.routes = parseRoutes(dirContents['routes.js']);
