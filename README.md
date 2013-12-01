@@ -1,7 +1,8 @@
 appmake
 =======
 
-Turns a JSON into a web app.
+App on filesystem <-> JSON
+JSON -> web app
 
 The format of the app JSON is documented in the wiki.
 
