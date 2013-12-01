@@ -63,7 +63,7 @@ function parseModel(modelName, content) {
     for (var isName in model.staticmethods) {
         var is = model.staticmethods[isName];
         assertType('function', is, 'model.'+modelName+'.staticmethods');
-        model.staticmethods[is] = is.toString(); // convert the function to its source code for serialization
+        model.staticmethods[isName] = is.toString(); // convert the function to its source code for serialization
     }
     return model;
 }

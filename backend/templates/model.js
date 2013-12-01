@@ -4,24 +4,20 @@ var Schema = mongoose.Schema;
 
 
 var <%= model.name %>Schema = new Schema({
-<% for(var i = 0; i < model.fields.length; i ++) { %>
-<% var field = model.fields[i]; %>
-  <%= field.name %>:  <%= field.type %>,
+<% for(var fieldName in model.fields) { %>
+<% var field = model.fields[fieldName]; %>
+  <%= fieldName %>:  <%= field %>,
 <% } %>
 });
 
-<% for(var i = 0; i < model.instancemethods.length; i ++) { %>
-<% var im = model.instancemethods[i]; %>
-<%= model.name %>Schema.methods.<%= im.name %> = function(<%= im.args.join(', ') %>) {
-  <%= im.code %>
-}
+<% for(var imName in model.instancemethods) { %>
+<% var im = model.instancemethods[imName]; %>
+<%= model.name %>Schema.methods.<%= imName %> = <%= im %>;
 <% } %>
 
-<% for(var i = 0; i < model.staticmethods.length; i ++) { %>
-<% var sm = model.staticmethods[i]; %>
-<%= model.name %>Schema.methods.<%= sm.name %> = function(<%= sm.args.join(', ') %>) {
-  <%= sm.code %>
-}
+<% for(var smName in model.staticmethods) { %>
+<% var sm = model.staticmethods[smName]; %>
+<%= model.name %>Schema.methods.<%= smName %> = <%= sm %>;
 <% } %>
 
 exports.<%= model.name %> = mongoose.model('<%= model.name %>', <%= model.name %>Schema);

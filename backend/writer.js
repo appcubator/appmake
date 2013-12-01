@@ -45,17 +45,19 @@ function write(app, dirpath, callback) {
     }
 
     // models
-    for (var i = 0; i < app.models.length; i++) {
-        var model = app.models[i];
-        validatefname(model.name + '.js');
-        _writeFile(_j(dirpath, 'models', model.name + '.js'), templates.modeljs(model));
+    for (var modelName in app.models) {
+        var model = app.models[modelName];
+        model.name = modelName;
+        validatefname(modelName + '.js');
+        _writeFile(_j(dirpath, 'models', modelName + '.js'), templates.modeljs(model));
     }
 
     // templates
-    for (i = 0; i < app.templates.length; i++) {
-        var template = app.templates[i];
-        validatefname(template.name + '.ejs');
-        _writeFile(_j(dirpath, 'views', template.name + '.ejs'), templates.template(template, template.layoutStrategy));
+    for (var templateName in app.templates) {
+        var template = app.templates[templateName];
+        template.name = templateName;
+        validatefname(templateName + '.ejs');
+        _writeFile(_j(dirpath, 'views', templateName + '.ejs'), templates.template(template, template.layoutStrategy));
     }
 
     // css
