@@ -57,7 +57,7 @@ function write(app, dirpath, callback) {
         var template = app.templates[templateName];
         template.name = templateName;
         validatefname(templateName + '.ejs');
-        _writeFile(_j(dirpath, 'views', templateName + '.ejs'), templates.template(template, template.layoutStrategy));
+        _writeFile(_j(dirpath, 'views', templateName + '.ejs'), template);
     }
 
     // css
