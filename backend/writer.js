@@ -1,5 +1,4 @@
-var temp = require("temp"),
-    path = require('path'),
+var path = require('path'),
     fs = require('fs'),
     mkdirp = require('mkdirp'),
     templates = require("./templates");
@@ -53,7 +52,7 @@ function write(app, dirpath, callback) {
     }
 
     // templates
-    for (var i = 0; i < app.templates.length; i++) {
+    for (i = 0; i < app.templates.length; i++) {
         var template = app.templates[i];
         validatefname(template.name + '.ejs');
         _writeFile(_j(dirpath, 'views', template.name + '.ejs'), templates.template(template, template.layoutStrategy));
@@ -73,11 +72,5 @@ function write(app, dirpath, callback) {
 
 }
 
-function writeTemp(app, cb) {
-    temp.mkdir('appmake', function(err, dirpath) {
-        write(app, dirpath, function(){ return cb(dirpath); });
-    });
-}
 
 exports.write = write;
-exports.writeTemp = writeTemp;
