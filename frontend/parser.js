@@ -1,7 +1,8 @@
 var fs = require("fs"),
     path = require("path"),
     _ = require("underscore"),
-    vm = require("vm");
+    vm = require("vm"),
+    validator = require("./validator");
 
 function loadDir(dirPath) {
     // load contents of directory into a path-content mapping
@@ -27,43 +28,28 @@ function loadDir(dirPath) {
     return contents;
 }
 
-// pass the type, value to be the type, and locString which is just some string to help with debugging location of the error.
-function assertType(typeString, value, locString) {
-    var valueType = typeof(value);
-    var errorMsg = 'Found: "' + valueType + '", expected "' + typeString + '" (' + value + ' in ' + locString + ')';
-    if (valueType != typeString)
-        throw errorMsg;
-}
-// if value undefined, throws error to define the value called varName.
-function assertExists(value, varName) {
-    var valueType = typeof(value);
-    var errorMsg = 'Please expose variable \'' + varName + '\'';
-    if (valueType == typeof('undefined'))
-        throw errorMsg;
-}
-
 function parseModel(modelName, content) {
     // potentially insecure: safely running untrusted code requires a separate process.
     var model = vm.runInNewContext(content + "; var __noconflictplz__ = {fields:fields, instancemethods:instancemethods, staticmethods:staticmethods}; __noconflictplz__");
 
-    assertExists(model.fields, 'fields');
-    assertExists(model.instancemethods, 'instancemethods');
-    assertExists(model.staticmethods, 'staticmethods');
+    validator.assertExists(model.fields, 'fields');
+    validator.assertExists(model.instancemethods, 'instancemethods');
+    validator.assertExists(model.staticmethods, 'staticmethods');
 
     // validate schema of model
     for (var fieldName in model.fields) {
-        assertType('string', fieldName, 'model.'+modelName+'.fields');
+        validator.assertType('string', fieldName, 'model.'+modelName+'.fields');
     }
     for (var imName in model.instancemethods) {
-        assertType('string', imName, 'model.'+modelName+'.instancemethods');
+        validator.assertType('string', imName, 'model.'+modelName+'.instancemethods');
         var im = model.instancemethods[imName];
-        assertType('function', im, 'model.'+modelName+'.instancemethods');
+        validator.assertType('function', im, 'model.'+modelName+'.instancemethods');
         model.instancemethods[imName] = im.toString(); // convert the function to its source code for serialization
     }
     for (var isName in model.staticmethods) {
-        assertType('string', isName, 'model.'+modelName+'.staticmethods');
+        validator.assertType('string', isName, 'model.'+modelName+'.staticmethods');
         var is = model.staticmethods[isName];
-        assertType('function', is, 'model.'+modelName+'.staticmethods');
+        validator.assertType('function', is, 'model.'+modelName+'.staticmethods');
         model.staticmethods[isName] = is.toString(); // convert the function to its source code for serialization
     }
     return model;
@@ -113,22 +99,25 @@ function parseTemplate(templateName, content) {
 }
 
 function parseRoutes(content) {
-    // potentially insecure: safely running untrusted code requires a separate process.
+    // Note that routes may contain generators, and that's OK.
     var routes = vm.runInNewContext("'use strict'; " + content + "; routes");
 
-    assertExists(routes, 'routes');
+    validator.assertExists(routes, 'routes');
 
     _.each(routes, function(route, index) {
-        assertType('string', route.method, 'routes.'+index+'.method');
-        assertType('string', route.pattern, 'routes.'+index+'.pattern');
-        assertType('function', route.code, 'routes.'+index+'.code');
-        route.code = route.code.toString();
+        var locString = 'routes.'+index;
+        // TODO make all validation like this.
+        // Each will return true or throw error.
+        var success = validateGenerator(route, locString) || validateRoute(route, locString);
+        if (!success) throw 'Impossible: error should have been thrown';
     });
 
     return routes;
 }
 
 function parseGenerator(generatorName, content) {
+    var generators = vm.runInNewContext("'use strict'; " + content + "; generators");
+    validator.assertExists(routes, 'routes');
 }
 
 exports.parseDir = function (dirPath) {
