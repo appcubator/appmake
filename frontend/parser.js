@@ -189,6 +189,7 @@ exports.parseDir = function (dirPath) {
         generatorName = generatorName.substr(0, generatorName.length - 3);
         // TODO validate generatorName
 
+        // all going in the root module for now.
         app.generators[generatorName] = parseGenerator(generatorName, dirContents.generators[generatorName + '.js']);
     }
 

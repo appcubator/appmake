@@ -7,12 +7,17 @@ function findGenData(generators, genID) {
     var module = generators[genID.module];
     if (module === undefined)
         throw "Generator module not found";
-    var genpack = genID[name];
-    if (genpack === undefined)
-        throw "Generator not found";
-    var generator = genpack[genID.version];
+    var generator;
+    // linear search through the generators in the module.
+    for (var i = 0; i < module.length; i ++){
+        var generator2 = module[i];
+        if ((generator2.name == genID.name) && (generator2.version == genID.version)) {
+            generator = generator2;
+            break;
+        }
+    }
     if (generator === undefined)
-        throw "Version not found";
+        throw "Generator '"+genID.name+"' with version '"+genID.version+"' not found in module '"+genID.module+"'";
 
     return generator;
 }
@@ -38,35 +43,34 @@ function parseGenID(generatorName) {
 
     var genName = tokens[tokens.length-1];
 
-    tokens.remove(tokens.length-1);
-    var moduleString = tokens.join('.') ;
+    var moduleString = tokens.slice(0,tokens.length-1).join('.') ;
 
     // TODO version nums. for now everything is 0.1.
     return { module: moduleString, name: genName, version: '0.1' };
 }
 
-function replace(parent, key, genData) {
-    var genID = parseGenID(obj.generator);
-    var generatedObj = constructGen(findGenData(genID))(genData.data);
-    parent[key] = generatedObj;
+function expand(generators, genData) {
+    var genID = parseGenID(genData.generate);
+    var generatedObj = constructGen(findGenData(generators, genID))(genData.data);
+    return generatedObj;
 }
 
 exports.expandAll = function(app) {
-    _.each(routes, function(route, i) {
-        if ('generator' in route) {
-            replace(routes, i, route);
+    _.each(app.routes, function(route, i) {
+        if ('generate' in route) {
+            app.routes[i] = expand(app.generators, route);
         }
     });
 
-    _.each(models, function(model, modelName) {
+    _.each(app.models, function(model, modelName) {
         _.each(model.instanceMethods, function(im, imName) {
-            if ('generator' in im) {
-                replace(models.instanceMethods, imName, im);
+            if ('generate' in im) {
+                app.models.instanceMethods[imName] = expand(app.generators, im);
             }
         });
         _.each(model.staticMethods, function(sm, smName) {
-            if ('generator' in sm) {
-                replace(models.staticMethods, smName, sm);
+            if ('generate' in sm) {
+                app.models.staticMethods[smName] = expand(app.generators, sm);
             }
         });
     });
