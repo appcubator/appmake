@@ -20,12 +20,28 @@ function constructGen(generatorData) {
     // input the generator's data from the json
     // output a function which can directly be used for generator execution.
     var fn = function(data) {
+        var templates = generatorData.templates;
+        // TODO compile each EJS template so that it can have a render method.
+        var templatesFn = function(){};
+        var genObj = vm.runInNewContext('var data = ' + JSON.stringify(data)+'; ' +
+                                  'var EJS = require(\'ejs\'); ' +
+                                  'var templates = ' + JSON.stringify(templates) + '; ' +
+                                  generatorData.code + '(data, templates);');
+        return genObj;
     };
     return fn;
-
 }
 
 function parseGenID(generatorName) {
+    var tokens = generatorName.split('.');
+
+    var genName = tokens[tokens.length-1];
+
+    tokens.remove(tokens.length-1);
+    var moduleString = tokens.join('.') ;
+
+    // TODO version nums. for now everything is 0.1.
+    return { module: moduleString, name: genName, version: '0.1' };
 }
 
 function replace(parent, key, genData) {
@@ -35,14 +51,25 @@ function replace(parent, key, genData) {
 }
 
 exports.expandAll = function(app) {
-   _.each(routes, function(route, i) {
-       if ('generator' in obj) {
-           replace(routes, i, obj);
-       }
-   });
+    _.each(routes, function(route, i) {
+        if ('generator' in route) {
+            replace(routes, i, route);
+        }
+    });
 
-    // TODO
-    // app.models
+    _.each(models, function(model, modelName) {
+        _.each(model.instanceMethods, function(im, imName) {
+            if ('generator' in im) {
+                replace(models.instanceMethods, imName, im);
+            }
+        });
+        _.each(model.staticMethods, function(sm, smName) {
+            if ('generator' in sm) {
+                replace(models.staticMethods, smName, sm);
+            }
+        });
+    });
+
     // app.templates
     return app;
 };
