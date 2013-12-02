@@ -1,4 +1,5 @@
 var vm = require("vm"),
+    ejs = require("ejs"),
     _ = require("underscore");
 
 function findGenData(generators, genID) {
@@ -27,12 +28,17 @@ function constructGen(generatorData) {
     // output a function which can directly be used for generator execution.
     var fn = function(data) {
         var templates = generatorData.templates;
+        var compiledTemplates = {};
+        _.each(templates, function(templateStr, templateName) {
+            compiledTemplates[templateName] = ejs.compile(templateStr);
+        });
         // TODO compile each EJS template so that it can have a render method.
-        var templatesFn = function(){};
-        var genObj = vm.runInNewContext('var data = ' + JSON.stringify(data)+'; ' +
-                                  'var EJS = require(\'ejs\'); ' +
-                                  'var templates = ' + JSON.stringify(templates) + '; ' +
-                                  generatorData.code + '(data, templates);');
+        var globals = {
+            data: data,
+            templates: compiledTemplates
+        };
+        var code = '(' + generatorData.code + ')(data, templates);';
+        var genObj = vm.runInNewContext(code, globals);
         return genObj;
     };
     return fn;
