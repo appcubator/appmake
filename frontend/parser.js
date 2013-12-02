@@ -106,10 +106,7 @@ function parseRoutes(content) {
 
     _.each(routes, function(route, index) {
         var locString = 'routes.'+index;
-        // TODO make all validation like this.
-        // Each will return true or throw error.
-        var success = validateGenerator(route, locString) || validateRoute(route, locString);
-        if (!success) throw 'Impossible: error should have been thrown';
+        validator.validateGenrefOr (validator.validateRoute) (route, locString);
     });
 
     return routes;

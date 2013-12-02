@@ -75,9 +75,6 @@ if (require.main === module) {
             var appJson = fs.readFileSync(srcJsonFile);
             var app = JSON.parse(appJson);
 
-            // TODO validate structure and do static analysis
-            var warnings = validator.validate(app);
-
             // expand the code generators
             expander.expandAll(app);
 

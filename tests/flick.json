@@ -1,6 +1,7 @@
 {
   "packages": {
     "express": "3.4.4",
+    "ejs": "0.8.5",
     "flickr": "0.1.0"
   },
   "modules": {
@@ -27,9 +28,11 @@
   },
   "routes": [
     {
-      "method": "GET",
-      "pattern": "/",
-      "code": "function (req, res) {\n        res.render('Homepage.ejs');\n    }"
+      "generate": "routes.staticpage",
+      "data": {
+        "url": "/",
+        "templateName": "Homepage"
+      }
     }
   ]
 }
