@@ -33,7 +33,7 @@ exports.validateGenerator = function(generator, locString) {
         assertType('function', generator.code, locString+'.code');
         generator.code = generator.code.toString();
         assertType('object', generator.templates, locString+'.templates');
-        _each(generator.templates, function(template, templateName) {
+        _.each(generator.templates, function(template, templateName) {
             assertType('string', templateName, locString+'.templates');
             assertType('string', template, locString+'.templates.'+templateName);
         });

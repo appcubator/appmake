@@ -40,6 +40,7 @@
       {
         "name": "staticpage",
         "version": "0.0.1",
+        "code": "function (data, templates){\n        var route = {\n            \"method\": \"GET\",\n            \"pattern\": data.url,\n            \"code\": templates.code.render({ templateName: data.templateName })\n        };\n        return route;\n    }",
         "templates": {
           "code": "function (req, res) {\n                res.render('<%= templateName %>');\n            }"
         }

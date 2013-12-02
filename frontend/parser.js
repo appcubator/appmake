@@ -115,6 +115,10 @@ function parseRoutes(content) {
 function parseGenerator(generatorName, content) {
     var generators = vm.runInNewContext("'use strict'; " + content + "; generators");
     validator.assertExists(generators, 'generators');
+    _.each(generators, function(generator, index) {
+        var locString = 'generators.'+index;
+        validator.validateGenerator(generator, locString);
+    });
     return generators;
 }
 
