@@ -1,4 +1,5 @@
-var vm = require("vm");
+var vm = require("vm"),
+    _ = require("underscore");
 
 function findGenData(generators, genID) {
     // generators is app.generators

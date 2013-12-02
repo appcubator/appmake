@@ -34,5 +34,16 @@
         "templateName": "Homepage"
       }
     }
-  ]
+  ],
+  "generators": {
+    "routes": [
+      {
+        "name": "staticpage",
+        "version": "0.0.1",
+        "templates": {
+          "code": "function (req, res) {\n                res.render('<%= templateName %>');\n            }"
+        }
+      }
+    ]
+  }
 }

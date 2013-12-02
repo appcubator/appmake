@@ -114,7 +114,8 @@ function parseRoutes(content) {
 
 function parseGenerator(generatorName, content) {
     var generators = vm.runInNewContext("'use strict'; " + content + "; generators");
-    validator.assertExists(routes, 'routes');
+    validator.assertExists(generators, 'generators');
+    return generators;
 }
 
 exports.parseDir = function (dirPath) {
@@ -171,18 +172,21 @@ exports.parseDir = function (dirPath) {
 
     app.routes = parseRoutes(dirContents['routes.js']);
 
-    /* TODO Will implement generators after it works without it.
     app.generators = {};
     for (var generatorName in dirContents.generators) {
-        if (!generatorName.endsWith('.js'))
-            continue; // TODO maybe print a warning?
+        //if (!generatorName.endsWith('.js'))
+        if (generatorName.indexOf('.js') !== (generatorName.length  - 3)) {
+            // TODO a folder may represent a module of generators
+            console.log("[parser] Skipping non-js file: " + generatorName);
+            continue;
+        }
 
-        // take off the '.ejs' ending to get generator name
+        // take off the '.js' ending to get generator name
         generatorName = generatorName.substr(0, generatorName.length - 3);
         // TODO validate generatorName
 
-        app.generators[generatorName] = parseGenerator(generatorName, dirContents.generators[generatorName]);
-    } */
+        app.generators[generatorName] = parseGenerator(generatorName, dirContents.generators[generatorName + '.js']);
+    }
 
     // TODO figure out this CSS thing
 
