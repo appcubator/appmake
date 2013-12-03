@@ -17,7 +17,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.cookieParser('some secret'));
   app.use(express.cookieSession());
-  app.use(express.csrf());
+  // app.use(express.csrf());
   // TODO this should be optional, just wanna confirm.
   // app.use(app.router);
   app.use('/static', express.static(path.join(__dirname, 'public')));

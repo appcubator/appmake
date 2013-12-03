@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_ADDR);
 
 var Schema = mongoose.Schema;
 
@@ -17,7 +18,7 @@ var <%= model.name %>Schema = new Schema({
 
 <% for(var smName in model.staticmethods) { %>
 <% var sm = model.staticmethods[smName]; %>
-<%= model.name %>Schema.methods.<%= smName %> = <%= sm %>;
+<%= model.name %>Schema.statics.<%= smName %> = <%= sm %>;
 <% } %>
 
 exports.<%= model.name %> = mongoose.model('<%= model.name %>', <%= model.name %>Schema);
