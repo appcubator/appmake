@@ -5,7 +5,7 @@ var parser = require('./frontend/parser'),
     writer = require('./backend/writer'),
     fs = require('fs'),
     path = require('path'),
-    request = require('request'),
+    restler = require('restler'),
     temp = require('temp'),
     tar = require('tar'),
     fstream = require('fstream');
@@ -92,19 +92,18 @@ if (require.main === module) {
                 var tmpfilepath = path.join(dirPath, 'code.tar');
                 var destfstream = fstream.Writer(tmpfilepath);
                 srcfstream.pipe(pack).pipe(destfstream);
-                srcfstream.on('end', function(d){
+                srcfstream.on('end', function(){
                     console.log(tmpfilepath);
-                    fs.readFile(tmpfilepath, function(err2, data) {
-                        if (err2) throw err2;
-
-                        var r = request.post('http://cloud.appcubator.com/api/deploy/', function (error, response, body) {
-                            console.log(error);
+                    fs.stat(tmpfilepath, function (err, stats) {
+                        console.log(stats.size);
+                        var r = restler.post('http://cloud.appcubator.com/api/deploy/', { multipart:true,
+                                                                                          data: restler.file(tmpfilepath, null, stats.size)});
+                        r.on('complete', function (body, response) {
                             console.log(body);
                         });
-                        var form = r.form();
-                        form.append('code', data);
 
                     });
+
 
                 });
 

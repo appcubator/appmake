@@ -7,6 +7,6 @@
         "underscore": "1.5.2",
         "fstream": "0.1.25",
         "tar": "0.1.19",
-        "request": "2.27.0"
+        "restler": "3.1.0"
     }
 }
