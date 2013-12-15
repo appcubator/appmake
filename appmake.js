@@ -77,7 +77,6 @@ if (require.main === module) {
             break;
 
         case "deploy":
-            // temp.track();
             if (process.argv.length < 4) {
                 process.stdout.write("Not enough arguments for parse:\n");
                 process.stdout.write(USAGE);
@@ -95,13 +94,14 @@ if (require.main === module) {
                 console.log(tmpfilepath);
                 destfstream.on('end', function(){console.log(dirPath);});
 
-                var r = request.post('http://cloud.appcubator.com/api/deployment/', function (error, response, body) {
+                var r = request.post('http://cloud.appcubator.com/api/deploy/', function (error, response, body) {
                     console.log(error);
                     //console.log(response);
                     console.log(body);
                 });
                 var form = r.form();
                 form.append('code', 'my_value');
+                r.on('end', function(){temp.track();});
 
             });
             break;
