@@ -77,6 +77,7 @@ if (require.main === module) {
             break;
 
         case "deploy":
+            temp.track();
             if (process.argv.length < 4) {
                 process.stdout.write("Not enough arguments for parse:\n");
                 process.stdout.write(USAGE);
@@ -86,22 +87,26 @@ if (require.main === module) {
             var appDir = process.argv[3];
 
             temp.mkdir('appmake-', function(err, dirPath) {
+                var srcfstream = fstream.Reader({path:appDir, type:'Directory'});
                 var pack = tar.Pack();
                 var tmpfilepath = path.join(dirPath, 'code.tar');
                 var destfstream = fstream.Writer(tmpfilepath);
-                var srcfstream = fstream.Reader({path:appDir, type:'Directory'});
                 srcfstream.pipe(pack).pipe(destfstream);
-                console.log(tmpfilepath);
-                destfstream.on('end', function(){console.log(dirPath);});
+                srcfstream.on('end', function(d){
+                    console.log(tmpfilepath);
+                    fs.readFile(tmpfilepath, function(err2, data) {
+                        if (err2) throw err2;
 
-                var r = request.post('http://cloud.appcubator.com/api/deploy/', function (error, response, body) {
-                    console.log(error);
-                    //console.log(response);
-                    console.log(body);
+                        var r = request.post('http://cloud.appcubator.com/api/deploy/', function (error, response, body) {
+                            console.log(error);
+                            console.log(body);
+                        });
+                        var form = r.form();
+                        form.append('code', data);
+
+                    });
+
                 });
-                var form = r.form();
-                form.append('code', 'my_value');
-                r.on('end', function(){temp.track();});
 
             });
             break;
