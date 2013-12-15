@@ -10,7 +10,6 @@ var parser = require('./frontend/parser'),
     tar = require('tar'),
     fstream = require('fstream');
 
-/* TODO this is kinda out of place but I dont care at the moment */
 
 if (require.main === module) {
     var USAGE = '\n  Usage:\n\n'+
@@ -22,8 +21,8 @@ if (require.main === module) {
                 '       Compiles the app given by the json_file, and outputs\n' +
                 '           a node app at the output_dir. Defaults to a temp dir.\n\n' +
 
-                '    ./appmake.js deploy <app_dir> [env_name]\n\n' +
-                '       Deploys the app in app_dir to the Appcubator cloud (optionally in a specified environment).\n\n';
+                '    ./appmake.js deploy <app_dir> \n\n' +
+                '       Deploys the app in app_dir to the Appcubator cloud.\n\n';
 
     if (process.argv.length < 3) {
         process.stdout.write(USAGE);
@@ -86,21 +85,6 @@ if (require.main === module) {
             }
 
             var appDir = process.argv[3];
-
-            // assume dev environment unless the user specifies an environment. envs are TODO
-            var environment = 'dev';
-            if (process.argv.length >= 5) {
-                var environment = process.argv[4];
-            }
-
-            /*
-            if (!fs.existsSync(path.join(appDir, '.appID'))) {
-                process.stdout.write('\nError: .appID file not found. To fix, please type the appID in a file called .appID (in your Appcubator app) and try again.');
-                process.exit(1);
-            }
-            */
-
-            // var appID = fs.readFileSync().trim(); // str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 
             temp.mkdir('appmake-', function(err, dirPath) {
                 var pack = tar.Pack();
