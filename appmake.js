@@ -6,23 +6,11 @@ var parser = require('./frontend/parser'),
     fs = require('fs'),
     path = require('path'),
     request = require('request'),
-    temp = require("temp"),
-    readline = require('readline');
+    temp = require('temp'),
+    tar = require('tar'),
+    fstream = require('fstream');
 
 /* TODO this is kinda out of place but I dont care at the moment */
-function deploy(cb) {
-    var r = request.post('http://cloud.appcubator.com/api/deployment/', function (error, response, body) {
-        if (error) throw error;
-        if (response.statusCode != 200) throw body;
-        cb(body);
-    });
-    var form = r.form();
-    // TODO fill in the proper api.
-    form.append('my_field', 'my_value');
-    form.append('my_buffer', new Buffer([1, 2, 3]));
-    form.append('my_file', fs.createReadStream(path.join(__dirname, 'doodle.png')));
-    form.append('remote_file', request('http://google.com/doodle.png'));
-}
 
 if (require.main === module) {
     var USAGE = '\n  Usage:\n\n'+
@@ -90,6 +78,7 @@ if (require.main === module) {
             break;
 
         case "deploy":
+            // temp.track();
             if (process.argv.length < 4) {
                 process.stdout.write("Not enough arguments for parse:\n");
                 process.stdout.write(USAGE);
@@ -104,25 +93,32 @@ if (require.main === module) {
                 var environment = process.argv[4];
             }
 
+            /*
             if (!fs.existsSync(path.join(appDir, '.appID'))) {
                 process.stdout.write('\nError: .appID file not found. To fix, please type the appID in a file called .appID (in your Appcubator app) and try again.');
                 process.exit(1);
             }
+            */
 
-            var appID = fs.readFileSync().trim(); // str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+            // var appID = fs.readFileSync().trim(); // str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 
-            var rl = readline.createInterface({
-              input: process.stdin,
-              output: process.stdout
-            });
+            temp.mkdir('appmake-', function(err, dirPath) {
+                var pack = tar.Pack();
+                var tmpfilepath = path.join(dirPath, 'code.tar');
+                var destfstream = fstream.Writer(tmpfilepath);
+                var srcfstream = fstream.Reader({path:appDir, type:'Directory'});
+                srcfstream.pipe(pack).pipe(destfstream);
+                console.log(tmpfilepath);
+                destfstream.on('end', function(){console.log(dirPath);});
 
-            rl.question("This will deploy " + appID + " to the '" + envname + "' environment. Do you want to continue? [y/n]:", function(answer) {
-                if (answer == 'y') {
-                    deploy(function(body) {process.stdout.write('Success: \n' + body);});
-                } else {
-                    process.stdout.write('\nOk, have a good day!');
-                }
-                rl.close();
+                var r = request.post('http://cloud.appcubator.com/api/deployment/', function (error, response, body) {
+                    console.log(error);
+                    //console.log(response);
+                    console.log(body);
+                });
+                var form = r.form();
+                form.append('code', 'my_value');
+
             });
             break;
 
