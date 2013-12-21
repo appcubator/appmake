@@ -5,11 +5,29 @@ var vm = require("vm"),
 function findGenData(generators, genID) {
     // generators is app.generators
     // genID is an obj w (module, name, version) keys
-    var module = generators[genID.module];
-    if (module === undefined)
-        throw "Generator module not found";
-    var generator;
+    var packageNameSeperatorIndex = genID.module.indexOf(".");
+    console.log(packageNameSeperatorIndex);
+    var packageName,
+        moduleName;
+
+    // TODO: validate package name validateGenID(genID);
+    if (packageNameSeperatorIndex === -1) {
+        packageName = "root";
+        moduleName = genID.module;
+    }
+    else {
+        packageName = genID.module.substr(0, packageNameSeperatorIndex);
+        moduleName = genID.module.substr(packageNameSeperatorIndex + 1, genID.module.length);
+    }
+    var packageObj = generators[packageName];
+    if (packageObj === undefined)
+        throw "Package " + packageName + " not found";
+    var module = packageObj[moduleName];
+    if (packageObj === undefined)
+        throw "Module " + moduleName + " not found in package " + packageName;
+
     // linear search through the generators in the module.
+    var generator;
     for (var i = 0; i < module.length; i ++){
         var generator2 = module[i];
         if ((generator2.name == genID.name) && (generator2.version == genID.version)) {
