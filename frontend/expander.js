@@ -81,6 +81,27 @@ exports.expandAll = function(app) {
         });
     });
 
-    // app.templates
+    _.each(app.templates, function (uielements, templateName) {
+
+        // TODO make this a code generator, since each structure is specific to the layout strategy.
+        // Copied over from parser.js
+        var concat = function (uielements) {
+            var templateLines = [];
+            for (var i = 0; i < uielements.length; i ++) {
+                var uie = uielements[i];
+                templateLines.push(uie.html);
+                templateLines.push("<style>"+uie.css+"</style>");
+                templateLines.push('<script type="text/javascript">'+uie.js+'</script>');
+            }
+            return templateLines.join("\n");
+        };
+
+        for (var i = 0; i < uielements.length; i++){
+            while ('generate' in uielements[i]){ // Keep expanding till 
+                uielements[i] =  expand(app.generators, uielements[i]);
+            }
+        }
+        app.templates[templateName] = concat(uielements);
+    })
     return app;
 };
