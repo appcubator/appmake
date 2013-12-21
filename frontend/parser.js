@@ -24,7 +24,6 @@ function loadDir(dirPath) {
             contents[filename] = loadDir(filepath);
         }
     });
-
     return contents;
 }
 
@@ -125,7 +124,9 @@ function parseRoutes(content) {
 }
 
 function parseGenerator(generatorName, content) {
-    var generators = vm.runInNewContext("'use strict'; " + content + "; generators");
+    console.log(content);
+
+    var generators = vm.runInNewContext("'use strict';" + content + "; generators");
     validator.assertExists(generators, 'generators');
     _.each(generators, function(generator, index) {
         var locString = 'generators.'+index;
@@ -191,23 +192,33 @@ exports.parseDir = function (dirPath) {
     app.routes = parseRoutes(dirContents['routes.js']);
 
     app.generators = {};
+    app.generators.root = {};
     for (var generatorName in dirContents.generators) {
         //if (!generatorName.endsWith('.js'))
         if (generatorName.indexOf('.js') !== (generatorName.length  - 3)) {
+            // Assume the name of the package is its folder name
+            var generatorsPath = "generators"; 
+            var packageName = generatorName;
+            var packageDir = loadDir(path.join(dirPath, generatorsPath, packageName));
+            app.generators[packageName] = {};
+
+            for (var moduleFileName in packageDir){
+                // Assume moduleFileName ends with .js and module structure is only 1 level deep. TODO: Go vun deeper. 
+                var moduleName = moduleFileName.substr(0, moduleFileName.length - 3);
+                app.generators[packageName][moduleName] = parseGenerator(moduleName, packageDir[moduleFileName]);
+            }
+
+            //console.log(app.generators);
             // TODO a folder may represent a module of generators
-            console.log("[parser] Skipping non-js file: " + generatorName);
-            continue;
+            //console.log("[parser] Skipping non-js file: " + generatorName);
         }
 
-        // take off the '.js' ending to get generator name
         generatorName = generatorName.substr(0, generatorName.length - 3);
         // TODO validate generatorName
 
-        // all going in the root module for now.
-        app.generators[generatorName] = parseGenerator(generatorName, dirContents.generators[generatorName + '.js']);
+        app.generators.root[generatorName] = parseGenerator(generatorName, dirContents.generators[generatorName + '.js']);
     }
 
     // TODO figure out this CSS thing
-
     return app;
 };
