@@ -6,7 +6,6 @@ function findGenData(generators, genID) {
     // generators is app.generators
     // genID is an obj w (module, name, version) keys
     var packageNameSeperatorIndex = genID.module.indexOf(".");
-    console.log(packageNameSeperatorIndex);
     var packageName,
         moduleName;
 

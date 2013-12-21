@@ -192,7 +192,6 @@ exports.parseDir = function (dirPath) {
     app.generators = {};
     app.generators.root = {};
     for (var generatorName in dirContents.generators) {
-        console.log(generatorName);
         //if (!generatorName.endsWith('.js'))
         if (generatorName.indexOf('.js') !== (generatorName.length  - 3)) {
             // Assume the name of the package is its folder name
@@ -208,7 +207,6 @@ exports.parseDir = function (dirPath) {
         } else {
            // generatorName = generatorName.substr(0, generatorName.length - 3);
              // TODO validate generatorName
-            console.log(generatorName);
             generatorLabel = generatorName.substr(0, generatorName.length - 3);
             app.generators.root[generatorLabel] = parseGenerator(generatorName, dirContents.generators[generatorName]);            
         }
