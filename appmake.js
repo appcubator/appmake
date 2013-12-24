@@ -11,6 +11,11 @@ var parser = require('./frontend/parser'),
     fstream = require('fstream');
 
 
+if (parseFloat(process.version.substr(3)) < 10.21) {
+    console.log('ERROR: Appmake is meant to use node version 0.10.21 or greater');
+    process.exit(1);
+}
+
 if (require.main === module) {
     var USAGE = '\n  Usage:\n\n'+
                 '    ./appmake.js parse <src_dir> <json_file_out>\n\n' +
