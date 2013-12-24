@@ -16,7 +16,6 @@ function findGenData(generators, genID) {
         packageName = "root";
         moduleName = genID.module;
         packageObj = rootGenerators;
-        console.log(packageObj);
     } else {
         packageName = genID.module.substr(0, packageNameSeperatorIndex);
         moduleName = genID.module.substr(packageNameSeperatorIndex + 1, genID.module.length);

@@ -1,7 +1,29 @@
-mv tmp/appcode/node_modules bckupppp
-rm -rf tmp
-mkdir tmp
-./appmake.js parse tests/flickrpickr/ tmp/flick.json
-./appmake.js compile tmp/flick.json tmp/appcode
-mv bckupppp tmp/appcode/node_modules
-cd tmp/appcode && MONGO_ADDR=mongodb://localhost/test node app.js
+OUTDIR=`pwd`/tmp
+
+# BACKUP NODE MODULES
+NODEMODULES=$OUTDIR/compiled/node_modules
+NMBACKUP=$TMPDIR/node_modules
+if [ -d $NODEMODULES ]; then
+    mv $NODEMODULES $NMBACKUP
+fi
+
+# CLEAN PREVIOUS WORK
+rm -r -f $OUTDIR
+mkdir -p $OUTDIR
+
+# COMPILE APP
+./appmake.js parse tests/flickrpickr/ $OUTDIR/parsed.json
+./appmake.js compile $OUTDIR/parsed.json $OUTDIR/compiled
+
+cd $OUTDIR/compiled
+
+# RESTORE BACKUP OF NODE MODULES
+if [ -d $NMBACKUP ]; then
+    mv $NMBACKUP $NODEMODULES
+else
+    npm install
+fi
+
+# RUN APP
+echo -e "\nYour app is running! http://localhost:3000/\n"
+MONGO_ADDR=mongodb://localhost/test node app.js
