@@ -52,6 +52,7 @@ if (require.main === module) {
             var app = parser.parseDir(srcDir);
 
             fs.writeFileSync(destJsonPath, JSON.stringify(app, null, 2));
+            process.stdout.write('Parsed: '+path.resolve(destJsonPath)+'\n');
             break;
 
         case "compile":
@@ -73,10 +74,10 @@ if (require.main === module) {
             if (destPath === null) {
                 temp.mkdir('appmake-', function(err, tmpdir) {
                     destPath = tmpdir;
-                    writer.write(app, destPath, function() { return process.stdout.write('Done: '+path.resolve(destPath)+'\n'); });
+                    writer.write(app, destPath, function() { return process.stdout.write('Compiled: '+path.resolve(destPath)+'\n'); });
                 });
             } else {
-                writer.write(app, destPath, function() { return process.stdout.write('Done: '+path.resolve(destPath)+'\n'); });
+                writer.write(app, destPath, function() { return process.stdout.write('Compiled: '+path.resolve(destPath)+'\n'); });
             }
 
             break;
