@@ -97,9 +97,12 @@ if (require.main === module) {
                     fs.stat(tmpfilepath, function (err, stats) {
                         console.log(stats.size);
                         var r = restler.post('http://cloud.appcubator.com/api/deploy/', { multipart:true,
-                                                                                          data: restler.file(tmpfilepath, null, stats.size)});
+                                                                                          data: {code: restler.file(tmpfilepath, null, stats.size )}});
                         r.on('complete', function (body, response) {
                             console.log(body);
+                        });
+                        r.on('error', function(err){
+                            console.log(err);
                         });
 
                     });
