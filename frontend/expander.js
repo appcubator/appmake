@@ -1,28 +1,31 @@
 var vm = require("vm"),
     ejs = require("ejs"),
-    _ = require("underscore");
+    _ = require("underscore"),
+    rootGenerators = require("../generators/generators");
 
 function findGenData(generators, genID) {
     // generators is app.generators
     // genID is an obj w (module, name, version) keys
     var packageNameSeperatorIndex = genID.module.indexOf(".");
     var packageName,
-        moduleName;
+        moduleName,
+        packageObj;
 
     // TODO: validate package name validateGenID(genID);
     if (packageNameSeperatorIndex === -1) {
         packageName = "root";
         moduleName = genID.module;
-    }
-    else {
+        packageObj = rootGenerators;
+        console.log(packageObj);
+    } else {
         packageName = genID.module.substr(0, packageNameSeperatorIndex);
         moduleName = genID.module.substr(packageNameSeperatorIndex + 1, genID.module.length);
+        packageObj = generators[packageName];
     }
-    var packageObj = generators[packageName];
     if (packageObj === undefined)
         throw "Package " + packageName + " not found";
     var module = packageObj[moduleName];
-    if (packageObj === undefined)
+    if (module === undefined)
         throw "Module " + moduleName + " not found in package " + packageName;
 
     // linear search through the generators in the module.
@@ -72,29 +75,31 @@ function parseGenID(generatorName) {
     return { module: moduleString, name: genName, version: '0.1' };
 }
 
-function expand(generators, genData) {
+function expandOnce(generators, genData) {
     var genID = parseGenID(genData.generate);
     var generatedObj = constructGen(findGenData(generators, genID))(genData.data);
     return generatedObj;
 }
 
+function expand(generators, genData) {
+    // TODO check for cycles
+    while ('generate' in genData) {
+        genData = expandOnce(generators, genData);
+    }
+    return genData
+}
+
 exports.expandAll = function(app) {
     _.each(app.routes, function(route, i) {
-        if ('generate' in route) {
-            app.routes[i] = expand(app.generators, route);
-        }
+        app.routes[i] = expand(app.generators, route);
     });
 
     _.each(app.models, function(model, modelName) {
         _.each(model.instanceMethods, function(im, imName) {
-            if ('generate' in im) {
-                app.models.instanceMethods[imName] = expand(app.generators, im);
-            }
+            app.models.instanceMethods[imName] = expand(app.generators, im);
         });
         _.each(model.staticMethods, function(sm, smName) {
-            if ('generate' in sm) {
-                app.models.staticMethods[smName] = expand(app.generators, sm);
-            }
+            app.models.staticMethods[smName] = expand(app.generators, sm);
         });
     });
 
@@ -113,12 +118,8 @@ exports.expandAll = function(app) {
             return templateLines.join("\n");
         };
 
-        for (var i = 0; i < uielements.length; i++){
-            while ('generate' in uielements[i]){ // Keep expanding till 
-                uielements[i] =  expand(app.generators, uielements[i]);
-            }
-        }
-        app.templates[templateName] = concat(uielements);
-    })
+        var expandedUIElements = _.map(uielements, function(uie){ return expand(app.generators, uie); });
+        app.templates[templateName] = concat(expandedUIElements);
+    });
     return app;
 };
