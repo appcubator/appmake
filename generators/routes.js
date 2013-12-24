@@ -15,3 +15,5 @@ generators.push({
                        "    res.render('<%= templateName %>');"+"\n"+
                        "}"}
 });
+
+exports.generators = generators;
