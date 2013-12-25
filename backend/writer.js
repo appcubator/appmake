@@ -39,9 +39,23 @@ function write(app, dirpath, callback) {
     _writeFile(_j(dirpath, 'package.json'), templates.packages(app.packages));
 
     // custom modules
+    // DFS through the app.modules nested object.
+    var nodestack = [];
     for (var filepath in app.modules) {
-        validatefp(filepath);
-        _writeFile(_j(dirpath, filepath), app.modules[filepath]);
+        nodestack.push([filepath, app.modules[filepath]]);
+    }
+    while (nodestack.length > 0) {
+        var entry = nodestack.pop();
+        var filepath = entry[0],
+            module = entry[1];
+        if (typeof(module) == typeof('')) {
+            validatefp(filepath);
+            _writeFile(_j(dirpath, filepath), module);
+        } else {
+            for (var subpath in module) {
+                nodestack.push([filepath + '/' + subpath, module[subpath]]);
+            }
+        }
     }
 
     // models
