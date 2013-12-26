@@ -140,29 +140,21 @@ exports.parseDir = function (dirPath) {
     app.routes = parseRoutes(dirContents['routes.js']);
 
     app.generators = {};
-    app.generators.root = {};
     for (var generatorName in dirContents.generators) {
-        //if (!generatorName.endsWith('.js'))
-        if (generatorName.indexOf('.js') !== (generatorName.length  - 3)) {
-            // Assume the name of the package is its folder name
-            app.generators[generatorName] = {};
-            for (var moduleFileName in dirContents.generators[generatorName]){
-                // Assume moduleFileName ends with .js and module structure is only 1 level deep. TODO: Go vun deeper. 
+        // Assume the name of the package is its folder name
+        app.generators[generatorName] = {};
+        if (typeof(dirContents.generators[generatorName]) !== typeof({})) {
+            // case file
+            console.log("Warning: root generators should go in appmake. I'm ignoring whatever this is!: " + generatorName);
+        } else {
+            // case directory
+            for (var moduleFileName in dirContents.generators[generatorName]) {
+                // Assume moduleFileName ends with .js and module structure is only 1 level deep
                 var moduleName = moduleFileName.substr(0, moduleFileName.length - 3);
                 app.generators[generatorName][moduleName] = parseGenerator(moduleName, dirContents.generators[generatorName][moduleFileName]);
             }
-
-            // TODO a folder may represent a module of generators
-            //console.log("[parser] Skipping non-js file: " + generatorName);
-        } else {
-           // generatorName = generatorName.substr(0, generatorName.length - 3);
-             // TODO validate generatorName
-            generatorLabel = generatorName.substr(0, generatorName.length - 3);
-            app.generators.root[generatorLabel] = parseGenerator(generatorName, dirContents.generators[generatorName]);            
         }
 
-
-//     
     }
 
     // TODO figure out this CSS thing

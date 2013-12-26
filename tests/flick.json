@@ -83,7 +83,6 @@
     }
   ],
   "generators": {
-    "root": {},
     "flickrpickr": {
       "uielements": [
         {
