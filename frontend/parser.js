@@ -109,18 +109,6 @@ exports.parseDir = function (dirPath) {
 
     app.templates = {};
 
-    // TODO make this a code generator, since each structure is specific to the layout strategy.
-    var concat = function (uielements) {
-        var templateLines = [];
-        for (var i = 0; i < uielements.length; i ++) {
-            var uie = uielements[i];
-            templateLines.push(uie.html);
-            templateLines.push("<style>"+uie.css+"</style>");
-            templateLines.push('<script type="text/javascript">'+uie.js+'</script>');
-        }
-        return templateLines.join("\n");
-    };
-
     for (var templateName in dirContents.templates) {
         //if (!templateName.endsWith('.ejs'))
         if (templateName.indexOf('.ejs') !== (templateName.length  - 4)) {
