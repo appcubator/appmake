@@ -8,12 +8,16 @@
   "modules": {
     "custom": {
       "custom.txt": "this is custom code\n"
+    },
+    "public": {
+      "models.js": "/*\n * models.js\n * remote method library\n *\n * by Appcubator, all rights reserved\n *\n */\n\n\nvar modelDefs = {\n    /* url should be either '' or 'GET /someurl' format. */\n    Picture: {\n        instancemethods: {'updateUrl': ''},\n        staticmethods: {'randomNFromFlickr': ''}\n    }\n};\n\nwindow.models = (function($, modelDefs){\n\n    var remoteFnFactory = function(method, url) {\n        var remoteFn = function() {\n            // read more at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/arguments\n            var args = Array.prototype.slice.call(arguments);\n            var callback = args.pop(); // this would be the last argument\n\n            $.ajax({\n                url: url,\n                method: method,\n                data: JSON.stringify(args),\n                contentType: 'application/json',\n                success: function(res) {callback(res.error, res.data);}\n            });\n        };\n        return remoteFn;\n    };\n\n    var models = {};\n\n    /* initialize model object with an attribute for each model, for each model method. */\n    for (var modelName in modelDefs) {\n        var modelDef = modelDefs[modelName];\n        models[modelName] = {};\n        for (var staticmethodName in modelDef.staticmethods) {\n            var url = modelDef.staticmethods[staticmethodName];\n            /* url should be either '' or 'GET /someurl' format. */\n            var remoteFn;\n            if (url === '') {\n                remoteFn = remoteFnFactory('POST', '/api/' + modelName + '/' + staticmethodName);\n            } else {\n                var toks = url.split(' '); // assert toks.length == 2\n                remoteFn = remoteFnFactory(toks[0], toks.substr(1).join(' '));\n            }\n            models[modelName][staticmethodName] = remoteFn;\n        }\n    }\n\n    return models;\n\n\n})(jQuery, modelDefs);\n"
     }
   },
   "models": {
     "Picture": {
       "fields": {
         "datePicked": "Date",
+        "name": "String",
         "url": "String"
       },
       "instancemethods": {
@@ -25,32 +29,41 @@
     }
   },
   "templates": {
-    "Homepage": [
-      {
-        "html": "\n    <h1>FlickrPickr</h1>\n    ",
-        "js": "",
-        "css": ""
-      },
-      {
-        "html": "\n<script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js\"></script>\n",
-        "js": "",
-        "css": ""
-      },
-      {
-        "generate": "flickrpickr.uielements.flicksearchbar",
-        "data": {
-          "galleryID": "myflickgallery",
-          "searchID": "myflicksearch",
-          "buttonText": "Hit the backend!"
-        }
-      },
-      {
-        "generate": "flickrpickr.uielements.flickgallery",
-        "data": {
-          "galleryID": "myflickgallery"
+    "Homepage": {
+      "generate": "templates.page",
+      "data": {
+        "head": "\n<script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js\"></script>\n<script src=\"/static/models.js\"></script>\n",
+        "body": {
+          "generate": "templates.concatUIE",
+          "data": [
+            {
+              "html": "\n    <h1>FlickrPickr</h1>\n    ",
+              "js": "",
+              "css": ""
+            },
+            {
+              "generate": "flickrpickr.uielements.flicksearchbar",
+              "data": {
+                "galleryID": "myflickgallery",
+                "searchID": "myflicksearch",
+                "buttonText": "Hit the backend!"
+              }
+            },
+            {
+              "generate": "flickrpickr.uielements.flickgallery",
+              "data": {
+                "galleryID": "myflickgallery"
+              }
+            },
+            {
+              "html": "<form id=\"testform\">\n    <input type=\"text\" name=\"name\" placeholder=\"name\"><br>\n    <input type=\"text\" name=\"url\" placeholder=\"url\"><br>\n    <input type=\"button\" value=\"Submit\"><br>\n    </form>\n    <span id=\"#testformloading\" style=\"visibility:hidden\">Loading...</span>\n    <span id=\"#testformok\" style=\"visibility:hidden\">OK</div>\n\n    ",
+              "js": "$('#testform input[type=\"button\"]').click(function(){\n    var formdata = $('#testform').getData();\n    models.Picture.create(formdata, function(err, data){\n        $('#testformloading').show();\n        if (err) { alert(err); }\n        else {\n            $('#testformloading').hide();\n            $('#testformok').show().delay(500).hide();\n        }\n    });\n});\n",
+              "css": ""
+            }
+          ]
         }
       }
-    ]
+    }
   },
   "routes": [
     {
@@ -61,9 +74,11 @@
       }
     },
     {
-      "method": "POST",
-      "pattern": "/randomNFromFlickr",
-      "code": "function (req, res) {\n        var P = require('./models/Picture').Picture;\n        var whenDone = function(e, d) { res.send({error:e, data:d}); };\n        var args = req.body.args;\n        args.push(whenDone);\n        P.randomNFromFlickr.apply(P, args);\n    }"
+      "generate": "routes.apiroute",
+      "data": {
+        "modelName": "Picture",
+        "methodName": "randomNFromFlickr"
+      }
     }
   ],
   "generators": {
@@ -76,7 +91,7 @@
           "code": "function (data, templates){\n        // buttonText, searchID, galleryID\n        var uie = {\n            html: templates.html(data),\n            css: '',\n            js: templates.js(data)\n        };\n        return uie;\n    }",
           "templates": {
             "html": "<form id=\"<%= searchID %>\">\n<input type=\"text\" name=\"q\">\n<input type=\"submit\" value=\"<%= buttonText %>\">\n</form>",
-            "js": "var models={};models.Picture={};models.Picture.randomNFromFlickr = function(arg1, arg2, callback) {    $.ajax({        url: '/randomNFromFlickr',        method: 'POST',        data: {'args[0]':arg1, 'args[1]':arg2 },        success: function(res) {callback(res.error, res.data);}    });};function renderInList (e, d) {    if (e) alert(e);    else {        for (var i = 0; i < d.photos.photo.length; i ++) {            var photo = d.photos.photo[i];            $('#<%= galleryID %>').append('<img src=\"'+photo.url_q+'\">');        }    }}$('#<%= searchID %>').submit(function() {    var formData = $('#<%= searchID %>').serializeArray();    models.Picture.randomNFromFlickr(formData[0].value, 10, renderInList);    return false;});"
+            "js": "function renderInList (e, d) {    if (e) alert(e);    else {        for (var i = 0; i < d.photos.photo.length; i ++) {            var photo = d.photos.photo[i];            $('#<%= galleryID %>').append('<img src=\"'+photo.url_q+'\">');        }    }}$('#<%= searchID %>').submit(function() {    var formData = $('#<%= searchID %>').serializeArray();    models.Picture.randomNFromFlickr(formData[0].value, 10, renderInList);    return false;});"
           }
         },
         {

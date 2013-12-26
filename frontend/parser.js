@@ -55,58 +55,9 @@ function parseModel(modelName, content) {
 }
 
 function parseTemplate(templateName, content) {
-    // TODO parse HTML/XML syntax that I have yet to decide.
-    // return the list of uielements (this is assuming rowcol strategy)
-
-    // Parsing algorithm:
-    // find <uie>   
-    // find </uie>
-    // take a slice, push, and search again.
-    // then parse all uielements strings into objects.
-    var subContent = content;
-    var openIndex = content.indexOf('<uie>'),
-        closeIndex,
-        uieStrings = [];
-    while (openIndex != -1) {
-        closeIndex = subContent.indexOf('</uie>');
-        if (closeIndex == -1) {
-            // TODO throw unmatched <uie> tag
-        }
-        var uieSlice = subContent.slice(openIndex + 5, closeIndex);
-        uieStrings.push(uieSlice);
-        subContent = subContent.slice(closeIndex + 6);
-        openIndex = subContent.indexOf('<uie>');
-    }
-
-    function parseUIEString(uieString) {
-        // for now, there is a html, css, and js section. TODO layout?
-        var openGenerate = uieString.indexOf('<generate>');
-        if (openGenerate === -1){ 
-            var openHTML = uieString.indexOf('<html>'),
-                closeHTML = uieString.indexOf('</html>'),
-                openJS = uieString.indexOf('<js>'),
-                closeJS = uieString.indexOf('</js>'),
-                openCSS = uieString.indexOf('<css>'),
-                closeCSS = uieString.indexOf('</css>');
-                
-            var html = uieString.slice(openHTML + 6, closeHTML),
-                js = uieString.slice(openJS + 4, closeJS),
-                css = uieString.slice(openCSS + 5, closeCSS);
-                
-            return {html:html, js:js, css:css};
-        }
-        else {
-            var closeGenerate = uieString.indexOf('</generate>'),
-                openData = uieString.indexOf('<data>'),
-                closeData = uieString.indexOf('</data>');
-            var generatorName = uieString.slice(openGenerate + 10, closeGenerate),
-                generateData = JSON.parse(uieString.slice(openData + 6, closeData));
-            return  { generate: generatorName, data: generateData};      
-        }
-    }
-
-    var uielements = _.map(uieStrings, parseUIEString);
-    return uielements;
+    var template = vm.runInNewContext("'use strict'; " + content + "; template");
+    validator.assertExists(template, templateName + '/template');
+    return template;
 }
 
 function parseRoutes(content) {
@@ -182,8 +133,7 @@ exports.parseDir = function (dirPath) {
         // TODO validate templateName
 
         var uielements = parseTemplate(templateName, dirContents.templates[templateName + '.ejs']);
-        if (uielements.generate === undefined)
-        app.templates[templateName] = uielements
+        app.templates[templateName] = uielements;
 
     }
 

@@ -45,16 +45,18 @@ function findGenData(generators, genID) {
 function constructGen(generatorData) {
     // input the generator's data from the json
     // output a function which can directly be used for generator execution.
-    var fn = function(data) {
+    var fn = function(generators, data) {
         var templates = generatorData.templates;
         var compiledTemplates = {};
         _.each(templates, function(templateStr, templateName) {
             compiledTemplates[templateName] = ejs.compile(templateStr);
         });
         // TODO compile each EJS template so that it can have a render method.
+        var expandFn = function(data) { return expand(generators, data); };
         var globals = {
             data: data,
-            templates: compiledTemplates
+            templates: compiledTemplates,
+            expand: expandFn
         };
         var code = '(' + generatorData.code + ')(data, templates);';
         var genObj = vm.runInNewContext(code, globals);
@@ -76,16 +78,16 @@ function parseGenID(generatorName) {
 
 function expandOnce(generators, genData) {
     var genID = parseGenID(genData.generate);
-    var generatedObj = constructGen(findGenData(generators, genID))(genData.data);
+    var generatedObj = constructGen(findGenData(generators, genID))(generators, genData.data);
     return generatedObj;
 }
 
 function expand(generators, genData) {
     // TODO check for cycles
-    while ('generate' in genData) {
+    while (typeof(genData) == typeof({}) && 'generate' in genData) {
         genData = expandOnce(generators, genData);
     }
-    return genData
+    return genData;
 }
 
 exports.expandAll = function(app) {
@@ -102,23 +104,8 @@ exports.expandAll = function(app) {
         });
     });
 
-    _.each(app.templates, function (uielements, templateName) {
-
-        // TODO make this a code generator, since each structure is specific to the layout strategy.
-        // Copied over from parser.js
-        var concat = function (uielements) {
-            var templateLines = [];
-            for (var i = 0; i < uielements.length; i ++) {
-                var uie = uielements[i];
-                templateLines.push(uie.html);
-                templateLines.push("<style>"+uie.css+"</style>");
-                templateLines.push('<script type="text/javascript">'+uie.js+'</script>');
-            }
-            return templateLines.join("\n");
-        };
-
-        var expandedUIElements = _.map(uielements, function(uie){ return expand(app.generators, uie); });
-        app.templates[templateName] = concat(expandedUIElements);
+    _.each(app.templates, function (template, templateName) {
+        app.templates[templateName] = expand(app.generators, template);
     });
     return app;
 };
