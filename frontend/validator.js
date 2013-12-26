@@ -4,7 +4,7 @@ var _ = require("underscore");
 function assertExists(value, varName) {
     var valueType = typeof(value);
     var errorMsg = 'Please expose variable \'' + varName + '\'';
-    if (valueType == typeof('undefined'))
+    if (valueType == typeof(undefined))
         throw errorMsg;
 }
 

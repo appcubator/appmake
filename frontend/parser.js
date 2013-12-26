@@ -56,7 +56,7 @@ function parseModel(modelName, content) {
 
 function parseTemplate(templateName, content) {
     var template = vm.runInNewContext("'use strict'; " + content + "; template");
-    validator.assertExists(template, templateName + '/template');
+    validator.assertExists(template, 'template');
     return template;
 }
 
