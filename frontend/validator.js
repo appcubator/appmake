@@ -19,34 +19,7 @@ function assertType(typeString, value, locString) {
 exports.assertExists = assertExists;
 exports.assertType = assertType;
 
-exports.validateRoute = function(route, locString) {
-        assertType('string', route.method, locString+'.method');
-        assertType('string', route.pattern, locString+'.pattern');
-        assertType('function', route.code, locString+'.code');
-        route.code = route.code.toString();
-};
-
-// this is for the generator definition. see validateGenrefOr for the generator usage (aka ref)
-exports.validateGenerator = function(generator, locString) {
-        assertType('string', generator.name, locString+'.name');
-        assertType('string', generator.version, locString+'.version');
-        assertType('function', generator.code, locString+'.code');
-        generator.code = generator.code.toString();
-        assertType('object', generator.templates, locString+'.templates');
-        _.each(generator.templates, function(template, templateName) {
-            assertType('string', templateName, locString+'.templates');
-            assertType('string', template, locString+'.templates.'+templateName);
-        });
-};
-
-/*
- * Often you want to validate that something is a generator ref or something else.
- * Ie, a generator ref in a routes array is still valid.
- *
- * Example:
- *     validator.validateGenrefOr(validateRoute)(route, 'routes.4');
- */
-exports.validateGenrefOr = function(otherValidator) {
+function validateGenrefOr(otherValidator) {
     var v = function(obj, locString) {
         // is a generator? then return. else try to validate otherValidator.
         try {
@@ -57,4 +30,59 @@ exports.validateGenrefOr = function(otherValidator) {
         }
     };
     return v;
-};
+}
+
+function validateRoute(route, locString) {
+        assertType('string', route.method, locString+'.method');
+        assertType('string', route.pattern, locString+'.pattern');
+        assertType('function', route.code, locString+'.code');
+        route.code = route.code.toString();
+}
+
+function validateIM(im, locString) {
+        assertType('string', im.name, locString+'.name');
+        assertType('function', im.code, locString+'.code');
+        im.code = im.code.toString();
+}
+
+function validateSM(sm, locString) {
+        assertType('string', sm.name, locString+'.name');
+        assertType('function', sm.code, locString+'.code');
+        sm.code = sm.code.toString();
+}
+
+function validateModel(model, locString) {
+        assertExists(model.fields, 'fields');
+        assertExists(model.instancemethods, 'instancemethods');
+        assertExists(model.staticmethods, 'staticmethods');
+        assertType('string', model.name, locString+'.name');
+        _.each(model.instancemethods, function(im){ validateGenrefOr(validateIM)(im, locString + '.instancemethods'); });
+        _.each(model.staticmethods, function(sm){ validateGenrefOr(validateSM)(sm, locString + '.staticmethods'); });
+}
+
+// this is for the generator definition. see validateGenrefOr for the generator usage (aka ref)
+function validateGenerator(generator, locString) {
+        assertType('string', generator.name, locString+'.name');
+        assertType('string', generator.version, locString+'.version');
+        assertType('function', generator.code, locString+'.code');
+        generator.code = generator.code.toString();
+        assertType('object', generator.templates, locString+'.templates');
+        _.each(generator.templates, function(template, templateName) {
+            assertType('string', templateName, locString+'.templates');
+            assertType('string', template, locString+'.templates.'+templateName);
+        });
+}
+
+/*
+ * Often you want to validate that something is a generator ref or something else.
+ * Ie, a generator ref in a routes array is still valid.
+ *
+ * Example:
+ *     validator.validateGenrefOr(validateRoute)(route, 'routes.4');
+ */
+exports.validateGenrefOr = validateGenrefOr;
+exports.validateRoute = validateRoute;
+exports.validateIM = validateIM;
+exports.validateSM = validateSM;
+exports.validateModel = validateModel;
+exports.validateGenerator = validateGenerator;

@@ -30,27 +30,9 @@ function loadDir(dirPath) {
 function parseModel(modelName, content) {
     // potentially insecure: safely running untrusted code requires a separate process.
     var model = vm.runInNewContext(content + "; var __noconflictplz__ = {fields:fields, instancemethods:instancemethods, staticmethods:staticmethods}; __noconflictplz__");
+    model.name = modelName;
 
-    validator.assertExists(model.fields, 'fields');
-    validator.assertExists(model.instancemethods, 'instancemethods');
-    validator.assertExists(model.staticmethods, 'staticmethods');
-
-    // validate schema of model
-    for (var fieldName in model.fields) {
-        validator.assertType('string', fieldName, 'model.'+modelName+'.fields');
-    }
-    for (var imName in model.instancemethods) {
-        validator.assertType('string', imName, 'model.'+modelName+'.instancemethods');
-        var im = model.instancemethods[imName];
-        validator.assertType('function', im, 'model.'+modelName+'.instancemethods');
-        model.instancemethods[imName] = im.toString(); // convert the function to its source code for serialization
-    }
-    for (var isName in model.staticmethods) {
-        validator.assertType('string', isName, 'model.'+modelName+'.staticmethods');
-        var is = model.staticmethods[isName];
-        validator.assertType('function', is, 'model.'+modelName+'.staticmethods');
-        model.staticmethods[isName] = is.toString(); // convert the function to its source code for serialization
-    }
+    validator.validateModel(model, 'models.' + modelName);
     return model;
 }
 
@@ -92,7 +74,7 @@ exports.parseDir = function (dirPath) {
     app.packages = JSON.parse(dirContents['requires.json']);
     app.modules = dirContents.modules; // TODO change the spec to be this nested object, it better represents a tree.
 
-    app.models = {};
+    app.models = [];
     for (var modelName in dirContents.models) {
         // if not modelName.endsWith(.js)
         if (modelName.indexOf('.js') !== (modelName.length -  3)) {
@@ -104,7 +86,8 @@ exports.parseDir = function (dirPath) {
         modelName = modelName.substr(0, modelName.length - 3);
         // TODO validate modelName
 
-        app.models[modelName] = parseModel(modelName, dirContents.models[modelName + '.js']);
+        var modelObj = parseModel(modelName, dirContents.models[modelName + '.js']);
+        app.models.push(modelObj);
     }
 
     app.templates = {};

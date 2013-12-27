@@ -95,12 +95,16 @@ exports.expandAll = function(app) {
         app.routes[i] = expand(app.generators, route);
     });
 
-    _.each(app.models, function(model, modelName) {
-        _.each(model.instanceMethods, function(im, imName) {
-            app.models.instanceMethods[imName] = expand(app.generators, im);
+    _.each(app.models, function(model, index) {
+
+        app.models[index] = expand(app.generators, model);
+
+        _.each(model.instancemethods, function(im, index) {
+            model.instancemethods[index] = expand(app.generators, im);
         });
-        _.each(model.staticMethods, function(sm, smName) {
-            app.models.staticMethods[smName] = expand(app.generators, sm);
+
+        _.each(model.staticmethods, function(sm, index) {
+            model.staticmethods[index] = expand(app.generators, sm);
         });
     });
 

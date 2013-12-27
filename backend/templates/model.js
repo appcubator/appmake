@@ -13,12 +13,12 @@ var <%= model.name %>Schema = new Schema({
 
 <% for(var imName in model.instancemethods) { %>
 <% var im = model.instancemethods[imName]; %>
-<%= model.name %>Schema.methods.<%= imName %> = <%= im %>;
+<%= model.name %>Schema.methods.<%= im.name %> = <%= im.code %>;
 <% } %>
 
 <% for(var smName in model.staticmethods) { %>
 <% var sm = model.staticmethods[smName]; %>
-<%= model.name %>Schema.statics.<%= smName %> = <%= sm %>;
+<%= model.name %>Schema.statics.<%= sm.name %> = <%= sm.code %>;
 <% } %>
 
 exports.<%= model.name %> = mongoose.model('<%= model.name %>', <%= model.name %>Schema);

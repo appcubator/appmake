@@ -1,7 +1,8 @@
 var path = require('path'),
     fs = require('fs'),
     mkdirp = require('mkdirp'),
-    templates = require("./templates");
+    templates = require("./templates"),
+    _ = require('underscore');
 
 var _j = path.join;
 
@@ -41,13 +42,14 @@ function write(app, dirpath, callback) {
     // custom modules
     // DFS through the app.modules nested object.
     var nodestack = [];
-    for (var filepath in app.modules) {
+    var filepath;
+    for (filepath in app.modules) {
         nodestack.push([filepath, app.modules[filepath]]);
     }
     while (nodestack.length > 0) {
         var entry = nodestack.pop();
-        var filepath = entry[0],
-            module = entry[1];
+        filepath = entry[0];
+        var module = entry[1];
         if (typeof(module) == typeof('')) {
             validatefp(filepath);
             _writeFile(_j(dirpath, filepath), module);
@@ -59,12 +61,10 @@ function write(app, dirpath, callback) {
     }
 
     // models
-    for (var modelName in app.models) {
-        var model = app.models[modelName];
-        model.name = modelName;
-        validatefname(modelName + '.js');
-        _writeFile(_j(dirpath, 'models', modelName + '.js'), templates.modeljs(model));
-    }
+    _.each(app.models, function(model) {
+        validatefname(model.name + '.js');
+        _writeFile(_j(dirpath, 'models', model.name + '.js'), templates.modeljs(model));
+    });
 
     // templates
     for (var templateName in app.templates) {
