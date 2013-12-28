@@ -1,0 +1,55 @@
+var template = { generate: "templates.page",
+  data: { head: '',
+          body: { generate: "templates.concatUIE",
+              data: [
+                  {
+                    "html": "\n    <h1>FlickrPickr</h1>\n    ",
+                    "js": "",
+                    "css": ""
+                  },
+                  {
+                    "generate": "flickrpickr.uielements.flicksearchbar",
+                    "data": {
+                      "galleryID": "myflickgallery",
+                      "searchID": "myflicksearch",
+                      "buttonText": "Hit the backend!"
+                    }
+                  },
+                  {
+                    "generate": "flickrpickr.uielements.flickgallery",
+                    "data": {
+                      "galleryID": "myflickgallery"
+                    }
+                  },
+                  // begin create form
+                  {
+                  "html": "<form id=\"testform\">\n"+
+                          "<input type=\"text\" name=\"name\" placeholder=\"name\"><br>\n"+
+                          "<input type=\"text\" name=\"url\" placeholder=\"url\"><br>\n"+
+                          "<input type=\"submit\" value=\"Submit\"><br>\n"+
+                          "</form>\n"+
+                          "<span id=\"testformloading\">Loading...</span>\n"+
+                          "<span id=\"testformok\">OK</span>\n",
+                    "js": "$('#testformloading').hide();\n\
+                           $('#testformok').hide();\n\
+                           $('#testform').submit(function(){\n\
+                               var formdata = {};\n\
+                               formdata.name = $('#testform input[name=\"name\"]').val();\n\
+                               formdata.url = $('#testform input[name=\"url\"]').val();\n\
+                               models.Picture.createPicture(formdata, function(err, data){\n\
+                                   console.log(data);\n\
+                                   $('#testformloading').show();\n\
+                                   if (err) { alert(err); }\n\
+                                   else {\n\
+                                       $('#testformloading').hide();\n\
+                                       $('#testformok').show();\n\
+                                   }\n\
+                               });\n\
+                               return false;\n\
+                           });\n",
+                    "css": ""
+                  }
+                ]
+          }
+  }
+}
