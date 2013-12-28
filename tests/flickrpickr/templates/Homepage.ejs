@@ -21,32 +21,12 @@ var template = { generate: "templates.page",
                       "galleryID": "myflickgallery"
                     }
                   },
-                  // begin create form
                   {
-                  "html": "<form id=\"testform\">\n"+
-                          "<input type=\"text\" name=\"name\" placeholder=\"name\"><br>\n"+
-                          "<input type=\"text\" name=\"url\" placeholder=\"url\"><br>\n"+
-                          "<input type=\"submit\" value=\"Submit\"><br>\n"+
-                          "</form>\n",
-                    "js": "$('#testform').submit(function(){\n\
-                               var formdata = {};\n\
-                               formdata.name = $('#testform input[name=\"name\"]').val();\n\
-                               formdata.url = $('#testform input[name=\"url\"]').val();\n\
-                               models.Picture.createPicture(formdata, function(err, data){\n\
-                                   console.log(data);\n\
-                                   $('#testformloading').show();\n\
-                                   if (err) {\n\
-                                       // Do whatever you want with user errors\n\
-                                       alert(err);\n\
-                                   }\n\
-                                   else {\n\
-                                       // You can redirect on success\n\
-                                       location.href = 'https://www.google.com/';\n\
-                                   }\n\
-                               });\n\
-                               return false;\n\
-                           });\n",
-                    "css": ""
+                    generate: "crud.uielements.create",
+                    data: { fields: [['name', 'text'],
+                                    ['url', 'text']],
+                            id: 'testform',
+                            redirect: 'https://www.google.com/' }
                   }
                 ]
           }

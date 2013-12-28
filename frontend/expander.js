@@ -1,31 +1,23 @@
 var vm = require("vm"),
     ejs = require("ejs"),
     _ = require("underscore"),
-    rootGenerators = require("../generators/generators");
+    builtinGenerators = require("../generators/generators");
 
 function findGenData(generators, genID) {
     // generators is app.generators
-    // genID is an obj w (module, name, version) keys
-    var packageNameSeperatorIndex = genID.module.indexOf(".");
-    var packageName,
-        moduleName,
-        packageObj;
+    // genID is an obj w (package, module, name, version) keys
+    // Search order: generators, then builtinGenerators
 
-    // TODO: validate package name validateGenID(genID);
-    if (packageNameSeperatorIndex === -1) {
-        packageName = "root";
-        moduleName = genID.module;
-        packageObj = rootGenerators;
-    } else {
-        packageName = genID.module.substr(0, packageNameSeperatorIndex);
-        moduleName = genID.module.substr(packageNameSeperatorIndex + 1, genID.module.length);
-        packageObj = generators[packageName];
+    var packageObj = generators[genID.package];
+    if (packageObj === undefined) {
+        packageObj = builtinGenerators[genID.package];
+        if (packageObj === undefined) {
+            throw "Package " + genID.package + " not found";
+        }
     }
-    if (packageObj === undefined)
-        throw "Package " + packageName + " not found";
-    var module = packageObj[moduleName];
+    var module = packageObj[genID.module];
     if (module === undefined)
-        throw "Module " + moduleName + " not found in package " + packageName;
+        throw "Module " + genID.module + " not found in package " + genID.package;
 
     // linear search through the generators in the module.
     var generator;
@@ -67,13 +59,25 @@ function constructGen(generatorData) {
 
 function parseGenID(generatorName) {
     var tokens = generatorName.split('.');
+    var module, package, name, version;
+    // TODO care about version nums. for now everything is 0.1.
 
-    var genName = tokens[tokens.length-1];
+    version = "0.1";
 
-    var moduleString = tokens.slice(0,tokens.length-1).join('.') ;
+    if (tokens.length == 2) {
+        package = 'root';
+        module = tokens[0];
+        name = tokens[1];
+    } else if (tokens.length == 3) {
+        package = tokens[0];
+        module = tokens[1];
+        name = tokens[2];
+    } else {
+        throw "Invalid dot separation. Must be 2 or 3 tokens. Original: " + generatorName;
+    }
 
-    // TODO version nums. for now everything is 0.1.
-    return { module: moduleString, name: genName, version: '0.1' };
+
+    return { package: package, module: module, name: name, version: version };
 }
 
 function expandOnce(generators, genData) {

@@ -33,13 +33,13 @@ staticmethods.push({
  * If it's save instancemethod, we may be able to use create on the backend. */
 
 staticmethods.push({
-    generate: 'models.create',
+    generate: 'crud.models.create',
     data: { modelName: 'Picture',
             enableAPI: true, }
 });
 
 staticmethods.push({
-    generate: 'models.find',
+    generate: 'crud.models.find',
     data: { modelName: 'Picture',
             enableAPI: true, }
 });

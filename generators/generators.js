@@ -1,3 +1,2 @@
-exports.routes = require('./routes.js').generators;
-exports.templates = require('./templates.js').generators;
-exports.models = require('./models.js').generators;
+exports.root = require('./root/generators');
+exports.crud = require('./crud/generators');
