@@ -33,9 +33,8 @@ staticmethods.push({
  * If it's save instancemethod, we may be able to use create on the backend. */
 
 staticmethods.push({
-    generate: 'models.proxyToMongoose',
+    generate: 'models.create',
     data: { modelName: 'Picture',
-            methodName: 'create',
             enableAPI: true, }
 });
 
