@@ -27,22 +27,21 @@ var template = { generate: "templates.page",
                           "<input type=\"text\" name=\"name\" placeholder=\"name\"><br>\n"+
                           "<input type=\"text\" name=\"url\" placeholder=\"url\"><br>\n"+
                           "<input type=\"submit\" value=\"Submit\"><br>\n"+
-                          "</form>\n"+
-                          "<span id=\"testformloading\">Loading...</span>\n"+
-                          "<span id=\"testformok\">OK</span>\n",
-                    "js": "$('#testformloading').hide();\n\
-                           $('#testformok').hide();\n\
-                           $('#testform').submit(function(){\n\
+                          "</form>\n",
+                    "js": "$('#testform').submit(function(){\n\
                                var formdata = {};\n\
                                formdata.name = $('#testform input[name=\"name\"]').val();\n\
                                formdata.url = $('#testform input[name=\"url\"]').val();\n\
                                models.Picture.createPicture(formdata, function(err, data){\n\
                                    console.log(data);\n\
                                    $('#testformloading').show();\n\
-                                   if (err) { alert(err); }\n\
+                                   if (err) {\n\
+                                       // Do whatever you want with user errors\n\
+                                       alert(err);\n\
+                                   }\n\
                                    else {\n\
-                                       $('#testformloading').hide();\n\
-                                       $('#testformok').show();\n\
+                                       // You can redirect on success\n\
+                                       location.href = 'https://www.google.com/';\n\
                                    }\n\
                                });\n\
                                return false;\n\
