@@ -38,6 +38,12 @@ staticmethods.push({
             enableAPI: true, }
 });
 
+staticmethods.push({
+    generate: 'models.find',
+    data: { modelName: 'Picture',
+            enableAPI: true, }
+});
+
 var model = {fields: fields,
              instancemethods: instancemethods,
              staticmethods: staticmethods};
