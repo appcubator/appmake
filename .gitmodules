@@ -1,3 +1,0 @@
-[submodule "tests/flickrpickr"]
-    path = tests/flickrpickr
-    url = git@github.com:appcubator/flickrpickr.git
