@@ -37,21 +37,8 @@
           "generate": "models.proxyToMongoose",
           "data": {
             "modelName": "Picture",
-            "methodName": "create"
-          }
-        },
-        {
-          "generate": "models.proxyToMongoose",
-          "data": {
-            "modelName": "Picture",
-            "methodName": "find"
-          }
-        },
-        {
-          "generate": "models.proxyToMongoose",
-          "data": {
-            "modelName": "Picture",
-            "methodName": "findOne"
+            "methodName": "create",
+            "enableAPI": true
           }
         }
       ],

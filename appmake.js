@@ -89,7 +89,7 @@ if (require.main === module) {
                     }
                 });
             });
-            app.templates['modeldefs.ejs'] = 'var modelDefs = ' + JSON.stringify(modelDefs, null, 2) + ';';
+            app.templates['modeldefs'] = 'var modelDefs = ' + JSON.stringify(modelDefs, null, 2) + ';';
 
             if (destPath === null) {
                 temp.mkdir('appmake-', function(err, tmpdir) {
