@@ -29,7 +29,7 @@ function loadDir(dirPath) {
 
 function parseModel(modelName, content) {
     // potentially insecure: safely running untrusted code requires a separate process.
-    var model = vm.runInNewContext(content + "; var __noconflictplz__ = {fields:fields, instancemethods:instancemethods, staticmethods:staticmethods}; __noconflictplz__");
+    var model = vm.runInNewContext(content + "; model");
     model.name = modelName;
 
     validator.validateModel(model, 'models.' + modelName);

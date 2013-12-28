@@ -8,6 +8,7 @@ var parser = require('./frontend/parser'),
     restler = require('restler'),
     temp = require('temp'),
     tar = require('tar'),
+    _ = require('underscore'),
     fstream = require('fstream');
 
 
@@ -70,6 +71,25 @@ if (require.main === module) {
 
             // expand the code generators
             expander.expandAll(app);
+
+            // autogenerate api routes and modelDefs template for the frontend library
+            var modelDefs = {};
+            _.each(app.models, function(model) {
+                var thisModelDef = { instancemethods: {}, staticmethods: {} };
+                // Note that modelDefs will be mutated iff the below code runs in at least one iteration
+                _.each(model.staticmethods, function(sm) {
+                    if (sm.enableAPI) {
+                        modelDefs[model.name] = thisModelDef; // this need only happens once but repeatedly doesn't hurt and code is easier this way.
+                        modelDefs[model.name].staticmethods[sm.name] = ''; // TODO custom url can go here.
+                        app.routes.push(expander.expand(app.generators, {
+                            generate: "routes.apiroute",
+                            data: { modelName: model.name,
+                                    methodName: sm.name } // TODO custom url can go here as well.
+                        }));
+                    }
+                });
+            });
+            app.templates['modeldefs.ejs'] = 'var modelDefs = ' + JSON.stringify(modelDefs, null, 2) + ';';
 
             if (destPath === null) {
                 temp.mkdir('appmake-', function(err, tmpdir) {
