@@ -15,34 +15,104 @@
   },
   "models": [
     {
-      "fields": {
-        "datePicked": "Date",
-        "name": "String",
-        "url": "String"
-      },
-      "instancemethods": [
-        {
-          "name": "updateUrl",
-          "enableAPI": true,
-          "code": "function (newUrl, cb) {\n      this.url = newUrl;\n      this.save(function(e, d){cb(e,d);});\n    }"
-        }
-      ],
-      "staticmethods": [
-        {
-          "name": "randomNFromFlickr",
-          "enableAPI": true,
-          "code": "function (searchQ, limit, cb) {\n      var flickr = require('flickr');\n      var fcli = new flickr.Flickr('cbe3f7f6cbf9d13ad243a1e1afec902d', '5c3f9a33e088ef60');\n      fcli.executeAPIRequest('flickr.photos.search', {text: searchQ, per_page: limit, extras: ['url_q']},\n                               false, function(e, d){cb(e, d);});\n    }"
-        },
-        {
-          "generate": "models.proxyToMongoose",
-          "data": {
-            "modelName": "Picture",
-            "methodName": "create",
-            "enableAPI": true
+      "generate": "models.model",
+      "data": {
+        "name": "Picture",
+        "fields": [
+          {
+            "name": "datePicked",
+            "type": "Date"
+          },
+          {
+            "name": "name",
+            "type": "String"
+          },
+          {
+            "name": "url",
+            "type": "String"
           }
-        }
-      ],
-      "name": "Picture"
+        ],
+        "instancemethods": [
+          {
+            "name": "updateUrl",
+            "enableAPI": true,
+            "code": "function (newUrl, cb) {\n      this.url = newUrl;\n      this.save(function(e, d){cb(e,d);});\n    }"
+          }
+        ],
+        "staticmethods": [
+          {
+            "name": "randomNFromFlickr",
+            "enableAPI": true,
+            "code": "function (searchQ, limit, cb) {\n      var flickr = require('flickr');\n      var fcli = new flickr.Flickr('cbe3f7f6cbf9d13ad243a1e1afec902d', '5c3f9a33e088ef60');\n      fcli.executeAPIRequest('flickr.photos.search', {text: searchQ, per_page: limit, extras: ['url_q']},\n                               false, function(e, d){cb(e, d);});\n    }"
+          },
+          {
+            "generate": "crud.models.create",
+            "data": {
+              "modelName": "Picture",
+              "enableAPI": true
+            }
+          },
+          {
+            "generate": "crud.models.find",
+            "data": {
+              "modelName": "Picture",
+              "enableAPI": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "generate": "models.model",
+      "data": {
+        "name": "User",
+        "fields": [
+          {
+            "name": "name",
+            "type": "String"
+          },
+          {
+            "name": "email",
+            "type": "String"
+          },
+          {
+            "name": "username",
+            "type": "String"
+          },
+          {
+            "name": "hashed_password",
+            "type": "String"
+          },
+          {
+            "name": "salt",
+            "type": "String"
+          }
+        ],
+        "instancemethods": [
+          {
+            "name": "authenticate",
+            "code": "function (plainText) {\n  /**\n   * Authenticate by checking the hashed password and provided password\n   *\n   * @param {String} plainText\n   * @return {Boolean}\n   * @api private\n   */\n    return this.encryptPassword(plainText) === this.hashed_password;\n  }"
+          },
+          {
+            "name": "makeSalt",
+            "code": "function () {\n  /**\n   * Create password salt\n   *\n   * @return {String}\n   * @api private\n   */\n\n    /* Then to regenerate password, use:\n        this.salt = this.makeSalt()\n        this.hashed_password = this.encryptPassword(password)\n    */\n    return Math.round((new Date().valueOf() * Math.random())) + '';\n  }"
+          },
+          {
+            "name": "encryptPassword",
+            "code": "function (password) {\n  /**\n   * Encrypt password\n   *\n   * @param {String} password\n   * @return {String}\n   * @api private\n   */\n    var crypto = require('crypto');\n    if (!password) return '';\n    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');\n  }"
+          },
+          {
+            "name": "resetToken",
+            "code": "function (token, cb) {\n  /**\n   * Reset auth token\n   *\n   * @param {String} token\n   * @param {Function} cb\n   * @api private\n   */\n    var self = this;\n    var crypto = require('crypto');\n    crypto.randomBytes(48, function(ex, buf) {\n      self[token] = buf.toString('hex');\n      if (cb) cb();\n    });\n  }"
+          }
+        ],
+        "staticmethods": [],
+        "schemaMods": [
+          "function (schema) {\n  schema.path('name').validate(function (name) {\n    return name.trim().length > 0;\n  }, 'Please provide a valid name');\n}",
+          "function (schema) {\n  schema.path('email').validate(function (email) {\n    return email.trim().length > 0;\n  }, 'Please provide a valid email');\n}",
+          "function (schema) {\n  schema.path('hashed_password').validate(function (hashed_password) {\n    return hashed_password.length > 0;\n  }, 'Please provide a password');\n}"
+        ]
+      }
     }
   ],
   "templates": {
@@ -73,9 +143,21 @@
               }
             },
             {
-              "html": "<form id=\"testform\">\n<input type=\"text\" name=\"name\" placeholder=\"name\"><br>\n<input type=\"text\" name=\"url\" placeholder=\"url\"><br>\n<input type=\"submit\" value=\"Submit\"><br>\n</form>\n<span id=\"testformloading\">Loading...</span>\n<span id=\"testformok\">OK</span>\n",
-              "js": "$('#testformloading').hide();\n                           $('#testformok').hide();\n                           $('#testform').submit(function(){\n                               var formdata = {};\n                               formdata.name = $('#testform input[name=\"name\"]').val();\n                               formdata.url = $('#testform input[name=\"url\"]').val();\n                               models.Picture.createPicture(formdata, function(err, data){\n                                   console.log(data);\n                                   $('#testformloading').show();\n                                   if (err) { alert(err); }\n                                   else {\n                                       $('#testformloading').hide();\n                                       $('#testformok').show();\n                                   }\n                               });\n                               return false;\n                           });\n",
-              "css": ""
+              "generate": "crud.uielements.create",
+              "data": {
+                "fields": [
+                  [
+                    "name",
+                    "text"
+                  ],
+                  [
+                    "url",
+                    "text"
+                  ]
+                ],
+                "id": "testform",
+                "redirect": "https://www.google.com/"
+              }
             }
           ]
         }
@@ -110,6 +192,12 @@
           "templates": {}
         }
       ]
+    }
+  },
+  "config": {
+    "generate": "app.config",
+    "data": {
+      "customCodeChunks": []
     }
   }
 }
