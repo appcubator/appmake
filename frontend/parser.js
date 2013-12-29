@@ -128,6 +128,13 @@ exports.parseDir = function (dirPath) {
 
     }
 
+    function parseConfig(content) {
+        var config = vm.runInNewContext(content + "; config");
+        validator.assertExists(config, 'config');
+        return config;
+    }
+    app.config = parseConfig(dirContents['config.js']);
+
     // TODO figure out this CSS thing
     return app;
 };

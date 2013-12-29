@@ -28,8 +28,6 @@ exports.routes = function(routes) { return templates.routes({routes: routes}); }
 /* Boilerplate */
 
 
-var appjs = fs.readFileSync(path.join(__dirname, 'templates/app.js'));
-
 // packages.json
 exports.packages = function(packages) {
     // packages is a flat object of string - string.
@@ -42,6 +40,3 @@ exports.js = function(models) { return "alert('helloworld');" };
 
 // the css file
 exports.css = function(css) { return "body { background-color: red }" };
-
-// js code for http server and registers routes
-exports.app = function() { return appjs; };

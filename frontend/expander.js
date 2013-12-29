@@ -117,5 +117,7 @@ exports.expandAll = function(app) {
     _.each(app.templates, function (template, templateName) {
         app.templates[templateName] = expand(app.generators, template);
     });
+
+    app.config = expand(app.generator, app.config);
     return app;
 };

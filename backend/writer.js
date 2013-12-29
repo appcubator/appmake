@@ -84,7 +84,7 @@ function write(app, dirpath, callback) {
     _writeFile(_j(dirpath, 'routes.js'), templates.routes(app.routes));
 
     // app
-    _writeFile(_j(dirpath, 'app.js'), templates.app(), true);
+    _writeFile(_j(dirpath, 'app.js'), app.config, true);
 
 }
 
