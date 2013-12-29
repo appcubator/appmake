@@ -48,7 +48,8 @@ function constructGen(generatorData) {
         var globals = {
             data: data,
             templates: compiledTemplates,
-            expand: expandFn
+            expand: expandFn,
+            //console: console // debug
         };
         var code = '(' + generatorData.code + ')(data, templates);';
         var genObj = vm.runInNewContext(code, globals);
@@ -102,22 +103,13 @@ exports.expandAll = function(app) {
     });
 
     _.each(app.models, function(model, index) {
-
         app.models[index] = expand(app.generators, model);
-
-        _.each(model.instancemethods, function(im, index) {
-            model.instancemethods[index] = expand(app.generators, im);
-        });
-
-        _.each(model.staticmethods, function(sm, index) {
-            model.staticmethods[index] = expand(app.generators, sm);
-        });
     });
 
     _.each(app.templates, function (template, templateName) {
         app.templates[templateName] = expand(app.generators, template);
     });
 
-    app.config = expand(app.generator, app.config);
+    app.config = expand(app.generators, app.config);
     return app;
 };

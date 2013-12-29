@@ -63,7 +63,7 @@ function write(app, dirpath, callback) {
     // models
     _.each(app.models, function(model) {
         validatefname(model.name + '.js');
-        _writeFile(_j(dirpath, 'models', model.name + '.js'), templates.modeljs(model));
+        _writeFile(_j(dirpath, 'models', model.name + '.js'), model.code);
     });
 
     // templates

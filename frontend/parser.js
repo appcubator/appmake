@@ -30,9 +30,8 @@ function loadDir(dirPath) {
 function parseModel(modelName, content) {
     // potentially insecure: safely running untrusted code requires a separate process.
     var model = vm.runInNewContext(content + "; model");
-    model.name = modelName;
 
-    validator.validateModel(model, 'models.' + modelName);
+    validator.validateGenrefOr (validator.validateModel) (model, 'models.' + modelName);
     return model;
 }
 

@@ -12,13 +12,9 @@ function fromFile(filepath) {
 }
 
 var templates = {
-    model : ejs.compile(fromFile('/templates/model.js')),
     routes : ejs.compile(fromFile('/templates/routes.js'))
 };
 
-
-// mongoose model js code
-exports.modeljs = function(model) { return templates.model({ model: model}); };
 
 // routes (ie to render page)
 exports.routes = function(routes) { return templates.routes({routes: routes}); };

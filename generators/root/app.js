@@ -38,8 +38,7 @@ app.configure('development', function(){\n\
 var routes = require('./routes');\n\
 routes.bindTo(app);\n\
 \n\
-app.listen(app.get('port'));\n\
-});\n"
+app.listen(app.get('port'));\n"
     }
 });
 

@@ -1,8 +1,10 @@
-var fields = {
-  "datePicked": "Date",
-  "name": "String",
-  "url": "String"
-};
+var fields = [{ name: "datePicked",
+                type: "Date" },
+              { name: "name",
+                type: "String" },
+              { name: "url",
+                type: "String" }
+];
 
 var instancemethods = [];
 instancemethods.push({
@@ -44,6 +46,11 @@ staticmethods.push({
             enableAPI: true, }
 });
 
-var model = {fields: fields,
-             instancemethods: instancemethods,
-             staticmethods: staticmethods};
+var model = { generate: "models.model",
+              data: {
+                  name: 'Picture',
+                  fields: fields,
+                  instancemethods: instancemethods,
+                  staticmethods: staticmethods
+              }
+};

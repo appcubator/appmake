@@ -52,7 +52,12 @@ if (require.main === module) {
 
             var app = parser.parseDir(srcDir);
 
-            fs.writeFileSync(destJsonPath, JSON.stringify(app, null, 2));
+            fs.writeFileSync(destJsonPath, JSON.stringify(app, function(key, value) {
+                if (typeof(value) === 'function')
+                    return value.toString();
+                else
+                    return value;
+            }, 2));
             process.stdout.write('Parsed: '+path.resolve(destJsonPath)+'\n');
             break;
 

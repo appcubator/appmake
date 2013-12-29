@@ -1,10 +1,23 @@
-var fields = {
-  name: { type: 'String', default: '' },
-  email: { type: 'String', default: '' },
-  username: { type: 'String', default: '' },
-  hashed_password: { type: 'String', default: '' },
-  salt: { type: 'String', default: '' }
-};
+var fields = [{
+        "name": "name",
+        "type": "String"
+    },
+    {
+        "name": "email",
+        "type": "String"
+    },
+    {
+        "name": "username",
+        "type": "String"
+    },
+    {
+        "name": "hashed_password",
+        "type": "String"
+    },
+    {
+        "name": "salt",
+        "type": "String"
+    }];
 
 var instancemethods = [];
 
@@ -23,7 +36,7 @@ instancemethods.push({
 });
 
 instancemethods.push({
-  name: makeSalt,
+  name: 'makeSalt',
   code: function() {
   /**
    * Create password salt
@@ -41,7 +54,7 @@ instancemethods.push({
 });
 
 instancemethods.push({
-  name: encryptPassword,
+  name: 'encryptPassword',
   code: function (password) {
   /**
    * Encrypt password
@@ -58,7 +71,7 @@ instancemethods.push({
 
 
 instancemethods.push({
-  name: resetToken,
+  name: 'resetToken',
   code: function (token, cb) {
   /**
    * Reset auth token
@@ -98,8 +111,13 @@ schemaMods.push(function (schema) {
 
 var staticmethods = [];
 
-var model = {fields: fields,
-             instancemethods: instancemethods,
-             staticmethods: staticmethods,
-             schemaMods: schemaMods};
+var model = { generate: "models.model",
+              data: {
+                  name: 'User',
+                  fields: fields,
+                  instancemethods: instancemethods,
+                  staticmethods: staticmethods,
+                  schemaMods: schemaMods
+              }
+};
 

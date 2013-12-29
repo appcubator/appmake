@@ -36,19 +36,16 @@ function validateRoute(route, locString) {
         assertType('string', route.method, locString+'.method');
         assertType('string', route.pattern, locString+'.pattern');
         assertType('function', route.code, locString+'.code');
-        route.code = route.code.toString();
 }
 
 function validateIM(im, locString) {
         assertType('string', im.name, locString+'.name');
         assertType('function', im.code, locString+'.code');
-        im.code = im.code.toString();
 }
 
 function validateSM(sm, locString) {
         assertType('string', sm.name, locString+'.name');
         assertType('function', sm.code, locString+'.code');
-        sm.code = sm.code.toString();
 }
 
 function validateModel(model, locString) {
@@ -65,7 +62,6 @@ function validateGenerator(generator, locString) {
         assertType('string', generator.name, locString+'.name');
         assertType('string', generator.version, locString+'.version');
         assertType('function', generator.code, locString+'.code');
-        generator.code = generator.code.toString();
         assertType('object', generator.templates, locString+'.templates');
         _.each(generator.templates, function(template, templateName) {
             assertType('string', templateName, locString+'.templates');
