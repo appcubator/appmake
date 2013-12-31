@@ -4,11 +4,11 @@ generators.push({
     name: 'create',
     version: '0.1',
     code: function(data, templates) {
-        /* Example (temporary)
+        /* Example (subject to change)
         {
           generate: "crud.uielements.create",
-          data: { fields: [['name', 'text'],
-                          ['url', 'text']],
+          data: { fields: [['name', { type: 'text', placeholder: 'Name'} ],
+                           ['url', { type: 'text', placeholder: 'URL'}   ]],
                   id: 'testform',
                   redirect: 'https://www.google.com/' }
         }
@@ -21,7 +21,7 @@ generators.push({
     templates: {
         "html": "<form id=\"<%= id %>\">\n"+
                 "<% for (var i = 0; i < fields.length; i ++) { %>\n"+
-                "<input type=\"<%= fields[i][1] %>\" name=\"<%= fields[i][0] %>\" placeholder=\"name\"><br>\n"+
+                "<input type=\"<%= fields[i][1].type %>\" name=\"<%= fields[i][0] %>\" placeholder=\"<%= fields[i][1].placeholder %>\"><br>\n"+
                 "<% } %>\n"+
                 "<input type=\"submit\" value=\"Submit\"><br>\n"+
                 "</form>\n",

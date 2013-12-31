@@ -34,7 +34,6 @@ generators.push({
 <% } %>\n\
 })",
         main: "var mongoose = require('mongoose');\n\
-mongoose.connect(process.env.MONGO_ADDR);\n\
 \n\
 var Schema = mongoose.Schema;\n\
 \n\
@@ -43,17 +42,17 @@ var <%= name %>Schema = <%= schemaCode %>;\n\
 \n\
 <% for(var index in instancemethods) { %>\n\
 <% var im = instancemethods[index]; %>\n\
-<%= name %>Schema.methods.<%= im.name %> = <%= im.code %>;\n\
+<%= name %>Schema.methods.<%= im.name %> = <%- im.code %>;\n\
 <% } %>\n\
 \n\
 <% for(var index in staticmethods) { %>\n\
 <% var sm = staticmethods[index]; %>\n\
-<%= name %>Schema.statics.<%= sm.name %> = <%= sm.code %>;\n\
+<%= name %>Schema.statics.<%= sm.name %> = <%- sm.code %>;\n\
 <% } %>\n\
 \n\
 <% for(var index in schemaMods) { %>\n\
 <% var sm = schemaMods[index]; %>\n\
-(<%= sm %>)(<%= name %>Schema);\n\
+(<%- sm %>)(<%= name %>Schema);\n\
 <% } %>\n\
 \n\
 exports.<%= name %> = mongoose.model('<%= name %>', <%= name %>Schema);\n"

@@ -1,3 +1,5 @@
+SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
+cd $SCRIPTPATH
 OUTDIR=`pwd`/tmp
 
 # BACKUP NODE MODULES

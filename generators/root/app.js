@@ -33,6 +33,8 @@ app.configure('development', function(){\n\
   app.use(express.errorHandler());\n\
 });\n\
 \n\
+var mongoose = require('mongoose');\n\
+mongoose.connect(process.env.MONGO_ADDR);\n\
 <%= customConfig %>\n\
 \n\
 var routes = require('./routes');\n\

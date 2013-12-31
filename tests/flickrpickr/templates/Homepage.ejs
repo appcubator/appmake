@@ -1,9 +1,10 @@
 var template = { generate: "templates.page",
-  data: { head: '',
+data: { head: '<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>',
           body: { generate: "templates.concatUIE",
               data: [
+              /* FLICKR API ON THE BACKEND */
                   {
-                    "html": "\n    <h1>FlickrPickr</h1>\n    ",
+                    "html": "<h1>Search Flickr</h1>",
                     "js": "",
                     "css": ""
                   },
@@ -21,13 +22,58 @@ var template = { generate: "templates.page",
                       "galleryID": "myflickgallery"
                     }
                   },
+
+              /* CREATE FORM (frontend/backend integration lib) */
+                  {
+                    "html": "<h1>Create a Picture</h1>",
+                    "js": "",
+                    "css": ""
+                  },
                   {
                     generate: "crud.uielements.create",
-                    data: { fields: [['name', 'text'],
-                                    ['url', 'text']],
+                    data: { fields: [['name', {type:'text', placeholder:'Name'}],
+                                     ['url', {type:'text', placeholder:'URL'}]],
                             id: 'testform',
-                            redirect: 'https://www.google.com/' }
-                  }
+                            redirect: '/?success=true' }
+                  }, // client side rendering of the pics via api call.
+                  {
+                  "html": "<div id=\"piclist\"></div>",
+                  "js": "models.Picture.findPicture({}, function(err, data){\n"+
+                  "_.each(data, function(d) {$('#piclist').append('<p>'+d.name+'</p><img class=\"piclist\" src=\"'+d.url+'\">'); });\n"+
+                        "});",
+                  "css": "img.piclist {max-height: 200px; max-width: 300px;}"
+                  },
+
+
+              /* SIGNUP/LOGIN */
+                  {
+                    "html": ["<h1>Sign Up</h1>",
+                             '<form id="signup">',
+                             '<input name="username" type="text" placeholder="Username"><br>',
+                             '<input name="password" type="password" placeholder="Password"><br>',
+                             '<input name="password2" type="password" placeholder="Confirm password"><br>',
+                             '<input type="submit" value="Submit">',
+                             '</form>',
+                             ].join('\n'),
+                     "js": ["$('#signup').submit(function(){",
+                             "    var username = $('#signup input[name=\"username\"]').val();",
+                             "    var password = $('#signup input[name=\"password\"]').val();",
+                             "    var password2 = $('#signup input[name=\"password2\"]').val();",
+                             "    models.User.signup(username, password, password2, function(err, data){",
+                             "        if (err) { alert(err); }",
+                             "        else { location.href = data.url; }",
+                             "        ",
+                             "    });",
+                             "    return false;",
+                             "});",
+                           ].join('\n'),
+                    "css": ""
+                  },
+                  {
+                    "html": "<h1>Login</h1>",
+                    "js": "",
+                    "css": ""
+                  },
                 ]
           }
   }

@@ -111,6 +111,26 @@ schemaMods.push(function (schema) {
 
 var staticmethods = [];
 
+staticmethods.push({
+    name: 'signup',
+    enableAPI:true,
+    code: function(username, password, password2, callback) {
+        if (password !== password2) {
+            callback('Passwords don\'t match. Please try again.');
+        }
+        var user = new this({username: username});
+        user.salt = user.makeSalt();
+        user.hashed_password = user.encryptPassword(password);
+        user.save(function(err, data) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(null, {url:'?success=true'});
+            }
+        });
+    }
+});
+
 var model = { generate: "models.model",
               data: {
                   name: 'User',
