@@ -27,6 +27,9 @@ if (require.main === module) {
                 '       Compiles the app given by the json_file, and outputs\n' +
                 '           a node app at the output_dir. Defaults to a temp dir.\n\n' +
 
+                '    ./appmake.js runserver \n\n' +
+                '       Runs an HTTP Server at port 3000\n\n'+
+
                 '    ./appmake.js deploy <app_dir> \n\n' +
                 '       Deploys the app in app_dir to the Appcubator cloud.\n\n';
 
@@ -94,7 +97,7 @@ if (require.main === module) {
                     }
                 });
             });
-            app.templates['modeldefs'] = 'var modelDefs = ' + JSON.stringify(modelDefs, null, 2) + ';';
+            app.templates.modeldefs = 'var modelDefs = ' + JSON.stringify(modelDefs, null, 2) + ';';
 
             if (destPath === null) {
                 temp.mkdir('appmake-', function(err, tmpdir) {
@@ -105,6 +108,11 @@ if (require.main === module) {
                 writer.write(app, destPath, function() { return process.stdout.write('Compiled: '+path.resolve(destPath)+'\n'); });
             }
 
+            break;
+
+        case "runserver":
+            var server = require("./server");
+            server.run(3000);
             break;
 
         case "deploy":

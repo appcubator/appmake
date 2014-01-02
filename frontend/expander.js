@@ -97,6 +97,8 @@ function expand(generators, genData) {
 
 exports.expand = expand;
 
+exports.expandOnce = expandOnce;
+
 exports.expandAll = function(app) {
     _.each(app.routes, function(route, i) {
         app.routes[i] = expand(app.generators, route);
