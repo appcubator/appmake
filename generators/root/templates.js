@@ -57,4 +57,159 @@ generators.push({
     templates: {'code':""}
 });
 
+generators.push({
+    name: 'rowcolUIE',
+    version: '0.1',
+    code: function(data, templates) {
+        
+        function split_to_cols(uielements, leftOffset) {
+            // """Given some uielements, separate them into non-overlapping columns"""
+
+            var cols = [];
+            if (uielements.length === 0) {
+                return cols;
+            }
+
+            sorted_uiels = uielements.sort(function(a,b) { return a.layout.left - b.layout.left; });
+
+            // # leftmost uiel must be in the row
+            current_col = {};
+            cols.push(current_col);
+            current_block = sorted_uiels.pop(0);
+            current_col.uiels.push(current_block);
+            current_col.margin_left = current_block.layout.left - left_offset;
+
+            // # iterate over the uiels left down
+            for (var u in sorted_uiels) {
+                current_right = current_block.layout.left + current_block.layout.width;
+                u_left = u.layout.left;
+                u_right = u_left + u.layout.width;
+
+                // # Two cases:
+                // # 1. this block is in the current row.
+                if (u_left < current_right) {
+                    current_col.uiels.push(u);
+                        // # a. this block is extends longer than the current block
+                    if (u_right > current_right) current_block = u;
+                }
+                // # 2. this block must be the left-most block in a new row
+                else {
+                    current_col.width = current_right - current_col.uiels[0].layout.left;
+
+                    current_col = {};
+                    cols.push(current_col);
+
+                    current_col.uiels.push(u);
+                    current_col.margin_left = u_left - current_right;
+
+                    current_block = u;
+                }
+            }
+            // # set the width of the last column
+            current_right = current_block.layout.left + current_block.layout.width;
+            current_col.width = current_right - current_col.uiels[0].layout.left;
+
+            return cols;
+        }
+
+        function split_to_rows(uielements, topOffset) {
+            
+            var rows = [];
+
+            if (uielements.length === 0) {
+                return rows;
+            }
+
+            sorted_uiels = uielements.sort(function(a,b) { return a.layout.top - b.layout.top; });
+
+            // topmost uiel must be in the row
+            var current_row = {};
+            rows.push(current_row);
+            current_block = sorted_uiels.pop(0);
+            current_row.uiels.push(current_block);
+            current_row.margin_top = current_block.layout.top - top_offset;
+
+            // iterate over the uiels top down
+            for (var u in sorted_uiels) {
+                current_bottom = current_block.layout.top + current_block.layout.height;
+                u_top = u.layout.top;
+                u_bottom = u_top + u.layout.height;
+
+                // Two cases:
+                // 1. this block is in the current row.
+                if (u_top < current_bottom) {
+                    current_row.uiels.push(u);
+                        // # a. this block is extends longer than the current block
+                    if (u_bottom > current_bottom) current_block = u;
+                // 2. this block must be the top-most block in a new row
+                }
+                else {
+                    current_row = {};
+                    rows.push(current_row);
+
+                    current_row.uiels.push(u);
+                    current_row.margin_top = u_top - current_bottom;
+
+                    current_block = u;
+                }
+            }
+
+            return rows;
+        }
+
+        function createTree(uielements, nmrRecursion, topOffset, leftOffset) {
+
+            var rows = split_to_rows(uielements, topOffset);
+
+            for (var row in rows) {
+                var columns = split_to_cols(row.uielements, leftOffset);
+                var topOffset = row.uielements[0].layout.top;
+
+                for (var column in columns) {
+                    var leftOffset = column.uielements[0].layout.left;
+                    if (column.uielements.length == 1) {
+                        column.marginTop = column.uielements[0].layout.top - topOffset;
+                        break;
+                    }
+                    else {
+                        if (rows.length == 1 && columns.length == 1) {
+                            // in this case, recursion will not terminate since input is not subdivided into smaller components
+                            // create a relative container and absolute position the
+                            // contents.
+
+                            var min_top = column.uielements[0].layout.top;
+                            var max_bottom = column.uielements[0].layout.top + column.uielements[0].layout.height;
+                            
+                            for(var uie in c.uielements) {
+                                var top_offset = uie.layout.top - topOffset;
+                                var left_offset = uie.layout.left - leftOffset;
+                                var uie.overlap_styles = "; position: absolute; top: %spx; left: %spx;" % (
+                                    15 * top_offset, 80 * left_offset);
+                                var min_top = min(uie.layout.top, min_top);
+                                var max_bottom = max(uie.layout.top + uie.layout.height, max_bottom);
+                            }
+
+                            column.has_overlapping_nodes = true;
+
+                            column.container_height = max_bottom - min_top;
+
+                            column.tree = null;
+                        }
+                        else {
+                            column.tree = createTree(c.uielements, topOffset, leftOffset, nmrRecursion+ 1);
+                        }
+                    }
+                }
+            }
+
+            return { rows: rows };
+
+        }
+
+        createTree(data, 0, 0, 0);
+
+    },
+    templates: {'code':""}
+
+});
 exports.generators = generators;
