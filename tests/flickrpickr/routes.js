@@ -8,3 +8,10 @@ routes.push({
     }
 });
 
+routes.push({
+    generate:"routes.staticpage",
+    data: {
+        url: "/rowcol",
+        templateName: "rowcoltest"
+    }
+});

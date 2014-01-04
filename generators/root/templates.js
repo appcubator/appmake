@@ -113,11 +113,15 @@ generators.push({
         }
 
         function split_to_rows(uielements, topOffset) {
-            
+
             var rows = [];
 
             if (uielements.length === 0) {
                 return rows;
+            }
+
+            for (var ii=0; ii < uielements.length; ii++) {
+                uielements[ii].layout = (uielements[ii].layout || {});
             }
 
             sorted_uiels = uielements.sort(function(a,b) { return a.layout.top - b.layout.top; });
@@ -125,9 +129,10 @@ generators.push({
             // topmost uiel must be in the row
             var current_row = {};
             rows.push(current_row);
-            current_block = sorted_uiels.pop(0);
+            current_block = sorted_uiels.pop();
+            current_row.uiels = (current_row.uiels || []);
             current_row.uiels.push(current_block);
-            current_row.margin_top = current_block.layout.top - top_offset;
+            current_row.margin_top = current_block.layout.top - topOffset;
 
             // iterate over the uiels top down
             for (var u in sorted_uiels) {
@@ -163,12 +168,13 @@ generators.push({
 
             for (var row in rows) {
                 var columns = split_to_cols(row.uielements, leftOffset);
-                var topOffset = row.uielements[0].layout.top;
+                var topOffset = (row.uielements[0].layout.top||0);
 
                 for (var column in columns) {
                     var leftOffset = column.uielements[0].layout.left;
+                    
                     if (column.uielements.length == 1) {
-                        column.marginTop = column.uielements[0].layout.top - topOffset;
+                        column.marginTop = (column.uielements[0].layout.top||0) - topOffset;
                         break;
                     }
                     else {
@@ -176,12 +182,14 @@ generators.push({
                             // in this case, recursion will not terminate since input is not subdivided into smaller components
                             // create a relative container and absolute position the
                             // contents.
+                            column.uielements[0].layout = (column.uielements[0].layout || {});
 
-                            var min_top = column.uielements[0].layout.top;
-                            var max_bottom = column.uielements[0].layout.top + column.uielements[0].layout.height;
+                            var min_top = (column.uielements[0].layout.top||0);
+                            var max_bottom = (column.uielements[0].layout.top||0) + column.uielements[0].layout.height;
                             
-                            for(var uie in c.uielements) {
-                                var top_offset = uie.layout.top - topOffset;
+                            for(var uie in column.uielements) {
+                                uie.layout = (uie.layout || {});
+                                var top_offset = (uie.layout.top||0) - topOffset;
                                 var left_offset = uie.layout.left - leftOffset;
                                 uie.overlap_styles = "; position: absolute; top: %spx; left: %spx;" % (
                                     15 * top_offset, 80 * left_offset);
@@ -196,7 +204,7 @@ generators.push({
                             column.tree = null;
                         }
                         else {
-                            column.tree = createTree(c.uielements, topOffset, leftOffset, nmrRecursion+ 1);
+                            column.tree = createTree(column.uielements, topOffset, leftOffset, nmrRecursion+ 1);
                         }
                     }
                 }
