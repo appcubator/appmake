@@ -1,4 +1,5 @@
 var expander = require('./frontend/expander');
+var writer = require('./backend/writer');
 
 var express = require('express');
 var app = express();
@@ -34,6 +35,16 @@ app.post('/expand/', function(req, res){
 app.post('/expandAll/', function(req, res){
     var app = req.body;
     res.json(expander.expandAll(app));
+});
+
+// expand and compile an app down to code
+// POST where request body is app json string.
+app.post('/compile/', function(req, res){
+    var app = req.body;
+    expander.expandAll(app);
+    expander.doPostExpandMagic(app);
+    var codeData = writer.produceCode(app);
+    res.json(codeData);
 });
 
 exports.run = function(port) {

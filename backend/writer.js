@@ -89,4 +89,44 @@ function write(app, dirpath, callback) {
 }
 
 
+/* Produce a nested object
+    * whose keys are file/dirnames
+    * and values are string (file) and nested object (dir)*/
+function produceCode(app) {
+
+    // app.modules object is already in the right format so we just do a deep-copy.
+    var codeData = JSON.parse(JSON.stringify(app.modules));
+
+    // package.json
+    codeData['package.json'] = templates.packages(app.packages);
+
+    // models
+    codeData.models = codeData.models || {};
+    _.each(app.models, function(model) {
+        validatefname(model.name + '.js');
+        codeData.models[model.name + '.js'] = model.code;
+    });
+
+    // templates
+    codeData.views = codeData.views || {};
+    _.each(app.templates, function(template, templateName) {
+        template.name = templateName;
+        validatefname(templateName + '.ejs');
+        codeData.views[templateName + '.ejs'] = template;
+    });
+
+    // css
+    codeData.static = codeData.static || {};
+    // TODO generate CSS
+    codeData.static['style.css'] = templates.css(app.css);
+
+    // routes
+    codeData['routes.js'] = templates.routes(app.routes);
+
+    // app
+    codeData['app.js'] =  app.config;
+    return codeData;
+}
+
 exports.write = write;
+exports.produceCode = produceCode;
