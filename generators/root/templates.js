@@ -169,6 +169,8 @@ generators.push({
             rows.forEach(function(row) {
 
                 var columns = split_to_cols(row.uiels, leftOffset);
+                row.cols = columns;
+
                 var topOffset = (row.uiels[0].layout.top||0);
 
                 columns.forEach(function(column) {
@@ -216,8 +218,51 @@ generators.push({
 
         }
 
-        createTree(data, 0, 0, 0);
+        var domTree = createTree(data, 0, 0, 0);
 
+        console.log(domTree);
+
+        var cssLines = [];
+        var jsLines = [];
+        var htmlLines = [];
+
+        var nodeLines = [];
+
+        function rowLoop(rows) {
+            domTree.rows.forEach(function(row) {
+                if(row.cols) {
+                    htmlLines.push('<div class="row">');
+
+                    row.cols.forEach(function(col) {
+                        if(col.tree) {
+                            rowLoop(col.tree.rows);
+                        }
+                        else {
+                            htmlLines.push('SOME ELEMENT HERE');
+                        }
+                    });
+
+                    htmlLines.push('</div>');
+                }
+            });
+        }
+
+        rowLoop(domTree.rows);
+
+        // for (i = 0; i < data.length; i ++) {
+        //     uie = data[i];
+        //     if (uie.css) templateLines.push("<style>"+uie.css+"</style>");
+        // }
+        // for (i = 0; i < data.length; i ++) {
+        //     uie = data[i];
+        //     templateLines.push(uie.html);
+        // }
+        // for (i = 0; i < data.length; i ++) {
+        //     uie = data[i];
+        //     if (uie.js) templateLines.push('<script type="text/javascript">'+uie.js+'</script>');
+        // }
+
+        return htmlLines.join("\n");
     },
     templates: {'code':""}
 
