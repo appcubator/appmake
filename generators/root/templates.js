@@ -183,7 +183,7 @@ generators.push({
                             for(var uie in c.uielements) {
                                 var top_offset = uie.layout.top - topOffset;
                                 var left_offset = uie.layout.left - leftOffset;
-                                var uie.overlap_styles = "; position: absolute; top: %spx; left: %spx;" % (
+                                uie.overlap_styles = "; position: absolute; top: %spx; left: %spx;" % (
                                     15 * top_offset, 80 * left_offset);
                                 var min_top = min(uie.layout.top, min_top);
                                 var max_bottom = max(uie.layout.top + uie.layout.height, max_bottom);
