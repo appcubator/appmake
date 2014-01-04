@@ -49,7 +49,7 @@ function constructGen(generatorData) {
             data: data,
             templates: compiledTemplates,
             expand: expandFn,
-            //console: console // debug
+            console: console // debug
         };
         var code = '(' + generatorData.code + ')(data, templates);';
         var genObj = vm.runInNewContext(code, globals);
