@@ -73,14 +73,16 @@ generators.push({
             sorted_uiels = uielements.sort(function(a,b) { return a.layout.left - b.layout.left; });
 
             // # leftmost uiel must be in the row
-            current_col = {};
+            var current_col = {};
+            current_col.uiels = [];
+
             cols.push(current_col);
-            current_block = sorted_uiels.pop(0);
+            current_block = sorted_uiels.pop();
             current_col.uiels.push(current_block);
-            current_col.margin_left = current_block.layout.left - left_offset;
+            current_col.margin_left = current_block.layout.left - leftOffset;
 
             // # iterate over the uiels left down
-            for (var u in sorted_uiels) {
+            sorted_uiels.forEach(function(u) {
                 current_right = current_block.layout.left + current_block.layout.width;
                 u_left = u.layout.left;
                 u_right = u_left + u.layout.width;
@@ -104,7 +106,7 @@ generators.push({
 
                     current_block = u;
                 }
-            }
+            });
             // # set the width of the last column
             current_right = current_block.layout.left + current_block.layout.width;
             current_col.width = current_right - current_col.uiels[0].layout.left;
@@ -120,22 +122,20 @@ generators.push({
                 return rows;
             }
 
-            for (var ii=0; ii < uielements.length; ii++) {
-                uielements[ii].layout = (uielements[ii].layout || {});
-            }
-
-            sorted_uiels = uielements.sort(function(a,b) { return a.layout.top - b.layout.top; });
+            var sorted_uiels = uielements.sort(function(a,b) { return a.layout.top - b.layout.top; });
 
             // topmost uiel must be in the row
             var current_row = {};
             rows.push(current_row);
             current_block = sorted_uiels.pop();
+
             current_row.uiels = (current_row.uiels || []);
             current_row.uiels.push(current_block);
             current_row.margin_top = current_block.layout.top - topOffset;
 
             // iterate over the uiels top down
-            for (var u in sorted_uiels) {
+            sorted_uiels.forEach(function(u) {
+
                 current_bottom = current_block.layout.top + current_block.layout.height;
                 u_top = u.layout.top;
                 u_bottom = u_top + u.layout.height;
@@ -157,7 +157,7 @@ generators.push({
 
                     current_block = u;
                 }
-            }
+            });
 
             return rows;
         }
@@ -166,36 +166,38 @@ generators.push({
 
             var rows = split_to_rows(uielements, topOffset);
 
-            for (var row in rows) {
-                var columns = split_to_cols(row.uielements, leftOffset);
-                var topOffset = (row.uielements[0].layout.top||0);
+            rows.forEach(function(row) {
 
-                for (var column in columns) {
-                    var leftOffset = column.uielements[0].layout.left;
+                var columns = split_to_cols(row.uiels, leftOffset);
+                var topOffset = (row.uiels[0].layout.top||0);
+
+                columns.forEach(function(column) {
+
+                    var leftOffset = column.uiels[0].layout.left;
                     
-                    if (column.uielements.length == 1) {
-                        column.marginTop = (column.uielements[0].layout.top||0) - topOffset;
-                        break;
+                    if (column.uiels.length == 1) {
+                        column.marginTop = (column.uiels[0].layout.top||0) - topOffset;
+                        return;
                     }
                     else {
                         if (rows.length == 1 && columns.length == 1) {
                             // in this case, recursion will not terminate since input is not subdivided into smaller components
                             // create a relative container and absolute position the
                             // contents.
-                            column.uielements[0].layout = (column.uielements[0].layout || {});
+                            column.uiels[0].layout = (column.uiels[0].layout || {});
 
-                            var min_top = (column.uielements[0].layout.top||0);
-                            var max_bottom = (column.uielements[0].layout.top||0) + column.uielements[0].layout.height;
+                            var min_top = (column.uiels[0].layout.top||0);
+                            var max_bottom = (column.uiels[0].layout.top||0) + column.uiels[0].layout.height;
                             
-                            for(var uie in column.uielements) {
+                            column.uiels.forEach(function(uie) {
                                 uie.layout = (uie.layout || {});
                                 var top_offset = (uie.layout.top||0) - topOffset;
                                 var left_offset = uie.layout.left - leftOffset;
                                 uie.overlap_styles = "; position: absolute; top: %spx; left: %spx;" % (
                                     15 * top_offset, 80 * left_offset);
-                                var min_top = min(uie.layout.top, min_top);
-                                var max_bottom = max(uie.layout.top + uie.layout.height, max_bottom);
-                            }
+                                var min_top = Math.min(uie.layout.top, min_top);
+                                var max_bottom = Math.max(uie.layout.top + uie.layout.height, max_bottom);
+                            });
 
                             column.has_overlapping_nodes = true;
 
@@ -204,11 +206,11 @@ generators.push({
                             column.tree = null;
                         }
                         else {
-                            column.tree = createTree(column.uielements, topOffset, leftOffset, nmrRecursion+ 1);
+                            column.tree = createTree(column.uiel,s, topOffset, leftOffset, nmrRecursion+ 1);
                         }
                     }
-                }
-            }
+                });
+            });
 
             return { rows: rows };
 
