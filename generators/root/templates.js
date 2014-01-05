@@ -124,7 +124,9 @@ generators.push({
                 return rows;
             }
 
-            var sorted_uiels = uielements.sort(function(a,b) { return a.layout.top - b.layout.top; });
+            var sorted_uiels = uielements.sort(function(a,b) { return b.layout.top - a.layout.top; });
+
+            console.log(sorted_uiels);
 
             // topmost uiel must be in the row
             var current_row = {};
@@ -151,12 +153,14 @@ generators.push({
                 // 2. this block must be the top-most block in a new row
                 }
                 else {
-                    current_row = {};
-                    rows.push(current_row);
+                    var new_current_row = {};
+                    new_current_row.uiels = [];
+                    rows.push(new_current_row);
 
-                    current_row.uiels.push(u);
-                    current_row.margin_top = u_top - current_bottom;
+                    new_current_row.uiels.push(u);
+                    new_current_row.margin_top = u_top - current_bottom;
 
+                    current_row = new_current_row;
                     current_block = u;
                 }
             });
@@ -173,7 +177,8 @@ generators.push({
                 var columns = split_to_cols(row.uiels, leftOffset);
                 row.cols = columns;
 
-                var topOffset = (row.uiels[0].layout.top||0);
+                var topOffset = 0;
+                //(row.uiels[0].layout.top || 0);
 
                 columns.forEach(function(column) {
 
@@ -216,13 +221,69 @@ generators.push({
                 });
             });
 
+
             return { rows: rows };
 
         }
 
         var domTree = createTree(data, 0, 0, 0);
 
-        console.log(domTree);
+        /** RENDERING PART  **/
+
+        function render_column(self) {
+            // def absolutify(el, html):
+            //     html.style_string += el.overlap_styles
+            //     return html
+
+            // def layoutify(el, html):
+            //     html.class_string += ' hi%d span%d' % (el.layout.height, el.layout.width)
+            //     return html
+
+            // function add_padding(el, html) {
+            //     if (el.layout.has_padding()) {
+            //         html.style_string += "; padding: %dpx %dpx %dpx %dpx" % (
+            //                 el.layout.t_padding, el.layout.r_padding, el.layout.b_padding, el.layout.l_padding)
+                    
+            //         return html;
+            //     }
+            // }
+
+            function add_text_align(el, html) {
+                if (el.layout.alignment != 'left') {
+                    // create wrapper if not already wrapper
+                    if (html.is_wrapper) {
+                        wrapper = html;
+                    }
+                    else {
+                        wrapper = Tag('div', {}, content=html);
+                    }
+                    wrapper.style_string += "; text-align: %s" % el.layout.alignment;
+                    
+                    return wrapper;
+                }
+                else {
+                    return html;
+                }
+            }
+
+            var html = "Yolo";
+            if (self.has_overlapping_nodes) {
+                // set position absolute, with pixel dimensions, all in the style attribute
+                // htmls = [ el.html() for el in self.uiels ]
+                // htmls = [ add_padding(el, layoutify(el, absolutify(el, add_text_align(el, html)))) for el, html in zip(self.uiels, htmls) ]
+
+                // column_element = Tag('div', { 'class': self.class_string,
+                //                            'style': self.style_string }, content=htmls)
+            }
+            else {
+                el = self.uiels[0];
+                html = el.html;
+                //column_element = add_padding(el, layoutify(el, add_text_align(el, html)))
+                //column_element.class_string += ' ' + self.class_string;
+            }
+
+            return html;
+        }
 
         var cssLines = [];
         var jsLines = [];
@@ -240,7 +301,7 @@ generators.push({
                             rowLoop(col.tree.rows);
                         }
                         else {
-                            htmlLines.push('SOME ELEMENT HERE');
+                            htmlLines.push(render_column(col));
                         }
                     });
 
