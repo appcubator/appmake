@@ -4,9 +4,12 @@ data: { head: '<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2
               data: [
               /* FLICKR API ON THE BACKEND */
                   {
-                    "html": "<h1>Search Flickr</h1>",
-                    "js": "",
-                    "css": ""
+                    generate: 'uielements.node',
+                    data: {
+                            isSingle: false,
+                            tagName: 'h1',
+                            content: 'Search Flickr'
+                          }
                   },
                   {
                     "generate": "flickrpickr.uielements.flicksearchbar",
