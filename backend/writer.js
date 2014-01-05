@@ -75,7 +75,8 @@ function write(app, dirpath, callback) {
     }
 
     // css
-    _writeFile(_j(dirpath, 'static', 'style.css'), templates.css(app.css));
+    if (!app.css) app.css = '';
+    _writeFile(_j(dirpath, 'static', 'style.css'), app.css);
 
     // js (with rmi of models)
     _writeFile(_j(dirpath, 'static', 'script.js'), templates.js(app.models));
@@ -117,8 +118,8 @@ function produceCode(app) {
 
     // css
     codeData.static = codeData.static || {};
-    // TODO generate CSS
-    codeData.static['style.css'] = templates.css(app.css);
+    if (!app.css) app.css = '';
+    codeData.static['style.css'] = app.css;
 
     // routes
     codeData['routes.js'] = templates.routes(app.routes);
