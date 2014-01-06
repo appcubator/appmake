@@ -3,6 +3,8 @@ var vm = require("vm"),
     _ = require("underscore"),
     builtinGenerators = require("../generators/generators");
 
+var modelslib = require("fs").readFileSync(__dirname + '/modelslib.js');
+
 function findGenData(generators, genID) {
     // generators is app.generators
     // genID is an obj w (package, module, name, version) keys
@@ -138,5 +140,10 @@ exports.doPostExpandMagic = function(app) {
         });
     });
     app.templates.modeldefs = 'var modelDefs = ' + JSON.stringify(modelDefs, null, 2) + ';';
+
+    app.modules = app.modules || {};
+    app.modules.static = app.modules.static || {};
+    app.modules.static['models.js'] = modelslib;
+
     return app;
 };

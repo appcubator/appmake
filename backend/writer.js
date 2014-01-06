@@ -78,9 +78,6 @@ function write(app, dirpath, callback) {
     if (!app.css) app.css = '';
     _writeFile(_j(dirpath, 'static', 'style.css'), app.css);
 
-    // js (with rmi of models)
-    _writeFile(_j(dirpath, 'static', 'script.js'), templates.js(app.models));
-
     // routes
     _writeFile(_j(dirpath, 'routes.js'), templates.routes(app.routes));
 

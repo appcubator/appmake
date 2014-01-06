@@ -26,7 +26,7 @@ app.configure(function(){\n\
   app.use(express.cookieParser('some secret'));\n\
   app.use(express.cookieSession());\n\
   // app.use(express.csrf());\n\
-  app.use('/static', express.static(path.join(__dirname, 'public')));\n\
+  app.use('/static', express.static(path.join(__dirname, 'static')));\n\
 });\n\
 \n\
 app.configure('development', function(){\n\
