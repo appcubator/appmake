@@ -44,6 +44,7 @@ function write(app, dirpath, callback) {
     var nodestack = [];
     var filepath;
     for (filepath in app.modules) {
+        console.log(filepath);
         nodestack.push([filepath, app.modules[filepath]]);
     }
     while (nodestack.length > 0) {

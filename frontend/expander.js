@@ -3,7 +3,7 @@ var vm = require("vm"),
     _ = require("underscore"),
     builtinGenerators = require("../generators/generators");
 
-var modelslib = require("fs").readFileSync(__dirname + '/modelslib.js');
+var modelslib = require("fs").readFileSync(__dirname + '/modelslib.js').toString();
 
 function findGenData(generators, genID) {
     // generators is app.generators
