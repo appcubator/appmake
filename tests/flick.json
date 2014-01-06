@@ -8,9 +8,6 @@
   "modules": {
     "custom": {
       "custom.txt": "this is custom code\n"
-    },
-    "public": {
-      "models.js": "/*\n * models.js\n * remote method library\n *\n * by Appcubator, all rights reserved\n *\n */\n\n\nwindow.models = (function($, modelDefs){\n\n    var remoteFnFactory = function(method, url) {\n        var remoteFn = function() {\n            // read more at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/arguments\n            var args = Array.prototype.slice.call(arguments);\n            var callback = args.pop(); // this would be the last argument\n\n            $.ajax({\n                url: url,\n                method: method,\n                data: JSON.stringify(args),\n                contentType: 'application/json',\n                success: function(res) {callback(res.error, res.data);}\n            });\n        };\n        return remoteFn;\n    };\n\n    var models = {};\n\n    /* initialize model object with an attribute for each model, for each model method. */\n    for (var modelName in modelDefs) {\n        var modelDef = modelDefs[modelName];\n        models[modelName] = {};\n        for (var staticmethodName in modelDef.staticmethods) {\n            var url = modelDef.staticmethods[staticmethodName];\n            /* url should be either '' or 'GET /someurl' format. */\n            var remoteFn;\n            if (url === '') {\n                remoteFn = remoteFnFactory('POST', '/api/' + modelName + '/' + staticmethodName);\n            } else {\n                var toks = url.split(' '); // assert toks.length == 2\n                remoteFn = remoteFnFactory(toks[0], toks.substr(1).join(' '));\n            }\n            models[modelName][staticmethodName] = remoteFn;\n        }\n    }\n\n    return models;\n\n\n})(jQuery, modelDefs);\n"
     }
   },
   "models": [
@@ -106,7 +103,13 @@
             "code": "function (token, cb) {\n  /**\n   * Reset auth token\n   *\n   * @param {String} token\n   * @param {Function} cb\n   * @api private\n   */\n    var self = this;\n    var crypto = require('crypto');\n    crypto.randomBytes(48, function(ex, buf) {\n      self[token] = buf.toString('hex');\n      if (cb) cb();\n    });\n  }"
           }
         ],
-        "staticmethods": [],
+        "staticmethods": [
+          {
+            "name": "signup",
+            "enableAPI": true,
+            "code": "function (username, password, password2, callback) {\n        if (password !== password2) {\n            callback('Passwords don\\'t match. Please try again.');\n        }\n        var user = new this({username: username});\n        user.salt = user.makeSalt();\n        user.hashed_password = user.encryptPassword(password);\n        user.save(function(err, data) {\n            if (err) {\n                callback(err);\n            } else {\n                callback(null, {url:'?success=true'});\n            }\n        });\n    }"
+          }
+        ],
         "schemaMods": [
           "function (schema) {\n  schema.path('name').validate(function (name) {\n    return name.trim().length > 0;\n  }, 'Please provide a valid name');\n}",
           "function (schema) {\n  schema.path('email').validate(function (email) {\n    return email.trim().length > 0;\n  }, 'Please provide a valid email');\n}",
@@ -119,14 +122,17 @@
     "Homepage": {
       "generate": "templates.page",
       "data": {
-        "head": "",
+        "head": "<script src=\"//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js\"></script>",
         "body": {
           "generate": "templates.concatUIE",
           "data": [
             {
-              "html": "\n    <h1>FlickrPickr</h1>\n    ",
-              "js": "",
-              "css": ""
+              "generate": "uielements.node",
+              "data": {
+                "isSingle": false,
+                "tagName": "h1",
+                "content": "Search Flickr"
+              }
             },
             {
               "generate": "flickrpickr.uielements.flicksearchbar",
@@ -143,21 +149,47 @@
               }
             },
             {
+              "html": "<h1>Create a Picture</h1>",
+              "js": "",
+              "css": ""
+            },
+            {
               "generate": "crud.uielements.create",
               "data": {
                 "fields": [
                   [
                     "name",
-                    "text"
+                    {
+                      "type": "text",
+                      "placeholder": "Name"
+                    }
                   ],
                   [
                     "url",
-                    "text"
+                    {
+                      "type": "text",
+                      "placeholder": "URL"
+                    }
                   ]
                 ],
                 "id": "testform",
-                "redirect": "https://www.google.com/"
+                "redirect": "/?success=true"
               }
+            },
+            {
+              "html": "<div id=\"piclist\"></div>",
+              "js": "models.Picture.findPicture({}, function(err, data){\n_.each(data, function(d) {$('#piclist').append('<p>'+d.name+'</p><img class=\"piclist\" src=\"'+d.url+'\">'); });\n});",
+              "css": "img.piclist {max-height: 200px; max-width: 300px;}"
+            },
+            {
+              "html": "<h1>Sign Up</h1>\n<form id=\"signup\">\n<input name=\"username\" type=\"text\" placeholder=\"Username\"><br>\n<input name=\"password\" type=\"password\" placeholder=\"Password\"><br>\n<input name=\"password2\" type=\"password\" placeholder=\"Confirm password\"><br>\n<input type=\"submit\" value=\"Submit\">\n</form>",
+              "js": "$('#signup').submit(function(){\n    var username = $('#signup input[name=\"username\"]').val();\n    var password = $('#signup input[name=\"password\"]').val();\n    var password2 = $('#signup input[name=\"password2\"]').val();\n    models.User.signup(username, password, password2, function(err, data){\n        if (err) { alert(err); }\n        else { location.href = data.url; }\n        \n    });\n    return false;\n});",
+              "css": ""
+            },
+            {
+              "html": "<h1>Login</h1>",
+              "js": "",
+              "css": ""
             }
           ]
         }
