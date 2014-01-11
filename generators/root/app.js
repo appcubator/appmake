@@ -16,7 +16,7 @@ var express = require('express')\n\
 var app = express();\n\
 \n\
 app.configure(function(){\n\
-  app.set('port', process.env.PORT || 3000);\n\
+  app.set('port', (process.argv.length >= 3) ? parseInt(process.argv[2]) : (process.env.PORT || 3000));\n\
   app.set('views', __dirname + '/views');\n\
   app.set('view engine', 'ejs');\n\
   app.use(express.logger('dev'));\n\
