@@ -27,5 +27,5 @@ else
 fi
 
 # RUN APP
-echo -e "\nYour app is running! http://localhost:3000/\n"
-MONGO_ADDR=mongodb://localhost/test node app.js
+echo -e "\nYour app is running! http://localhost:3001/\n"
+MONGO_ADDR=mongodb://localhost/test node app.js 3001
