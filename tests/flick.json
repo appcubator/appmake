@@ -195,6 +195,40 @@
           ]
         }
       }
+    },
+    {
+      "generate": "templates.page",
+      "data": {
+        "name": "rowcoltest",
+        "head": "<script src=\"//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js\"></script>",
+        "body": {
+          "generate": "templates.rowcolUIE",
+          "data": [
+            {
+              "html": "<h1>Search Flickr</h1>",
+              "js": "",
+              "css": "",
+              "layout": {
+                "top": 0,
+                "height": 5,
+                "width": 5,
+                "left": 0
+              }
+            },
+            {
+              "html": "<h1>Create a Picture</h1>",
+              "js": "",
+              "css": "",
+              "layout": {
+                "top": 6,
+                "height": 5,
+                "width": 5,
+                "left": 0
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "routes": [
@@ -205,6 +239,15 @@
           "/"
         ],
         "name": "Homepage"
+      }
+    },
+    {
+      "generate": "routes.staticpage",
+      "data": {
+        "url": [
+          "/rowcol"
+        ],
+        "templateName": "rowcoltest"
       }
     }
   ],

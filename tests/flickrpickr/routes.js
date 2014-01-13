@@ -11,7 +11,7 @@ routes.push({
 routes.push({
     generate:"routes.staticpage",
     data: {
-        url: "/rowcol",
+        url: ["/rowcol"],
         templateName: "rowcoltest"
     }
 });
