@@ -1,3 +1,4 @@
+exports.code = function() {
 /*
  * models.js
  * remote method library
@@ -50,3 +51,5 @@ window.models = (function($, modelDefs){
 
 
 })(jQuery, modelDefs);
+};
+

@@ -1,7 +1,13 @@
 var _ = require("underscore"),
     builtinGenerators = require("../generators/generators");
 
-var modelslib = require("fs").readFileSync(__dirname + '/modelslib.js').toString();
+var modelslib = require("./modelslib.js").code.toString();
+/* fix the function wrapping hack */
+var lines = modelslib.split('\n');
+var relevantLines = lines.slice(1, lines.length-1);
+modelslib = relevantLines.join('\n');
+
+console.log(modelslib);
 
 exports.init = function(_safe_eval_) {
 
