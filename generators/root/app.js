@@ -16,7 +16,7 @@ var express = require('express')\n\
 var app = express();\n\
 \n\
 app.configure(function(){\n\
-  app.set('port', process.env.PORT || 3000);\n\
+  app.set('port', (process.argv.length >= 3) ? parseInt(process.argv[2]) : (process.env.PORT || 3000));\n\
   app.set('views', __dirname + '/views');\n\
   app.set('view engine', 'ejs');\n\
   app.use(express.logger('dev'));\n\
@@ -26,7 +26,7 @@ app.configure(function(){\n\
   app.use(express.cookieParser('some secret'));\n\
   app.use(express.cookieSession());\n\
   // app.use(express.csrf());\n\
-  app.use('/static', express.static(path.join(__dirname, 'public')));\n\
+  app.use('/static', express.static(path.join(__dirname, 'static')));\n\
 });\n\
 \n\
 app.configure('development', function(){\n\

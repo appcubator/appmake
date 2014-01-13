@@ -67,19 +67,14 @@ function write(app, dirpath, callback) {
     });
 
     // templates
-    for (var templateName in app.templates) {
-        var template = app.templates[templateName];
-        template.name = templateName;
-        validatefname(templateName + '.ejs');
-        _writeFile(_j(dirpath, 'views', templateName + '.ejs'), template);
-    }
+    _.each(app.templates, function(template) {
+        validatefname(template.name + '.ejs');
+        _writeFile(_j(dirpath, 'views', template.name + '.ejs'), template.code);
+    });
 
     // css
     if (!app.css) app.css = '';
     _writeFile(_j(dirpath, 'static', 'style.css'), app.css);
-
-    // js (with rmi of models)
-    _writeFile(_j(dirpath, 'static', 'script.js'), templates.js(app.models));
 
     // routes
     _writeFile(_j(dirpath, 'routes.js'), templates.routes(app.routes));
@@ -110,10 +105,9 @@ function produceCode(app) {
 
     // templates
     codeData.views = codeData.views || {};
-    _.each(app.templates, function(template, templateName) {
-        template.name = templateName;
-        validatefname(templateName + '.ejs');
-        codeData.views[templateName + '.ejs'] = template;
+    _.each(app.templates, function(template) {
+        validatefname(template.name + '.ejs');
+        codeData.views[template.name + '.ejs'] = template.code;
     });
 
     // css

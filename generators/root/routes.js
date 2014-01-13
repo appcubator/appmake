@@ -4,15 +4,17 @@ generators.push({
     name: 'staticpage',
     version: '0.1',
     code: function(data, templates){
+        /* Data should be an object with keys:
+        *   name : string, url : array */
         var route = {
             "method": "GET",
-            "pattern": data.url,
-            "code": templates.code({ templateName: data.templateName })
+            "pattern": data.url.join('/'),
+            "code": templates.code({ name: data.name })
         };
         return route;
     },
     templates: {'code':"function (req, res) {"+"\n"+
-                       "    res.render('<%= templateName %>');"+"\n"+
+                       "    res.render('<%= name %>');"+"\n"+
                        "}"}
 });
 
