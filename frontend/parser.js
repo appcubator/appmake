@@ -89,7 +89,7 @@ exports.parseDir = function (dirPath) {
         app.models.push(modelObj);
     }
 
-    app.templates = {};
+    app.templates = [];
 
     for (var templateName in dirContents.templates) {
         //if (!templateName.endsWith('.ejs'))
@@ -102,8 +102,8 @@ exports.parseDir = function (dirPath) {
         templateName = templateName.substr(0, templateName.length - 4);
         // TODO validate templateName
 
-        var uielements = parseTemplate(templateName, dirContents.templates[templateName + '.ejs']);
-        app.templates[templateName] = uielements;
+        var template = parseTemplate(templateName, dirContents.templates[templateName + '.ejs']);
+        app.templates.push(template);
 
     }
 

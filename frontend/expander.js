@@ -42,8 +42,8 @@ function constructGen(generatorData) {
     var fn = function(generators, data) {
         var templates = generatorData.templates;
         var compiledTemplates = {};
-        _.each(templates, function(templateStr, templateName) {
-            compiledTemplates[templateName] = ejs.compile(templateStr);
+        _.each(templates, function(templateStr, index) {
+            compiledTemplates[index] = ejs.compile(templateStr);
         });
         // TODO compile each EJS template so that it can have a render method.
         var expandFn = function(data) { return expand(generators, data); };
@@ -110,8 +110,8 @@ exports.expandAll = function(app) {
         app.models[index] = expand(app.generators, model);
     });
 
-    _.each(app.templates, function (template, templateName) {
-        app.templates[templateName] = expand(app.generators, template);
+    _.each(app.templates, function (template, index) {
+        app.templates[index] = expand(app.generators, template);
     });
 
     app.config = expand(app.generators, app.config);
@@ -139,7 +139,7 @@ exports.doPostExpandMagic = function(app) {
             }
         });
     });
-    app.templates.modeldefs = 'var modelDefs = ' + JSON.stringify(modelDefs, null, 2) + ';';
+    app.templates.push({ name: 'modeldefs', code: 'var modelDefs = ' + JSON.stringify(modelDefs, null, 2) + ';' });
 
     app.modules = app.modules || {};
     app.modules.static = app.modules.static || {};
