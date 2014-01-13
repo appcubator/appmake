@@ -44,7 +44,6 @@ function write(app, dirpath, callback) {
     var nodestack = [];
     var filepath;
     for (filepath in app.modules) {
-        console.log(filepath);
         nodestack.push([filepath, app.modules[filepath]]);
     }
     while (nodestack.length > 0) {
@@ -69,7 +68,6 @@ function write(app, dirpath, callback) {
 
     // templates
     _.each(app.templates, function(template) {
-        console.log(template);
         validatefname(template.name + '.ejs');
         _writeFile(_j(dirpath, 'views', template.name + '.ejs'), template.code);
     });
