@@ -42,7 +42,7 @@ app.post('/expandAll/', function(req, res){
 app.post('/compile/', function(req, res){
     var app = req.body;
     expander.expandAll(app);
-    expander.doPostExpandMagic(app);
+    require('./frontend/postExpand').doPostExpandMagic(app);
     var codeData = writer.produceCode(app);
     res.json(codeData);
 });

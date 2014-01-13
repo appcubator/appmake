@@ -79,7 +79,7 @@ if (require.main === module) {
 
             // expand the code generators
             expander.expandAll(app);
-            expander.doPostExpandMagic(app);
+            require('./frontend/postExpand').doPostExpandMagic(app);
 
             if (destPath === null) {
                 temp.mkdir('appmake-', function(err, tmpdir) {
