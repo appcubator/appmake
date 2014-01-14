@@ -1,9 +1,13 @@
+/* See bottom of file for module usage.
+ * This code is browserified and shared between frontend and backend.
+ */
+
 var _ = require("underscore"),
     builtinGenerators = require("../generators/generators");
 
-exports.init = function(_safe_eval_) {
+exports.factory = function(_safe_eval_) {
 
-    var exports2 = {};
+    var expander = {};
 
     function findGenData(generators, genID) {
         // generators is app.generators
@@ -97,11 +101,11 @@ exports.init = function(_safe_eval_) {
         return genData;
     }
 
-    exports2.expand = expand;
+    expander.expand = expand;
 
-    exports2.expandOnce = expandOnce;
+    expander.expandOnce = expandOnce;
 
-    exports2.expandAll = function(app) {
+    expander.expandAll = function(app) {
         _.each(app.routes, function(route, i) {
             app.routes[i] = expand(app.generators, route);
         });
@@ -119,6 +123,19 @@ exports.init = function(_safe_eval_) {
     };
 
 
-    return exports2;
+    return expander;
 
 };
+
+try {
+    var x = window;
+    // No error -> we're in the frontend
+    window.expanderfactory = exports.factory;
+} catch (e) {
+    // ReferenceError -> we're in the backend
+
+    exports.init = function() {
+        var r = require; // avoid browserifying this
+        exports.expander = exports.factory(r('vm').runInNewContext);
+    };
+}

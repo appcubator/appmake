@@ -1,4 +1,4 @@
-var expander = require('./frontend/expander').init(require('vm').runInNewContext),
+var expander = require('./frontend/expander').init(),
     writer = require('./backend/writer');
 
 var express = require('express');

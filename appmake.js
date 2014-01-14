@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 var parser = require('./frontend/parser'),
     validator = require('./frontend/validator'),
-    expander = require('./frontend/expander').init(require('vm').runInNewContext),
+    expander = require('./frontend/expander').init(),
     postExpander = require('./frontend/postExpand'),
     writer = require('./backend/writer'),
     fs = require('fs'),
