@@ -45,4 +45,55 @@ generators.push({
     }
 });
 
+generators.push({
+    name: 'design-text',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<p class="<%= className %>" style="<%= style %>"><%= content %></p>'
+    }
+});
+
+generators.push({
+    name: 'design-img',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: url, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<img class="<%= className %>" style="<%= style %>" src="<%= url %>">'
+    }
+});
+
+generators.push({
+    name: 'design-link',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, url, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+    }
+});
+
 exports.generators = generators;
