@@ -1,5 +1,5 @@
 var expander = require('./frontend/expander').init(require('vm').runInNewContext),
-var writer = require('./backend/writer');
+    writer = require('./backend/writer');
 
 var express = require('express');
 var app = express();
