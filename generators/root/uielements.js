@@ -29,7 +29,7 @@ generators.push({
 
 
 generators.push({
-    name: 'design.header',
+    name: 'design-header',
     version: '0.1',
     code: function(data, templates) {
         /* expects: content, className, style */

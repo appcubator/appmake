@@ -75,14 +75,12 @@ exports.factory = function(_safe_eval_) {
             package = 'root';
             module = tokens[0];
             name = tokens[1];
-        } else if (tokens.length >= 3) {
+        } else if (tokens.length == 3) {
             package = tokens[0];
             module = tokens[1];
-            // combine ending tokens into one name.
-            // [ root, uielements, design, header ] => [ root, uielements, design.header ]
-            name = tokens.slice(2).join('.');
+            name = tokens[2];
         } else {
-            throw "Invalid generator reference. Must provide '[package.]module.name' .  Original: " + generatorName;
+            throw "Invalid generator reference syntax. Must provide '[package.]module.name' .  Original: " + generatorName;
         }
 
 
