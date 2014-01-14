@@ -58,7 +58,16 @@ exports.factory = function(_safe_eval_) {
                 console: console // debug
             };
             var code = '(' + generatorData.code + ')(data, templates);';
-            var genObj = _safe_eval_(code, globals);
+            
+            var genObj = "ERROR";
+
+            try {
+                genObj = _safe_eval_(code, globals);
+            }
+            catch(e) {
+                throw generatorData.name;
+            }
+
             return genObj;
         };
         return fn;
@@ -106,19 +115,25 @@ exports.factory = function(_safe_eval_) {
     expander.expandOnce = expandOnce;
 
     expander.expandAll = function(app) {
-        _.each(app.routes, function(route, i) {
-            app.routes[i] = expand(app.generators, route);
-        });
+        try {
+            _.each(app.routes, function(route, i) {
+                app.routes[i] = expand(app.generators, route);
+            });
 
-        _.each(app.models, function(model, index) {
-            app.models[index] = expand(app.generators, model);
-        });
+            _.each(app.models, function(model, index) {
+                app.models[index] = expand(app.generators, model);
+            });
 
-        _.each(app.templates, function (template, index) {
-            app.templates[index] = expand(app.generators, template);
-        });
+            _.each(app.templates, function (template, index) {
+                app.templates[index] = expand(app.generators, template);
+            });
 
-        app.config = expand(app.generators, app.config);
+            app.config = expand(app.generators, app.config);
+        }
+        catch(e) {
+            console.log("ERROR with generator: " + e);
+            throw e;
+        }
         return app;
     };
 
