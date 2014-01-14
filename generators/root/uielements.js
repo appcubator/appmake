@@ -32,19 +32,16 @@ generators.push({
     name: 'design.header',
     version: '0.1',
     code: function(data, templates) {
-        /* expects: content
-         * optional: className, style */
+        /* expects: content, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
         return { html: templates.html(data),
                  css: '',
                  js: '',
                  layout: data.layout };
     },
     templates: {
-        html: '<h1'+
-                '<% if (className) { %> class="<%= className %>"<% } %>>'+
-                '<% if (style) { %> style="<%= data.styleString %>"<% } %>'+
-                '<%= content %>'+
-              '</h1>'
+        html: '<h1 class="<%= className %>" style="<%= style %>"><%= content %></h1>'
     }
 });
 
