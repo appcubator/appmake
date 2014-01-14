@@ -2,6 +2,7 @@
 var parser = require('./frontend/parser'),
     validator = require('./frontend/validator'),
     expander = require('./frontend/expander').init(require('vm').runInNewContext),
+    postExpander = require('./frontend/postExpand'),
     writer = require('./backend/writer'),
     fs = require('fs'),
     path = require('path'),
@@ -54,6 +55,9 @@ if (require.main === module) {
             }
 
             var app = parser.parseDir(srcDir);
+            // uncomment below to demo expand steps
+            // expander.expandAll(app);
+            // postExpander.doPostExpandMagic(app);
 
             fs.writeFileSync(destJsonPath, JSON.stringify(app, function(key, value) {
                 if (typeof(value) === 'function')
@@ -79,7 +83,7 @@ if (require.main === module) {
 
             // expand the code generators
             expander.expandAll(app);
-            require('./frontend/postExpand').doPostExpandMagic(app);
+            postExpander.doPostExpandMagic(app);
 
             if (destPath === null) {
                 temp.mkdir('appmake-', function(err, tmpdir) {
