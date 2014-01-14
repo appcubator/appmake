@@ -138,6 +138,6 @@ try {
 
     exports.init = function() {
         var r = require; // avoid browserifying this
-        exports.expander = exports.factory(r('vm').runInNewContext);
+        return exports.factory(r('vm').runInNewContext);
     };
 }
