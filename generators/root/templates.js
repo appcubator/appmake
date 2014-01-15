@@ -24,9 +24,7 @@ generators.push({
     <%= head %>\n \
     </head>\n \
     <body>\n \
-    <%= navbar %> \n \
     <%= body %>\n \
-    <%= footer %>\n \
     </body>\n \
 </html>\n" }
 });
@@ -367,7 +365,6 @@ generators.push({
     name: 'footer',
     version: '0.1',
     code: function(data, templates){
-        // CSS at the top, then HTML elements, then the corresponding Javascript at the bottom.
         return templates.html({ data: data });
     },
     templates: {

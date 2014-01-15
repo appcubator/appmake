@@ -65,6 +65,7 @@ exports.factory = function(_safe_eval_) {
                 genObj = _safe_eval_(code, globals);
             }
             catch(e) {
+                console.log(e);
                 throw generatorData.name;
             }
 
