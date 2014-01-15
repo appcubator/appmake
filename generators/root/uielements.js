@@ -63,7 +63,7 @@ generators.push({
 });
 
 generators.push({
-    name: 'design-img',
+    name: 'design-image',
     version: '0.1',
     code: function(data, templates) {
         /* expects: url, className, style */
@@ -95,5 +95,110 @@ generators.push({
         html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
     }
 });
+
+/** NOT IMPLEMENTED YET **/
+
+generators.push({
+    name: 'design-button',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, url, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+    }
+});
+
+generators.push({
+    name: 'design-line',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, url, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+    }
+});
+
+generators.push({
+    name: 'design-box',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, url, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+    }
+});
+
+generators.push({
+    name: 'design-imageslider',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, url, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+    }
+});
+
+generators.push({
+    name: 'design-fbshare',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, url, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+    }
+});
+
+generators.push({
+    name: 'design-embedvideo',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, url, className, style */
+        data.className = data.className || '';
+        data.style = data.style || '';
+        return { html: templates.html(data),
+                 css: '',
+                 js: '',
+                 layout: data.layout };
+    },
+    templates: {
+        html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+    }
+});
+
 
 exports.generators = generators;
