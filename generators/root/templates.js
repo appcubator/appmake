@@ -6,7 +6,7 @@ generators.push({
     code: function(data, templates) {
         // The below could be concatUIE template
         // name, head, body
-        data.body = expand(data.body);
+        data.uielements = expand(data.uielements);
         data.navbar = expand(data.navbar);
         data.footer = expand(data.footer);
         data._inclString = '<% include modeldefs %>';// this include statement needs to be inserted into the generated code but it was causing problems inside the template and idk how to escape it in EJS.
@@ -30,7 +30,7 @@ generators.push({
     <%= navbar %>\n \
     <!-- END NAVBAR-->\n \
     <!-- BEGIN UIELEMENTS -->\n \
-    <%= body %>\n \
+    <%= uielements %>\n \
     <!-- END UIELEMENTS -->\n \
     <!-- BEGIN FOOTER-->\n \
     <%= footer %>\n \
