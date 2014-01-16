@@ -8,7 +8,7 @@ generators.push({
         *   name : string, url : array */
         var route = {
             "method": "GET",
-            "pattern": data.url.join('/'),
+            "pattern": '/' + data.url.join('/'),
             "code": templates.code({ name: data.name })
         };
         return route;
