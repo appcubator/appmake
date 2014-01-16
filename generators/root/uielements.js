@@ -222,22 +222,24 @@ generators.push({
     }
 });
 
-/** NOT IMPLEMENTED YET **/
-
 generators.push({
     name: 'design-embedvideo',
     version: '0.1',
     code: function(data, templates) {
         /* expects: content, url, className, style */
-        data.className = data.className || '';
-        data.style = data.style || '';
+        var url = data.youtubeURL;
+        url = url.replace('http://www.youtube.com/watch?v=', '');
+        url = '//www.youtube.com/embed/' + url;
+
+        data.url = url;
+
         return { html: templates.html(data),
                  css: '',
                  js: '',
                  layout: data.layout };
     },
     templates: {
-        html: '<a href="<%= url %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+        html: '<iframe class="video-embed" src="<%= url %>" width="<%= layout.width * 80" height="<%= layout.height * 15>" frameborder="0"></iframe>'
     }
 });
 
