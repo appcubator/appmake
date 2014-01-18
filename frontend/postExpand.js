@@ -30,6 +30,7 @@ exports.doPostExpandMagic = function(app) {
     app.modules = app.modules || {};
     app.modules.static = app.modules.static || {};
     app.modules.static['models.js'] = modelslib;
+    app.modules.Procfile = 'web: node devmon.js $PORT 3000 $PWD node app.js 3000'
 
     return app;
 };
