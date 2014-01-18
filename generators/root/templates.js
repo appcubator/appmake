@@ -136,8 +136,6 @@ generators.push({
 
             var sorted_uiels = uielements.sort(function(a,b) { return b.layout.top - a.layout.top; });
 
-            console.log(sorted_uiels);
-
             // topmost uiel must be in the row
             var current_row = {};
             rows.push(current_row);
@@ -389,5 +387,95 @@ generators.push({
           '<div class="clearfix"></div>'
     }
 });
+
+
+generators.push({
+    name: 'layoutSections',
+    version: '0.1',
+    code: function(data, templates){
+
+        function getArrangedModels (uielements) {
+
+            var els = {};
+
+            _.each(uielements, function (uielement) {
+
+                var key = uielement.data.layout.col;
+                els[key] = els[key] || [];
+                els[key].push(uielement);
+
+            });
+
+            _.each(els, function (val, key) {
+                els[key] = _.sortBy(val, function(uielement){
+                    return parseInt(uielement.data.layout.row, 10);
+                });
+            });
+
+            return els;
+        }
+
+        function renderSection (sectionObj) {
+
+            var dictEls  = getArrangedModels(sectionObj.uielements);
+            var template = templates[sectionObj.layout];
+
+            var expandedEls = {};
+            _.each(dictEls, function(val, key) {
+                expandedEls["col" + key] = _.map(val, function(el){
+                    
+                    return expand(el).html;
+
+                }).join('\n');
+            });
+
+            return template(expandedEls);
+        }
+
+        var str = _.map(data, renderSection);
+        str = str.join('\n');
+
+        return str;
+    },
+    templates: {
+            "hero": '<div class="jumbotron"><div class="container ycol"><%= col0 %></div></div>',
+            "3-3-3-3" : [
+                    '<div class="container">',
+                        '<div class="row">',
+                            '<div class="text-center ycol"><%= colheader %></div>',
+                            '<div class="col-md-3 ycol"><%= col0 %></div>',
+                            '<div class="col-md-3 ycol"><%= col1 %></div>',
+                            '<div class="col-md-3 ycol"><%= col2 %></div>',
+                            '<div class="col-md-3 ycol"><%= col3 %></div>',
+                        '</div>',
+                    '</div>'].join('\n'),
+            "4-4-4": [
+                    '<div class="container">',
+                        '<div class="row">',
+                            '<div class="text-center ycol">colheader</div>',
+                            '<div class="col-md-4 ycol">col0</div>',
+                            '<div class="col-md-4 ycol">col1</div>',
+                            '<div class="col-md-4 ycol">col2</div>',
+                        '</div>',
+                    '</div>'].join('\n'),
+             "8-4": [
+                    '<div class="container">',
+                        '<div class="row">',
+                            '<div class="text-center ycol">colheader</div>',
+                            '<div class="col-md-8 ycol">col0</div>',
+                            '<div class="col-md-4 ycol">col1</div>',
+                        '</div>',
+                    '</div>'].join('\n'),
+            "4-8": [
+                    '<div class="container">',
+                        '<div class="row">',
+                            '<div class="text-center ycol">colheader</div>',
+                            '<div class="col-md-4 ycol">col0</div>',
+                            '<div class="col-md-8 ycol">col1</div>',
+                        '</div>',
+                    '</div>'].join('\n')
+    }
+});
+
 
 exports.generators = generators;
