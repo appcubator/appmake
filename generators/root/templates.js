@@ -438,7 +438,7 @@ generators.push({
         return str;
     },
     templates: {
-            "hero": '<div class="jumbotron"><div class="container ycol"><%= col0 %></div></div>',
+            "12": '<div class="jumbotron"><div class="container ycol"><%= col0 %></div></div>',
             "3-3-3-3" : [
                     '<div class="container">',
                         '<div class="row">',
