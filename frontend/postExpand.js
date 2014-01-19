@@ -31,6 +31,7 @@ exports.doPostExpandMagic = function(app) {
     app.modules.static = app.modules.static || {};
     app.modules.static['models.js'] = modelslib;
     app.modules.Procfile = 'web: node devmon.js $PORT 3000 $PWD node app.js 3000'
+    app.modules['.appcubator'] = '(this file tells the hosting system to use the Appcubator buildpack)'
 
     return app;
 };
