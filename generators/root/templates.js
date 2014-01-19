@@ -159,6 +159,7 @@ generators.push({
                 }).join('\n');
             });
 
+            expandedEls.colheader = expandedEls.colheader || "";
             return template(expandedEls);
         }
 
