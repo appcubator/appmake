@@ -185,7 +185,7 @@ generators.push({
             "4-4-4": [
                     '<div class="container">',
                         '<div class="row">',
-                            '<div class="text-center ycol">colheader</div>',
+                            '<div class="text-center ycol"><%= colheader %></div>',
                             '<div class="col-md-4 ycol">col0</div>',
                             '<div class="col-md-4 ycol">col1</div>',
                             '<div class="col-md-4 ycol">col2</div>',
@@ -194,7 +194,7 @@ generators.push({
              "8-4": [
                     '<div class="container">',
                         '<div class="row">',
-                            '<div class="text-center ycol">colheader</div>',
+                            '<div class="text-center ycol"><%= colheader %></div>',
                             '<div class="col-md-8 ycol">col0</div>',
                             '<div class="col-md-4 ycol">col1</div>',
                         '</div>',
@@ -202,7 +202,7 @@ generators.push({
             "4-8": [
                     '<div class="container">',
                         '<div class="row">',
-                            '<div class="text-center ycol">colheader</div>',
+                            '<div class="text-center ycol"><%= colheader %></div>',
                             '<div class="col-md-4 ycol">col0</div>',
                             '<div class="col-md-8 ycol">col1</div>',
                         '</div>',
