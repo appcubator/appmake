@@ -69,7 +69,7 @@ generators.push({
         /* expects: url, className, style */
         data.className = data.className || '';
         data.style = data.style || '';
-        data.href = "";
+        data.href = data.href || "#";
 
         return { html: templates.html(data),
                  css: '',
@@ -105,13 +105,15 @@ generators.push({
         /* expects: content, url, className, style */
         data.className = data.className || '';
         data.style = data.style || '';
+        data.href = data.href || '#';
+
         return { html: templates.html(data),
                  css: '',
                  js: '',
                  layout: data.layout };
     },
     templates: {
-        html: '<a href="<%= url %>" class="btn <%= className %>" style="<%= style %>"><%= content %></a>'
+        html: '<a href="<%= href %>" class="btn <%= className %>" style="<%= style %>"><%= content %></a>'
     }
 });
 

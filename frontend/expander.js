@@ -55,6 +55,7 @@ exports.factory = function(_safe_eval_) {
                 data: data,
                 templates: compiledTemplates,
                 expand: expandFn,
+                _: _,
                 console: console // debug
             };
             var code = '(' + generatorData.code + ')(data, templates);';
