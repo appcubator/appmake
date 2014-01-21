@@ -160,6 +160,8 @@ generators.push({
             });
 
             expandedEls.colheader = expandedEls.colheader || "";
+            expandedEls.className = sectionObj.className || "";
+
             return template(expandedEls);
         }
 
@@ -169,45 +171,48 @@ generators.push({
         return str;
     },
     templates: {
-            "12":[ '<div class="jumbotron">',
-                    '<div class="ycol"><%= colheader %></div>',
-                    '<div class="container ycol"><%= col0 %></div>',
+            "12":[
+                '<div class="row <%= className %>">',
+                    '<div class="container">',
+                        '<div class="ycol"><%= colheader %></div>',
+                        '<div class="col-md-12 ycol"><%= col0 %></div>',
+                    '</div>',
                 '</div>'].join('\n'),
             "3-3-3-3" : [
+                '<div class="row <%= className %>">',
                     '<div class="container">',
-                        '<div class="row">',
-                            '<div class="text-center ycol"><%= colheader %></div>',
-                            '<div class="col-md-3 ycol"><%= col0 %></div>',
-                            '<div class="col-md-3 ycol"><%= col1 %></div>',
-                            '<div class="col-md-3 ycol"><%= col2 %></div>',
-                            '<div class="col-md-3 ycol"><%= col3 %></div>',
-                        '</div>',
-                    '</div>'].join('\n'),
+                        '<div class="text-center ycol"><%= colheader %></div>',
+                        '<div class="col-md-3 ycol"><%= col0 %></div>',
+                        '<div class="col-md-3 ycol"><%= col1 %></div>',
+                        '<div class="col-md-3 ycol"><%= col2 %></div>',
+                        '<div class="col-md-3 ycol"><%= col3 %></div>',
+                    '</div>',
+                '</div>'].join('\n'),
             "4-4-4": [
+                '<div class="row <%= className %>">',
                     '<div class="container">',
-                        '<div class="row">',
-                            '<div class="text-center ycol"><%= colheader %></div>',
-                            '<div class="col-md-4 ycol">col0</div>',
-                            '<div class="col-md-4 ycol">col1</div>',
-                            '<div class="col-md-4 ycol">col2</div>',
-                        '</div>',
-                    '</div>'].join('\n'),
+                        '<div class="text-center ycol"><%= colheader %></div>',
+                        '<div class="col-md-4 ycol"><%= col0 %></div>',
+                        '<div class="col-md-4 ycol"><%= col1 %></div>',
+                        '<div class="col-md-4 ycol"><%= col2 %></div>',
+                    '</div>',
+                '</div>'].join('\n'),
              "8-4": [
+                '<div class="row <%= className %>">',
                     '<div class="container">',
-                        '<div class="row">',
-                            '<div class="text-center ycol"><%= colheader %></div>',
-                            '<div class="col-md-8 ycol">col0</div>',
-                            '<div class="col-md-4 ycol">col1</div>',
-                        '</div>',
-                    '</div>'].join('\n'),
+                        '<div class="text-center ycol"><%= colheader %></div>',
+                        '<div class="col-md-8 ycol"><%= col0 %></div>',
+                        '<div class="col-md-4 ycol"><%= col1 %></div>',
+                    '</div>',
+                '</div>'].join('\n'),
             "4-8": [
+                '<div class="row <%= className %>">',
                     '<div class="container">',
-                        '<div class="row">',
-                            '<div class="text-center ycol"><%= colheader %></div>',
-                            '<div class="col-md-4 ycol">col0</div>',
-                            '<div class="col-md-8 ycol">col1</div>',
-                        '</div>',
-                    '</div>'].join('\n')
+                        '<div class="text-center ycol"><%= colheader %></div>',
+                        '<div class="col-md-4 ycol"><%= col0 %></div>',
+                        '<div class="col-md-8 ycol"><%= col1 %></div>',
+                    '</div>',
+                '</div>'].join('\n')
     }
 });
 
