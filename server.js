@@ -1,4 +1,5 @@
 var expander = require('./frontend/expander').init(),
+    postExpand = require('./frontend/postExpand'),
     writer = require('./backend/writer');
 
 var express = require('express');
@@ -42,9 +43,10 @@ app.post('/expandAll/', function(req, res){
 app.post('/compile/', function(req, res){
     var app = req.body;
     expander.expandAll(app);
-    require('./frontend/postExpand').doPostExpandMagic(app);
-    var codeData = writer.produceCode(app);
-    res.json(codeData);
+    postExpand.doPostExpandMagic(app, function(){
+        var codeData = writer.produceCode(app);
+        res.json(codeData);
+    });
 });
 
 exports.run = function(port) {

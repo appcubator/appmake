@@ -72,10 +72,6 @@ function write(app, dirpath, callback) {
         _writeFile(_j(dirpath, 'views', template.name + '.ejs'), template.code);
     });
 
-    // css
-    if (!app.css) app.css = '';
-    _writeFile(_j(dirpath, 'static', 'style.css'), app.css);
-
     // routes
     _writeFile(_j(dirpath, 'routes.js'), templates.routes(app.routes));
 
@@ -109,11 +105,6 @@ function produceCode(app) {
         validatefname(template.name + '.ejs');
         codeData.views[template.name + '.ejs'] = template.code;
     });
-
-    // css
-    codeData.static = codeData.static || {};
-    if (!app.css) app.css = '';
-    codeData.static['style.css'] = app.css;
 
     // routes
     codeData['routes.js'] = templates.routes(app.routes);
