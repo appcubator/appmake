@@ -241,9 +241,21 @@ generators.push({
                  layout: data.layout };
     },
     templates: {
-        html: '<iframe class="video-embed" src="<%= url %>" width="<%= layout.width * 80" height="<%= layout.height * 15>" frameborder="0"></iframe>'
+        html: '<iframe class="video-embed" src="<%= url %>" width="<%= layout.width * 80 %>" height="<%= layout.height * 15 %>" frameborder="0"></iframe>'
     }
 });
 
+generators.push({
+    name: 'design-custom',
+    version: '0.1',
+    code: function(data, templates) {
+        /* expects: content, url, className, style */
+        return { html: data.htmlC,
+                 css: data.cssC,
+                 js: data.jsC,
+                 layout: data.layout };
+    },
+    templates: { }
+});
 
 exports.generators = generators;
