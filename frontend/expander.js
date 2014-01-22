@@ -131,6 +131,7 @@ exports.factory = function(_safe_eval_) {
             });
 
             app.config = expand(app.generators, app.config);
+            app.css = expand(app.generators, app.css);
         }
         catch(e) {
             console.log("ERROR with generator: " + e);

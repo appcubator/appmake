@@ -1,13 +1,16 @@
 var modelslib = require("./modelslib.js").code.toString(),
     expander = require('./expander').init(require('vm').runInNewContext),
-    _ = require('underscore');
+    _ = require('underscore'),
+    less = require('less');
 
 /* fix the function wrapping hack */
 var lines = modelslib.split('\n');
 var relevantLines = lines.slice(1, lines.length-1);
 modelslib = relevantLines.join('\n');
 
-exports.doPostExpandMagic = function(app) {
+exports.doPostExpandMagic = function(app, callback) {
+    // Note: use callback since less css-generation is async
+
     // autogenerate api routes and modelDefs template for the frontend library
     var modelDefs = {};
     _.each(app.models, function(model) {
@@ -30,8 +33,13 @@ exports.doPostExpandMagic = function(app) {
     app.modules = app.modules || {};
     app.modules.static = app.modules.static || {};
     app.modules.static['models.js'] = modelslib;
-    app.modules.Procfile = 'web: node devmon.js $PORT 3000 $PWD node app.js 3000'
-    app.modules['.appcubator'] = '(this file tells the hosting system to use the Appcubator buildpack)'
+    app.modules.Procfile = 'web: node devmon.js $PORT 3000 $PWD node app.js 3000';
+    app.modules['.appcubator'] = '(this file tells the hosting system to use the Appcubator buildpack)';
+    less.render(app.css || '', function(e, css){
+        if (e) throw e;
+        app.modules.static['style.css'] = css;
+        callback(app);
+    });
 
     return app;
 };

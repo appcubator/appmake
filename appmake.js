@@ -83,16 +83,18 @@ if (require.main === module) {
 
             // expand the code generators
             expander.expandAll(app);
-            postExpander.doPostExpandMagic(app);
+            postExpander.doPostExpandMagic(app, function(){
 
-            if (destPath === null) {
-                temp.mkdir('appmake-', function(err, tmpdir) {
-                    destPath = tmpdir;
+                if (destPath === null) {
+                    temp.mkdir('appmake-', function(err, tmpdir) {
+                        destPath = tmpdir;
+                        writer.write(app, destPath, function() { return process.stdout.write('Compiled: '+path.resolve(destPath)+'\n'); });
+                    });
+                } else {
                     writer.write(app, destPath, function() { return process.stdout.write('Compiled: '+path.resolve(destPath)+'\n'); });
-                });
-            } else {
-                writer.write(app, destPath, function() { return process.stdout.write('Compiled: '+path.resolve(destPath)+'\n'); });
-            }
+                }
+
+            });
 
             break;
 

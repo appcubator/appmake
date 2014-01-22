@@ -1,5 +1,8 @@
 var expander = require('./frontend/expander').init(),
+    postExpand = require('./frontend/postExpand'),
     writer = require('./backend/writer');
+
+var less = require('less');
 
 var express = require('express');
 var app = express();
@@ -42,9 +45,20 @@ app.post('/expandAll/', function(req, res){
 app.post('/compile/', function(req, res){
     var app = req.body;
     expander.expandAll(app);
-    require('./frontend/postExpand').doPostExpandMagic(app);
-    var codeData = writer.produceCode(app);
-    res.json(codeData);
+    postExpand.doPostExpandMagic(app, function(){
+        var codeData = writer.produceCode(app);
+        res.json(codeData);
+    });
+});
+
+// compile some less to css
+// GET where request body is urlencoded less=lesscodehere.
+app.get('/less/', function(req, res){
+    var lessCode = req.body.less;
+    less.render(lessCode, function(e, css){
+        if (e) res.send(500, e);
+        else res.send(css);
+    });
 });
 
 exports.run = function(port) {

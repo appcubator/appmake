@@ -133,7 +133,7 @@ exports.parseDir = function (dirPath) {
         return config;
     }
     app.config = parseConfig(dirContents['config.js']);
+    app.css = dirContents['css'];
 
-    // TODO figure out this CSS thing
     return app;
 };
