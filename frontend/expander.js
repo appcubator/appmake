@@ -40,6 +40,8 @@ exports.factory = function(_safe_eval_) {
         return generator;
     }
 
+    expander.findGenData = findGenData;
+
     function constructGen(generatorData) {
         // input the generator's data from the json
         // output a function which can directly be used for generator execution.
@@ -98,11 +100,15 @@ exports.factory = function(_safe_eval_) {
         return { package: package, module: module, name: name, version: version };
     }
 
+    expander.parseGenID = parseGenID;
+
     function expandOnce(generators, genData) {
         var genID = parseGenID(genData.generate);
         var generatedObj = constructGen(findGenData(generators, genID))(generators, genData.data);
         return generatedObj;
     }
+
+    expander.expandOnce = expandOnce;
 
     function expand(generators, genData) {
         // TODO check for cycles
@@ -113,8 +119,6 @@ exports.factory = function(_safe_eval_) {
     }
 
     expander.expand = expand;
-
-    expander.expandOnce = expandOnce;
 
     expander.expandAll = function(app) {
         try {
