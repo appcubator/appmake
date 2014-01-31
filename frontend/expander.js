@@ -103,9 +103,17 @@ exports.factory = function(_safe_eval_) {
     expander.parseGenID = parseGenID;
 
     function expandOnce(generators, genData) {
-        var genID = parseGenID(genData.generate);
-        var generatedObj = constructGen(findGenData(generators, genID))(generators, genData.data);
-        return generatedObj;
+        try {
+            var genID = parseGenID(genData.generate);
+            var generatedObj = constructGen(findGenData(generators, genID))(generators, genData.data);
+            return generatedObj;
+        }
+        catch(e) {
+            _.each(genID, function(val, key) {
+                console.log(val + " " + key);
+            });
+            throw genID + " : " + e;
+        }
     }
 
     expander.expandOnce = expandOnce;
