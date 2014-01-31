@@ -100,7 +100,7 @@ if (require.main === module) {
 
         case "runserver":
             var server = require("./server");
-            server.run(3000);
+            server.run(parseInt(process.argv[3] || '3000'));
             break;
 
         case "deploy":
