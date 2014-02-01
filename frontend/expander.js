@@ -142,6 +142,9 @@ exports.factory = function(_safe_eval_) {
                 app.templates[index] = expand(app.generators, template);
             });
 
+            app.templates.push({name: "header", code: app.header||""});
+            app.templates.push({name: "scripts", code: app.scripts||""});
+
             app.config = expand(app.generators, app.config);
             app.css = expand(app.generators, app.css);
         }
