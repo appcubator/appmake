@@ -8,6 +8,8 @@ var express = require('express');
 var app = express();
 app.use(express.bodyParser());
 
+
+
 /*
  * Notes:
  *  -Below, app.generators refers to an array of the local app generators. For simple testing, an empty array is sufficient.
@@ -60,6 +62,58 @@ app.get('/less/', function(req, res){
         else res.send(css);
     });
 });
+
+
+/* Generator DB Routes */
+var path = require('path');
+var GeneratorModel = require('./models/Generator.js').Generators;
+
+app.configure(function(){
+	app.set('port', process.env.PORT || 3000);
+	app.use(express.static(path.join(__dirname, 'public')));
+	app.use(express.favicon());
+	app.use(express.logger('dev'));
+	
+	app.use(express.bodyParser());
+	app.use(express.methodOverride());
+});
+
+app.get('/', function (req, res){
+    res.sendfile( __dirname + '/client/app/index.html' );
+});
+
+app.get( '/client/*' , function (req, res, next) {
+    var file = req.params[0]; 
+    res.sendfile( __dirname + '/client/' + file );
+});
+
+app.get( '/public/*' , function (req, res, next) {
+    var file = req.params[0]; 
+    res.sendfile( __dirname + '/public/' + file );
+});
+
+app.get('/generators/list', function (req, res) {
+	GeneratorModel.find({}, function (err, gens) {
+		if (err) {
+			console.log(err);
+		}
+		res.json(gens);
+	});
+});
+
+app.get('/generators/:pkg/:mdl/:gen', function (req, res){
+	GeneratorModel.findOne({
+		packageName: req.params.pkg,
+		moduleName: req.params.mdl,
+		name: req.params.gen
+	}, function (err, gen) {
+		if (err) {
+			console.log(err);
+		}
+		res.json(gen);
+	});
+});
+
 
 exports.run = function(port) {
     app.listen(port);
