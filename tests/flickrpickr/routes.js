@@ -7,3 +7,11 @@ routes.push({
         name: "Homepage"
     }
 });
+
+routes.push({
+    generate:"routes.staticpage",
+    data: {
+        url: ["randomFlickr",":query", ":limit"],
+        name: "RandFlickr"
+    }
+});
