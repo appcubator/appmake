@@ -1,0 +1,47 @@
+var template = { generate: "templates.page",
+data: {   name: 'RandFlickr',
+          head: ['<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>',
+                 '<script src="http://127.0.0.1:3000/client/app/scripts/browser-expander.js"></script>',
+                 '<script src="http://127.0.0.1:3000/client/app/scripts/generator.js"></script>',
+                 '<script>var G = new Generator();</script>'].join('\n'),
+          navbar: '',
+          footer: '',
+          uielements: { generate: "templates.concatUIE",
+              data: [
+                  /* FLICKR API ON THE BACKEND */
+                  {
+                    "generate": "flickrpickr.uielements.flickgallery",
+                    "data": {
+                      "galleryID": "myflickgallery"
+                    }
+                  },
+                  {
+                  "html": "<div id=\"piclist\"></div>",
+                  js:["function renderInList (e, d) {",
+                      "  if (e) alert(e);",
+                      "  else {",
+                      "    for (var i = 0; i < d.photos.photo.length; i ++) {",
+                      "      var photo = d.photos.photo[i];",
+                      "      $('#myflickgallery').append('<img src=\"'+photo.url_q+'\">');",
+                      "    }",
+                      "  }",
+                      "}",
+                      "$('document').ready(function() {",
+                      "    var query = window.location.pathname.split( '/' )[2];",
+                      "    var limit = window.location.pathname.split( '/' )[3];",
+                      "    models.Picture.randomNFromFlickr(query, limit, renderInList);",
+                      "    return false;",
+                      "});"].join('\n'),
+                  "css": "img.piclist {max-height: 200px; max-width: 300px;}"
+
+
+
+
+
+
+
+                  }
+              ]
+          }
+  }
+}
