@@ -112,7 +112,7 @@ exports.factory = function(_safe_eval_) {
             _.each(genID, function(val, key) {
                 console.log(val + " " + key);
             });
-            throw genID + " : " + e;
+            throw JSON.stringify(genID, null, 3) + " : " + e;
         }
     }
 

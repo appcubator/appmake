@@ -4,6 +4,7 @@ generators.push({
     name: 'form-field',
     version: '0.1',
     code: function(data, templates) {
+        /*  */
 
         var template = templates[data.displayType];
         data.style = data.style || 'display:block';
@@ -31,12 +32,17 @@ generators.push({
     code: function(data, templates) {
         /* Example (subject to change)
         {
-          generate: "crud.uielements.create",
-          data: { fields: [['name', { type: 'text', placeholder: 'Name'} ],
-                           ['url', { type: 'text', placeholder: 'URL'}   ]],
-                  id: 'testform',
-                  redirect: 'https://www.google.com/' }
-        }
+            generate: "crud.uielements.create",
+            data: { fields: [{ generate: 'form-field',
+                               data: {displayType:'single-line-text',
+                                      field_name:'name',
+                                      placeholder: 'Name'}
+                             },{generate: 'form-field',
+                                data:{ displayType:'single-line-text',
+                                       field_name: 'url',
+                                       placeholder: 'URL'}}],
+                    id: 'testform',
+                    redirect: '/?success=true' }
           */
 
         data.className = data.className || "";

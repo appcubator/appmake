@@ -1,6 +1,8 @@
 var template = { generate: "templates.page",
 data: {   name: 'Homepage',
           head: '<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>',
+          navbar: '',
+          footer: '',
           uielements: { generate: "templates.concatUIE",
               data: [
               /* FLICKR API ON THE BACKEND */
@@ -35,8 +37,14 @@ data: {   name: 'Homepage',
                   },
                   {
                     generate: "crud.uielements.create",
-                    data: { fields: [['name', {type:'text', placeholder:'Name'}],
-                                     ['url', {type:'text', placeholder:'URL'}]],
+                    data: { fields: [{ generate: 'crud.uielements.form-field',
+                                       data: {displayType:'single-line-text',
+                                              field_name:'name',
+                                              placeholder: 'Name'}
+                                     },{generate: 'crud.uielements.form-field',
+                                        data:{ displayType:'single-line-text',
+                                               field_name: 'url',
+                                               placeholder: 'URL'}}],
                             id: 'testform',
                             redirect: '/?success=true' }
                   }, // client side rendering of the pics via api call.
