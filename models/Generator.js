@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost');
+mongoose.connect(process.env.MONGO_ADDR || 'mongodb://localhost');
 var Schema = mongoose.Schema;
 
 //mongoose.connection.db.dropDatabase();
