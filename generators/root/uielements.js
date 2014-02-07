@@ -79,7 +79,8 @@ generators.push({
     defaults: {
       className: '',
       style: '',
-      href: '#'
+      href: '#',
+      content: 'Click To Go'
     },
     code: function(data, templates) {
         /* expects: content, url, className, style */
@@ -161,7 +162,10 @@ generators.push({
     version: '0.1',
     defaults: {
       cid: Math.floor(Math.random()*11),
-      slides: []
+      slides: [ {
+        image: 'https://i.istockimg.com/file_thumbview_approve/18120560/2/stock-photo-18120560-students-at-computer-class.jpg',
+        text : "Slide 1 Text"
+      } ]
     },
     code: function(data, templates) {
         /* expects: content, url, className, style */
