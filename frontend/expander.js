@@ -48,9 +48,15 @@ exports.factory = function(_safe_eval_) {
         var fn = function(generators, data) {
             var templates = generatorData.templates;
             var compiledTemplates = {};
+
             _.each(templates, function(templateStr, index) {
                 compiledTemplates[index] = _.template(templateStr);
             });
+
+            if(generatorData.defaults) {
+                data = _.defaults(data, generatorData.defaults);
+            }
+
             // TODO compile each EJS template so that it can have a render method.
             var expandFn = function(data) { return expand(generators, data); };
             var globals = {
