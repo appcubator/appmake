@@ -28,7 +28,8 @@ Generator = (function(_){
     /**
     Generator.prototype.getGenerator = function(generatorPath) {
 
-        return this.expander.findGenData(v1.currentApp.model.serialize().generators, this.expander.parseGenID(generatorPath));
+        var s = v1.currentApp.model.serialize();
+        return this.expander.findGenData(s.plugins, s.generators, this.expander.parseGenID(generatorPath));
 
     };
     */
