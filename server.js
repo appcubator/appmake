@@ -22,17 +22,17 @@ app.use(express.bodyParser());
 
 
 // perform one expansion of a generator
-// POST [ app.generators, {generate:'blah', data:{blah} ]
+// POST [ app.plugins, app.generators, {generate:'blah', data:{blah} ]
 app.post('/expandOnce/', function(req, res){
     var argv = req.body;
-    res.json(expander.expandOnce(argv[0], argv[1]));
+    res.json(expander.expandOnce(argv[0], argv[1], argv[2]));
 });
 
 // expand a generator completely
-// POST [ app.generators, {generate:'blah', data:{blah} ]
+// POST [ app.plugins, app.generators, {generate:'blah', data:{blah} ]
 app.post('/expand/', function(req, res){
     var argv = req.body;
-    res.json(expander.expand(argv[0], argv[1]));
+    res.json(expander.expand(argv[0], argv[1], argv[2]));
 });
 
 // expand all the generators in the app completely
