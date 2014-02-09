@@ -29,6 +29,14 @@ generators.push({
 generators.push({
     name: 'create',
     version: '0.1',
+    defaults: {
+        className: "",
+        style: "",
+        fields: [],
+        redirect: "/",
+        id: Math.floor(Math.random()*11),
+        tableName: "DefaultTable"
+    },
     code: function(data, templates) {
         /* Example (subject to change)
         {
@@ -44,10 +52,6 @@ generators.push({
                     id: 'testform',
                     redirect: '/?success=true' }
           */
-
-        data.className = data.className || "";
-        data.style = data.style || "";
-
         data.formFields = _.map(data.fields, expand).join('\n');
 
         var uie = {
@@ -58,15 +62,17 @@ generators.push({
         return uie;
     },
     templates: {
+
         "html": "<form id=\"<%= id %>\" class=\"<%= className %>\" style=\"<%= style %>\">\n" +
             "<%= formFields %>" +
             "<input type=\"submit\" value=\"Submit\"><br>\n" +
             "</form>\n",
+
         "js": "$('#<%= id %>').submit(function(){\n" +
             "    var formdata = {};\n" +
             "    formdata.name = $('#<%= id %> input[name=\"name\"]').val();\n" +
             "    formdata.url = $('#<%= id %> input[name=\"url\"]').val();\n" +
-            "    models.Picture.createPicture(formdata, function(err, data){\n" +
+            "    models.<%= tableName %>.create<%= tableName %>(formdata, function(err, data){\n" +
             "        console.log(data);\n" +
             "        if (err) {\n" +
             "            // Do whatever you want with user errors\n" +

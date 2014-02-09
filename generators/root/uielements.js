@@ -100,7 +100,8 @@ generators.push({
     defaults: {
       className: '',
       style: '',
-      href: '#'
+      href: '#',
+      content: 'Button to Go'
     },
     code: function(data, templates) {
         /* expects: content, url, className, style */
