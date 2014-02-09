@@ -6,18 +6,8 @@ var fields = [{ name: "datePicked",
                 type: "String" }
 ];
 
-var instancemethods = [];
-instancemethods.push({
-  name: 'updateUrl',
-  enableAPI: true,
-  code: function(newUrl, cb) {
-      this.url = newUrl;
-      this.save(function(e, d){cb(e,d);});
-    }
-});
-
-var staticmethods = [];
-staticmethods.push({
+var functions = [];
+functions.push({
   name: 'randomNFromFlickr',
   enableAPI: true,
   code: function(searchQ, limit, cb) {
@@ -28,19 +18,22 @@ staticmethods.push({
     }
 });
 
-/* Pretend the user wants these exposed as methods...,
- * How do instancemethods get transported?
- *
- * Remote call, method and ID. findById, then call method with arguments.
- * If it's save instancemethod, we may be able to use create on the backend. */
+functions.push({
+  name: 'updateUrl',
+  enableAPI: true,
+  code: function(pic, newUrl, cb) {
+      pic.url = newUrl;
+      pic.save(function(e, d){cb(e,d);});
+    }
+});
 
-staticmethods.push({
+functions.push({
     generate: 'crud.models.create',
     data: { modelName: 'Picture',
             enableAPI: true, }
 });
 
-staticmethods.push({
+functions.push({
     generate: 'crud.models.find',
     data: { modelName: 'Picture',
             enableAPI: true, }
@@ -50,7 +43,6 @@ var model = { generate: "models.model",
               data: {
                   name: 'Picture',
                   fields: fields,
-                  instancemethods: instancemethods,
-                  staticmethods: staticmethods
+                  functions: functions
               }
 };

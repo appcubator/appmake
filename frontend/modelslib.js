@@ -33,8 +33,8 @@ window.models = (function($, modelDefs){
     for (var modelName in modelDefs) {
         var modelDef = modelDefs[modelName];
         models[modelName] = {};
-        for (var staticmethodName in modelDef.staticmethods) {
-            var url = modelDef.staticmethods[staticmethodName];
+        for (var staticmethodName in modelDef.functions) {
+            var url = modelDef.functions[staticmethodName];
             /* url should be either '' or 'GET /someurl' format. */
             var remoteFn;
             if (url === '') {

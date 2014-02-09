@@ -113,7 +113,7 @@ exports.factory = function(_safe_eval_) {
             _.each(genID, function(val, key) {
                 console.log(val + " " + key);
             });
-            throw genID + " : " + e;
+            throw JSON.stringify(genID, null, 3) + " : " + e;
         }
     }
 
@@ -220,6 +220,7 @@ generators.push({
     name: 'form-field',
     version: '0.1',
     code: function(data, templates) {
+        /*  */
 
         var template = templates[data.displayType];
         data.style = data.style || 'display:block';
@@ -247,12 +248,17 @@ generators.push({
     code: function(data, templates) {
         /* Example (subject to change)
         {
-          generate: "crud.uielements.create",
-          data: { fields: [['name', { type: 'text', placeholder: 'Name'} ],
-                           ['url', { type: 'text', placeholder: 'URL'}   ]],
-                  id: 'testform',
-                  redirect: 'https://www.google.com/' }
-        }
+            generate: "crud.uielements.create",
+            data: { fields: [{ generate: 'form-field',
+                               data: {displayType:'single-line-text',
+                                      field_name:'name',
+                                      placeholder: 'Name'}
+                             },{generate: 'form-field',
+                                data:{ displayType:'single-line-text',
+                                       field_name: 'url',
+                                       placeholder: 'URL'}}],
+                    id: 'testform',
+                    redirect: '/?success=true' }
           */
 
         data.className = data.className || "";
@@ -293,6 +299,7 @@ generators.push({
 });
 
 exports.generators = generators;
+
 },{}],5:[function(require,module,exports){
 exports.root = require('./root/generators');
 exports.crud = require('./crud/generators');
@@ -368,14 +375,9 @@ generators.push({
         if (data.schemaMods === undefined)
             data.schemaMods = [];
 
-        for (var index in data.instancemethods) {
-            var im = data.instancemethods[index];
-            data.instancemethods[index] = expand(im);
-        }
-
-        for (index in data.staticmethods) {
-            var sm = data.staticmethods[index];
-            data.staticmethods[index] = expand(sm);
+        for (index in data.functions) {
+            var sm = data.functions[index];
+            data.functions[index] = expand(sm);
         }
 
         // generate the main model code.
@@ -397,13 +399,8 @@ var Schema = mongoose.Schema;\n\
 \n\
 var <%= name %>Schema = <%= schemaCode %>;\n\
 \n\
-<% for(var index in instancemethods) { %>\n\
-<% var im = instancemethods[index]; %>\n\
-<%= name %>Schema.methods.<%= im.name %> = <%= im.code %>;\n\
-<% } %>\n\
-\n\
-<% for(var index in staticmethods) { %>\n\
-<% var sm = staticmethods[index]; %>\n\
+<% for(var index in functions) { %>\n\
+<% var sm = functions[index]; %>\n\
 <%= name %>Schema.statics.<%= sm.name %> = <%= sm.code %>;\n\
 <% } %>\n\
 \n\

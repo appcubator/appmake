@@ -11,14 +11,9 @@ generators.push({
         if (data.schemaMods === undefined)
             data.schemaMods = [];
 
-        for (var index in data.instancemethods) {
-            var im = data.instancemethods[index];
-            data.instancemethods[index] = expand(im);
-        }
-
-        for (index in data.staticmethods) {
-            var sm = data.staticmethods[index];
-            data.staticmethods[index] = expand(sm);
+        for (index in data.functions) {
+            var sm = data.functions[index];
+            data.functions[index] = expand(sm);
         }
 
         // generate the main model code.
@@ -40,13 +35,8 @@ var Schema = mongoose.Schema;\n\
 \n\
 var <%= name %>Schema = <%= schemaCode %>;\n\
 \n\
-<% for(var index in instancemethods) { %>\n\
-<% var im = instancemethods[index]; %>\n\
-<%= name %>Schema.methods.<%= im.name %> = <%= im.code %>;\n\
-<% } %>\n\
-\n\
-<% for(var index in staticmethods) { %>\n\
-<% var sm = staticmethods[index]; %>\n\
+<% for(var index in functions) { %>\n\
+<% var sm = functions[index]; %>\n\
 <%= name %>Schema.statics.<%= sm.name %> = <%= sm.code %>;\n\
 <% } %>\n\
 \n\

@@ -50,11 +50,9 @@ function validateSM(sm, locString) {
 
 function validateModel(model, locString) {
         assertExists(model.fields, 'fields');
-        assertExists(model.instancemethods, 'instancemethods');
-        assertExists(model.staticmethods, 'staticmethods');
+        assertExists(model.functions, 'functions');
         assertType('string', model.name, locString+'.name');
-        _.each(model.instancemethods, function(im){ validateGenrefOr(validateIM)(im, locString + '.instancemethods'); });
-        _.each(model.staticmethods, function(sm){ validateGenrefOr(validateSM)(sm, locString + '.staticmethods'); });
+        _.each(model.functions, function(sm){ validateGenrefOr(validateSM)(sm, locString + '.functions'); });
 }
 
 // this is for the generator definition. see validateGenrefOr for the generator usage (aka ref)

@@ -19,9 +19,9 @@ var fields = [{
         "type": "String"
     }];
 
-var instancemethods = [];
+var functions = [];
 
-instancemethods.push({
+functions.push({
   name: 'authenticate',
   code: function(plainText) {
   /**
@@ -31,11 +31,11 @@ instancemethods.push({
    * @return {Boolean}
    * @api private
    */
-    return this.encryptPassword(plainText) === this.hashed_password;
+    return user.encryptPassword(plainText) === user.hashed_password;
   }
 });
 
-instancemethods.push({
+functions.push({
   name: 'makeSalt',
   code: function() {
   /**
@@ -46,14 +46,14 @@ instancemethods.push({
    */
 
     /* Then to regenerate password, use:
-        this.salt = this.makeSalt()
-        this.hashed_password = this.encryptPassword(password)
+        user.salt = user.makeSalt()
+        user.hashed_password = user.encryptPassword(password)
     */
     return Math.round((new Date().valueOf() * Math.random())) + '';
   }
 });
 
-instancemethods.push({
+functions.push({
   name: 'encryptPassword',
   code: function (password) {
   /**
@@ -65,12 +65,12 @@ instancemethods.push({
    */
     var crypto = require('crypto');
     if (!password) return '';
-    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+    return crypto.createHmac('sha1', user.salt).update(password).digest('hex');
   }
 });
 
 
-instancemethods.push({
+functions.push({
   name: 'resetToken',
   code: function (token, cb) {
   /**
@@ -80,7 +80,7 @@ instancemethods.push({
    * @param {Function} cb
    * @api private
    */
-    var self = this;
+    var self = user;
     var crypto = require('crypto');
     crypto.randomBytes(48, function(ex, buf) {
       self[token] = buf.toString('hex');
@@ -109,9 +109,7 @@ schemaMods.push(function (schema) {
 });
 
 
-var staticmethods = [];
-
-staticmethods.push({
+functions.push({
     name: 'signup',
     enableAPI:true,
     code: function(username, password, password2, callback) {
@@ -135,8 +133,7 @@ var model = { generate: "models.model",
               data: {
                   name: 'User',
                   fields: fields,
-                  instancemethods: instancemethods,
-                  staticmethods: staticmethods,
+                  functions: functions,
                   schemaMods: schemaMods
               }
 };
