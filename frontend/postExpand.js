@@ -17,8 +17,7 @@ exports.doPostExpandMagic = function(app, callback) {
         var thisModelDef = { functions: {} };
         // Note that modelDefs will be mutated iff the below code runs in at least one iteration
         _.each(model.functions, function(sm) {
-            //if (sm.enableAPI) {
-            if (false) {
+            if (sm.enableAPI) {
                 modelDefs[model.name] = thisModelDef; // this need only happens once but repeatedly doesn't hurt and code is easier this way.
                 modelDefs[model.name].functions[sm.name] = ''; // TODO custom url can go here.
                 app.routes.push(expander.expand(app.plugins, app.generators, {
