@@ -17,10 +17,12 @@ generators.push({
 generators.push({
     name: 'design-header',
     version: '0.1',
+    defaults: {
+      className: '',
+      style: '',
+      content: 'Hello Header'
+    },
     code: function(data, templates) {
-        /* expects: content, className, style */
-        data.className = data.className || '';
-        data.style = data.style || '';
         return { html: templates.html(data),
                  css: '',
                  js: '',
@@ -34,10 +36,13 @@ generators.push({
 generators.push({
     name: 'design-text',
     version: '0.1',
+    defaults: {
+      className: '',
+      style: '',
+      content: 'Hello. This is a text sample. Lorem ipsum is too boring.'
+    },
     code: function(data, templates) {
         /* expects: content, className, style */
-        data.className = data.className || '';
-        data.style = data.style || '';
         return { html: templates.html(data),
                  css: '',
                  js: '',
@@ -51,12 +56,13 @@ generators.push({
 generators.push({
     name: 'design-image',
     version: '0.1',
+    defaults: {
+      className: '',
+      style: '',
+      href: '#',
+      src: 'https://i.istockimg.com/file_thumbview_approve/18120560/2/stock-photo-18120560-students-at-computer-class.jpg'
+    },
     code: function(data, templates) {
-        /* expects: url, className, style */
-        data.className = data.className || '';
-        data.style = data.style || '';
-        data.href = data.href || "#";
-
         return { html: templates.html(data),
                  css: '',
                  js: '',
@@ -70,10 +76,14 @@ generators.push({
 generators.push({
     name: 'design-link',
     version: '0.1',
+    defaults: {
+      className: '',
+      style: '',
+      href: '#',
+      content: 'Click To Go'
+    },
     code: function(data, templates) {
         /* expects: content, url, className, style */
-        data.className = data.className || '';
-        data.style = data.style || '';
         return { html: templates.html(data),
                  css: '',
                  js: '',
@@ -87,12 +97,13 @@ generators.push({
 generators.push({
     name: 'design-button',
     version: '0.1',
+    defaults: {
+      className: '',
+      style: '',
+      href: '#'
+    },
     code: function(data, templates) {
         /* expects: content, url, className, style */
-        data.className = data.className || '';
-        data.style = data.style || '';
-        data.href = data.href || '#';
-
         return { html: templates.html(data),
                  css: '',
                  js: '',
@@ -106,6 +117,10 @@ generators.push({
 generators.push({
     name: 'design-line',
     version: '0.1',
+    defaults: {
+      className: '',
+      style: ''
+    },
     code: function(data, templates) {
         /* expects: className, style */
         data.className = data.className || '';
@@ -123,6 +138,10 @@ generators.push({
 generators.push({
     name: 'design-box',
     version: '0.1',
+    defaults: {
+      className: '',
+      style: ''
+    },
     code: function(data, templates) {
         /* expects: content, url, className, style */
         data.className = data.className || '';
@@ -141,10 +160,15 @@ generators.push({
 generators.push({
     name: 'design-imageslider',
     version: '0.1',
+    defaults: {
+      cid: Math.floor(Math.random()*11),
+      slides: [ {
+        image: 'https://i.istockimg.com/file_thumbview_approve/18120560/2/stock-photo-18120560-students-at-computer-class.jpg',
+        text : "Slide 1 Text"
+      } ]
+    },
     code: function(data, templates) {
         /* expects: content, url, className, style */
-        data.cid = Math.floor(Math.random()*11);
-        data.slides = data.slides || [];
         return { html: templates.html(data),
                  css: '',
                  js: '',
@@ -213,12 +237,14 @@ generators.push({
 generators.push({
     name: 'design-embedvideo',
     version: '0.1',
+    defaults: {
+      youtubeURL: "http://www.youtube.com/watch?v=hZTx0vXUo34"
+    },
     code: function(data, templates) {
-        /* expects: content, url, className, style */
+
         var url = data.youtubeURL;
         url = url.replace('http://www.youtube.com/watch?v=', '');
         url = '//www.youtube.com/embed/' + url;
-
         data.url = url;
 
         return { html: templates.html(data),
