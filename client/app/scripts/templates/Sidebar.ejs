@@ -1,0 +1,95 @@
+<div class='row' class='brand'>
+	<h4> <small> Appcubator </small></h4>
+</div> 
+
+<% if (currentPlugin === undefined) { %>
+	<div class='row' id='pluginSelector'>
+		<div class="dropdown">
+		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#"> My Generators </a>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+		  	<li id='createNewPlugin'> 
+		  		<a href='#'>  
+		  		<span> <img height='40' width='40' src='http://bit.ly/1ePoLZj'>  </img> 
+		  	 	</span>New Plugin 
+		  	 	</a>
+		  	</li>
+
+		  	<li id='My Generators'> 
+		  		<a href='#'>  
+		  		<span> <img height='40' width='40' src='http://bit.ly/NBhukD'>  </img> 
+		  	 	</span> My Generators 
+		  	 	</a>
+		  	</li>
+
+		  </ul>
+		</div>
+
+		<div class='pluginInfo'>
+			<h6><span class="label label-default">AUTHOR</span>  
+				<input disabled type='text' placeholder='Your Email'> </input>  
+			</h6>
+
+			<h6><span class="label label-default">DOCS</span>   
+				<input disabled type='text'  placeholder='http://yourdocs.com'> </input>  
+			</h6>
+
+			<h6><span class="label label-default">REPO</span>  
+				<input disabled type='text' placeholder='git.com/yourRepo'> </input>  
+			</h6>
+
+			<hr>
+			<h6><span class="label label-default">CURRENT MODULE</span>  
+
+				<div class="input-group">
+				  <input type="text" id='newModuleNameInput' class="form-control">
+				  <span class="input-group-btn">
+				    <button class="btn btn-default" id='createNewModuleButton'type="button"> Add Module</button>
+				  </span>
+
+				</div><!-- /input-group -->
+
+			</h6>
+				<div class="dropdown">
+
+				  <a class='btn btn-default btn-block btn-default' data-toggle="dropdown" id='moduleSelector' href="#">
+				  	<% if (currentModule === undefined) { %>
+				  		No module selected
+				  	<% } else { %>
+				  		<%= currentModule %>
+				  	<% } %>
+				  </a>
+				  <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
+				  	  <% var mdls %>
+					  <% if (browsingLocalGenerators) { %>
+					  	<% mdls = currentObj.generators %>
+					  <% } else { %>
+					  	<% mdls = currentObj.plugins %>
+					  <% %>
+					  <li class="list-group-item" >
+					  	<% for (mdl in mdls) { %>
+					  		<%= mdl %>
+					  	<% } %>					  	
+					  </li>
+				  </ul>
+				</div>
+		</div>
+	</div>
+<% } else { %>
+
+<% } %>
+<div class='row' id='generatorBrowser'>
+
+	<h3> <small> generators </h3>
+		<button class='btn btn-lg btn-default btn-block'> New generator </button>
+
+		<ul class="list-group">
+		  <li class="list-group-item">flickrsearchbar</li>
+		  <li class="list-group-item">flickrsearchbutton</li>
+		  <li class="list-group-item">flickrsearchbar</li>
+		  <li class="list-group-item">flickrsearchbutton</li>
+		  <li class="list-group-item">flickrsearchbar</li>
+		  <li class="list-group-item">flickrsearchbutton</li>
+		</ul>
+
+
+</div>

@@ -2,6 +2,7 @@
 'use strict';
 
 require.config({
+
     shim: {
         underscore: {
             exports: '_'
@@ -28,7 +29,9 @@ require.config({
         underscore: '../bower_components/underscore/underscore',
         bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
         config: './config',
-        typeahead: "../bower_components/typeahead.js/dist/typeahead"
+        typeahead: "../bower_components/typeahead.js/dist/typeahead",
+        aceDir: '../bower_components/ace/lib/ace',
+        ace: '../bower_components/ace/lib/ace/ace'
     }
 });
 
@@ -36,41 +39,16 @@ require([
     'jquery',
     'config',
     'backbone',
+    'routes/AppRouter',
     'models/App',
-    'views/Home',
-    'views/Generator'
-], function ($, config, Backbone, AppModel, HomeView, GeneratorView) {
+    'views/App',
+    'ace'
+], function ($, config, Backbone, AppRouter, AppModel, AppView, ace) {
 
-
-
-    // Start the app, navigation and wall.
     var app = new AppModel();
-    var homeView = new HomeView({ model: app, el: $('body')});
-    var currentGeneratorView = new GeneratorView({ model: app, el: $('body')});
+    var AppView = new AppView({ model: app, el: $('body')});
+    var AppRouter = new AppRouter();
+    AppRouter.appView = AppView;
 
-    var AppRouter = Backbone.Router.extend({ 
-        routes: {
-            "": "index",
-            "generators/:pkg/:mdl/:gen": "generator"
-        },
-                        
-        index: function() {
-            homeView.render();
-            homeView.setTypeahead();
-
-        },
-        generator: function(pkg, mdl, gen) {
-            var uri = "generators/" + pkg + "/" + mdl + "/" + gen;
-            $.ajax({
-                url: uri,
-                success: function(res){
-                    console.log(res);
-                    currentGeneratorView.render(res);
-                }
-            })           
-        }
-    });
-    var appRouterInstance = new AppRouter();
     Backbone.history.start();
-
 });
