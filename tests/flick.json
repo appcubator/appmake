@@ -93,24 +93,32 @@
         "functions": [
           {
             "name": "authenticate",
-            "code": "function (plainText) {\n  /**\n   * Authenticate by checking the hashed password and provided password\n   *\n   * @param {String} plainText\n   * @return {Boolean}\n   * @api private\n   */\n    return user.encryptPassword(plainText) === user.hashed_password;\n  }"
+            "instancemethod": true,
+            "code": "function (plainText) {\n  /**\n   * Authenticate by checking the hashed password and provided password\n   *\n   * @param {String} plainText\n   * @return {Boolean}\n   * @api private\n   */\n    return this.encryptPassword(plainText) === this.hashed_password;\n  }"
           },
           {
             "name": "makeSalt",
+            "instancemethod": true,
             "code": "function () {\n  /**\n   * Create password salt\n   *\n   * @return {String}\n   * @api private\n   */\n\n    /* Then to regenerate password, use:\n        user.salt = user.makeSalt()\n        user.hashed_password = user.encryptPassword(password)\n    */\n    return Math.round((new Date().valueOf() * Math.random())) + '';\n  }"
           },
           {
             "name": "encryptPassword",
-            "code": "function (password) {\n  /**\n   * Encrypt password\n   *\n   * @param {String} password\n   * @return {String}\n   * @api private\n   */\n    var crypto = require('crypto');\n    if (!password) return '';\n    return crypto.createHmac('sha1', user.salt).update(password).digest('hex');\n  }"
+            "instancemethod": true,
+            "code": "function (password) {\n  /**\n   * Encrypt password\n   *\n   * @param {String} password\n   * @return {String}\n   * @api private\n   */\n    var crypto = require('crypto');\n    if (!password) return '';\n    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');\n  }"
           },
           {
             "name": "resetToken",
-            "code": "function (token, cb) {\n  /**\n   * Reset auth token\n   *\n   * @param {String} token\n   * @param {Function} cb\n   * @api private\n   */\n    var self = user;\n    var crypto = require('crypto');\n    crypto.randomBytes(48, function(ex, buf) {\n      self[token] = buf.toString('hex');\n      if (cb) cb();\n    });\n  }"
+            "code": "function (token, cb) {\n  /**\n   * Reset auth token\n   *\n   * @param {String} token\n   * @param {Function} cb\n   * @api private\n   */\n    var self = this;\n    var crypto = require('crypto');\n    crypto.randomBytes(48, function(ex, buf) {\n      self[token] = buf.toString('hex');\n      if (cb) cb();\n    });\n  }"
           },
           {
             "name": "signup",
             "enableAPI": true,
-            "code": "function (username, password, password2, callback) {\n        if (password !== password2) {\n            callback('Passwords don\\'t match. Please try again.');\n        }\n        var user = new this({username: username});\n        user.salt = user.makeSalt();\n        user.hashed_password = user.encryptPassword(password);\n        user.save(function(err, data) {\n            if (err) {\n                callback(err);\n            } else {\n                callback(null, {url:'?success=true'});\n            }\n        });\n    }"
+            "code": "function (email, username, password, password2, callback) {\n        if (password !== password2) {\n            callback('Passwords don\\'t match. Please try again.');\n        }\n        var user = new this({email: email, username: username});\n        user.salt = user.makeSalt();\n        user.hashed_password = user.encryptPassword(password);\n        user.save(function(err, data) {\n            if (err) {\n                callback(err);\n            } else {\n                callback(null, {url:'?success=true'});\n            }\n        });\n    }"
+          },
+          {
+            "name": "login",
+            "enableAPI": true,
+            "code": "function (username, password, callback, _req, _res) {\n        /* Fake it to look like a form submission */\n  _req.body.username = username;\n  _req.body.password = password;\n  var passport = require('passport');\n  passport.authenticate('local', function(err, user, info) {\n    if (err) {\n      return callback(err);\n    }\n    if (!user) {\n      return callback(null, { redirect: '/login' });\n    }\n    _req.logIn(user, function(err) {\n      if (err) {\n        return callback(err);\n      }\n      return callback(null, { redirect: '/users/' + user.username });\n    });\n  })(_req, _res);\n}"
           }
         ],
         "schemaMods": [
@@ -278,7 +286,7 @@
           "version": "0.1",
           "code": "function (data, templates) {\n        return templates.code(data);\n    }",
           "templates": {
-            "code": "// configure app to use passport middleware\n(function(){\nvar passport = require('passport');\napp.use(passport.initialize());\napp.use(passport.session());\n})();"
+            "code": "// configure app to use passport middleware\n(function(){\nvar passport = require('passport');\napp.use(passport.initialize());\napp.use(passport.session());\n\npassport.serializeUser(function(user, done) {\n      done(null, user);\n});\n\npassport.deserializeUser(function(user, done) {\n      done(null, user);\n});\n})();"
           }
         }
       ],
@@ -288,7 +296,7 @@
           "version": "0.1",
           "code": "function (data, templates) {\n        return templates.code(data);\n    }",
           "templates": {
-            "code": "// use local strategy\n(function(){\nvar passport = require('passport');\nvar LocalStrategy = require('passport-local').Strategy;\nvar User = require('./models/User').Strategy;\npassport.use(new LocalStrategy({\n    usernameField: 'email',\n    passwordField: 'password'\n  },\n  function(email, password, done) {\n    User.findOne({ email: email }, function (err, user) {\n      if (err) { return done(err) }\n      if (!user) {\n        return done(null, false, { message: 'Unknown user' })\n      }\n      if (!user.authenticate(password)) {\n        return done(null, false, { message: 'Invalid password' })\n      }\n      return done(null, user)\n    })\n  }\n));\n})();"
+            "code": "// use local strategy\n(function(){\nvar passport = require('passport');\nvar LocalStrategy = require('passport-local').Strategy;\nvar User = require('./models/User').User;\npassport.use(new LocalStrategy({\n    usernameField: 'username',\n    passwordField: 'password'\n  },\n  function(username, password, done) {\n    User.findOne({ $or: [{ username: username }, { email: username }] }, function (err, user) {\n      if (err) { return done(err) }\n      if (!user) {\n        return done(null, false, { message: 'Unknown user' })\n      }\n      if (!user.authenticate(password)) {\n        return done(null, false, { message: 'Invalid password' })\n      }\n      return done(null, user)\n    })\n  }\n));\n})();"
           }
         }
       ]

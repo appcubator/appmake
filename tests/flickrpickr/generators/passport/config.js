@@ -10,8 +10,15 @@ generators.push({
             "(function(){"+"\n"+
             "var passport = require('passport');"+"\n"+
             "app.use(passport.initialize());"+"\n"+
-            "app.use(passport.session());"+"\n"+
+            "app.use(passport.session());"+"\n\n"+
+            "passport.serializeUser(function(user, done) {"+"\n"+
+            "      done(null, user);"+"\n"+
+            "});"+"\n"+
+            ""+"\n"+
+            "passport.deserializeUser(function(user, done) {"+"\n"+
+            "      done(null, user);"+"\n"+
+            "});"+"\n" +
             "})();"
 
-    }
+}
 });
