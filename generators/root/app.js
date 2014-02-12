@@ -4,7 +4,7 @@ generators.push({
     name: 'config',
     version: '0.1',
     code: function(data, templates) {
-        return templates.main({customConfig: data.customCodeChunks.join("\n")});
+        return templates.main({customConfig: _.map(data.customCodeChunks, expand).join("\n")});
     },
     templates: {
         'main': "#!/usr/bin/env node\n\
