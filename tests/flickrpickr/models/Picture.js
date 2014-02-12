@@ -18,12 +18,29 @@ functions.push({
     }
 });
 
+/* example of instancemethod */
+functions.push({
+  name: 'updateUrl',
+  instancemethod: true,
+  code: function(newUrl, cb) {
+      this.url = newUrl;
+      this.save(function(e, d){cb(e,d);});
+    }
+});
+
 functions.push({
   name: 'updateUrl',
   enableAPI: true,
-  code: function(pic, newUrl, cb) {
-      pic.url = newUrl;
-      pic.save(function(e, d){cb(e,d);});
+  code: function(pic, newUrl, callback, _req, _res) {
+      if (_req.query.test === 'true') {
+          _res.send('pristine');
+      } else {
+          this.findOne({id:pic.id}, function(err, pic){
+              pic.updateUrl(newUrl, function(e, d) {
+                 callback(e, d);
+              });
+          });
+      }
     }
 });
 

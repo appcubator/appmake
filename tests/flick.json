@@ -37,8 +37,13 @@
           },
           {
             "name": "updateUrl",
+            "instancemethod": true,
+            "code": "function (newUrl, cb) {\n      this.url = newUrl;\n      this.save(function(e, d){cb(e,d);});\n    }"
+          },
+          {
+            "name": "updateUrl",
             "enableAPI": true,
-            "code": "function (pic, newUrl, cb) {\n      pic.url = newUrl;\n      pic.save(function(e, d){cb(e,d);});\n    }"
+            "code": "function (pic, newUrl, callback, _req, _res) {\n      if (_req.query.test === 'true') {\n          _res.send('pristine');\n      } else {\n          this.findOne({id:pic.id}, function(err, pic){\n              pic.updateUrl(newUrl, function(e, d) {\n                 callback(e, d);\n              });\n          });\n      }\n    }"
           },
           {
             "generate": "crud.models.create",

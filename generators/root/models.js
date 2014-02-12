@@ -37,7 +37,11 @@ var <%= name %>Schema = <%= schemaCode %>;\n\
 \n\
 <% for(var index in functions) { %>\n\
 <% var sm = functions[index]; %>\n\
+    <% if (sm.instancemethod) { %>\
+<%= name %>Schema.methods.<%= sm.name %> = <%= sm.code %>;\n\
+    <% } else { %>\
 <%= name %>Schema.statics.<%= sm.name %> = <%= sm.code %>;\n\
+    <% } %>\
 <% } %>\n\
 \n\
 <% for(var index in schemaMods) { %>\n\

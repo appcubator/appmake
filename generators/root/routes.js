@@ -36,6 +36,8 @@ generators.push({
                 "    var whenDone = function(e, d) { res.send({error:e, data:d}); };"+"\n"+
                 "    var args = req.body;"+"\n"+
                 "    args.push(whenDone);"+"\n"+
+                "    args.push(req);"+"\n"+
+                "    args.push(res);"+"\n"+
                 "    <%= modelName %>.<%= methodName %>.apply(<%= modelName %>, args);"+"\n"+
                 "}"}
 });
