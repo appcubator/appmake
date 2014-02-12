@@ -3,7 +3,9 @@
     "express": "3.4.4",
     "ejs": "0.8.5",
     "flickr": "0.1.0",
-    "mongoose": "3.8.1"
+    "mongoose": "3.8.1",
+    "passport": "0.2.0",
+    "passport-local": "0.1.6"
   },
   "modules": {
     "custom": {
@@ -268,12 +270,43 @@
           "templates": {}
         }
       ]
+    },
+    "passport": {
+      "config": [
+        {
+          "name": "basic",
+          "version": "0.1",
+          "code": "function (data, templates) {\n        return templates.code(data);\n    }",
+          "templates": {
+            "code": "// configure app to use passport middleware\n(function(){\nvar passport = require('passport');\napp.use(passport.initialize());\napp.use(passport.session());\n})();"
+          }
+        }
+      ],
+      "strategies": [
+        {
+          "name": "local",
+          "version": "0.1",
+          "code": "function (data, templates) {\n        return templates.code(data);\n    }",
+          "templates": {
+            "code": "// use local strategy\n(function(){\nvar passport = require('passport');\nvar LocalStrategy = require('passport-local').Strategy;\nvar User = require('./models/User').Strategy;\npassport.use(new LocalStrategy({\n    usernameField: 'email',\n    passwordField: 'password'\n  },\n  function(email, password, done) {\n    User.findOne({ email: email }, function (err, user) {\n      if (err) { return done(err) }\n      if (!user) {\n        return done(null, false, { message: 'Unknown user' })\n      }\n      if (!user.authenticate(password)) {\n        return done(null, false, { message: 'Invalid password' })\n      }\n      return done(null, user)\n    })\n  }\n));\n})();"
+          }
+        }
+      ]
     }
   },
   "config": {
     "generate": "app.config",
     "data": {
-      "customCodeChunks": []
+      "customCodeChunks": [
+        {
+          "generate": "passport.config.basic",
+          "data": {}
+        },
+        {
+          "generate": "passport.strategies.local",
+          "data": {}
+        }
+      ]
     }
   },
   "css": "body {\n    a {\n        font-family: Arial, Helvetica, sans-serif;\n    }\n}\n"
