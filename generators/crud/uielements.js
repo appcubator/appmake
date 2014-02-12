@@ -35,7 +35,7 @@ generators.push({
         fields: [],
         redirect: "/",
         id: Math.floor(Math.random()*11),
-        tableName: "DefaultTable"
+        modelName: "DefaultTable"
     },
     code: function(data, templates) {
         /* Example (subject to change)
@@ -72,7 +72,7 @@ generators.push({
             "    var formdata = {};\n" +
             "    formdata.name = $('#<%= id %> input[name=\"name\"]').val();\n" +
             "    formdata.url = $('#<%= id %> input[name=\"url\"]').val();\n" +
-            "    models.<%= tableName %>.create<%= tableName %>(formdata, function(err, data){\n" +
+            "    models.<%= modelName %>.create<%= modelName %>(formdata, function(err, data){\n" +
             "        console.log(data);\n" +
             "        if (err) {\n" +
             "            // Do whatever you want with user errors\n" +

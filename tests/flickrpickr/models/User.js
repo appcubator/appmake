@@ -23,6 +23,7 @@ var functions = [];
 
 functions.push({
   name: 'authenticate',
+  instancemethod: true,
   code: function(plainText) {
   /**
    * Authenticate by checking the hashed password and provided password
@@ -31,12 +32,13 @@ functions.push({
    * @return {Boolean}
    * @api private
    */
-    return user.encryptPassword(plainText) === user.hashed_password;
+    return this.encryptPassword(plainText) === this.hashed_password;
   }
 });
 
 functions.push({
   name: 'makeSalt',
+  instancemethod: true,
   code: function() {
   /**
    * Create password salt
@@ -55,6 +57,7 @@ functions.push({
 
 functions.push({
   name: 'encryptPassword',
+  instancemethod: true,
   code: function (password) {
   /**
    * Encrypt password
@@ -65,7 +68,7 @@ functions.push({
    */
     var crypto = require('crypto');
     if (!password) return '';
-    return crypto.createHmac('sha1', user.salt).update(password).digest('hex');
+    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
   }
 });
 
@@ -80,7 +83,7 @@ functions.push({
    * @param {Function} cb
    * @api private
    */
-    var self = user;
+    var self = this;
     var crypto = require('crypto');
     crypto.randomBytes(48, function(ex, buf) {
       self[token] = buf.toString('hex');
@@ -112,11 +115,11 @@ schemaMods.push(function (schema) {
 functions.push({
     name: 'signup',
     enableAPI:true,
-    code: function(username, password, password2, callback) {
+    code: function(email, username, password, password2, callback) {
         if (password !== password2) {
             callback('Passwords don\'t match. Please try again.');
         }
-        var user = new this({username: username});
+        var user = new this({email: email, username: username});
         user.salt = user.makeSalt();
         user.hashed_password = user.encryptPassword(password);
         user.save(function(err, data) {
@@ -137,4 +140,29 @@ var model = { generate: "models.model",
                   schemaMods: schemaMods
               }
 };
+
+functions.push({
+    name: 'login',
+    enableAPI: true,
+    code: function(username, password, callback, _req, _res) {
+        /* Fake it to look like a form submission */
+  _req.body.username = username;
+  _req.body.password = password;
+  var passport = require('passport');
+  passport.authenticate('local', function(err, user, info) {
+    if (err) {
+      return callback(err);
+    }
+    if (!user) {
+      return callback(null, { redirect: '/login' });
+    }
+    _req.logIn(user, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      return callback(null, { redirect: '/users/' + user.username });
+    });
+  })(_req, _res);
+}
+});
 
