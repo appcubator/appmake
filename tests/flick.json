@@ -189,6 +189,7 @@
                   }
                 ],
                 "id": "testform",
+                "modelName": "Picture",
                 "redirect": "/?success=true"
               }
             },
