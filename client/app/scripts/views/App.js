@@ -9,11 +9,18 @@ define([
 ], function ($, _, Backbone, JST, PluginEditorView) {
     'use strict';
 
+    var defaultObject = {
+        "generators": {
+            "MyPlugin": {}
+        },
+        "plugins": {}
+    }
+    console.log(defaultObject);
 
     var AppView = Backbone.View.extend({
         template: JST['app/scripts/templates/App.ejs'],
         defaults: {
-            currentObject: {}
+            currentObject: defaultObject
         },
         events: {
             "click .startPluginEditorButton": "startPluginEditor"
@@ -24,17 +31,6 @@ define([
         },
         initialize: function(){
             this.render();
-            this.model.on('change:generators', this.setTypeahead, this);
-        },
-        setTypeahead: function(){
-            var generators = this.model.get('generators'); 
-            $('input#repoSearchInput').typeahead({
-                name: 'generators',
-                local: generators,
-                valueKey: 'name',
-                template: JST['app/scripts/templates/Gen.ejs'],
-                limit: 10000
-            });
         },
         startPluginEditor: function(){
             this.pluginEditorView = new PluginEditorView({ model: this.model, el: $("body")});

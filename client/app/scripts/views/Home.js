@@ -16,10 +16,6 @@ define([
         },
         initialize: function(){
             this.render();
-            this.model.on('change:generators', this.setTypeahead, this);
-        },
-        setTypeahead: function(){
-            var generators = this.model.get('generators'); 
         }
     });
 

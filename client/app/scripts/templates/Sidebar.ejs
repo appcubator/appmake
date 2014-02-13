@@ -2,10 +2,10 @@
 	<h4> <small> Appcubator </small></h4>
 </div> 
 
-<% if (currentPlugin === undefined) { %>
+<% if (browsingLocalGenerators === true) { %>
 	<div class='row' id='pluginSelector'>
 		<div class="dropdown">
-		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#"> My Generators </a>
+		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#"> <%= currentPlugin %> </a>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 		  	<li id='createNewPlugin'> 
 		  		<a href='#'>  
@@ -49,34 +49,32 @@
 				</div><!-- /input-group -->
 
 			</h6>
-				<div class="dropdown">
 
 				  <a class='btn btn-default btn-block btn-default' data-toggle="dropdown" id='moduleSelector' href="#">
-				  	<% if (currentModule === undefined) { %>
-				  		No module selected
-				  	<% } else { %>
-				  		<%= currentModule %>
-				  	<% } %>
+				  		<% if (currentModule === undefined) { %>
+				  			No module selected
+				  		<% } else {%>
+				  			<%= currentModule %>
+				  		<% } %>
 				  </a>
+
+				<div class="dropdown">
 				  <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
-				  	  <% var mdls %>
-					  <% if (browsingLocalGenerators) { %>
-					  	<% mdls = currentObj.generators %>
-					  <% } else { %>
-					  	<% mdls = currentObj.plugins %>
-					  <% %>
-					  <li class="list-group-item" >
-					  	<% for (mdl in mdls) { %>
-					  		<%= mdl %>
-					  	<% } %>					  	
-					  </li>
+				  		<% if (browsingLocalGenerators === true) { %>
+				  			<% var mdls = currentObject.generators %>
+				  		<% } else {%>
+				  			<% var mdls = currentObject.plugins %>
+				  		<% } %>
+				  		<li class="list-group-item"> </li>
+				  		<% for (mdl in mdls) {  %>
+				  			<li class="list-group-item" moduleName='<%=mdl%>'> <%=mdl%> </li>
+				  		<% } %>				  		
 				  </ul>
 				</div>
 		</div>
 	</div>
-<% } else { %>
+<% }  %>
 
-<% } %>
 <div class='row' id='generatorBrowser'>
 
 	<h3> <small> generators </h3>

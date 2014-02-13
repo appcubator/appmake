@@ -31,10 +31,10 @@
 define(function(require, exports, module) {
 "no use strict";
 
-var lang = require("./lib/lang");
-var oop = require("./lib/oop");
-var net = require("./lib/net");
-var EventEmitter = require("./lib/event_emitter").EventEmitter;
+var lang = require("aceDir/lib/lang");
+var oop = require("aceDir/lib/oop");
+var net = require("aceDir/lib/net");
+var EventEmitter = require("aceDir/lib/event_emitter").EventEmitter;
 
 var global = (function() {
     return this;

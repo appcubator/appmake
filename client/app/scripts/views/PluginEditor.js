@@ -20,10 +20,10 @@ define([
         },
         initialize: function(){
             this.authenticated = false; 
-            this.browsingLocalGenerators = false; 
+            this.browsingLocalGenerators = true; 
 
             if (!this.authenticated){
-                this.currentPlugin = undefined;
+                this.currentPlugin = "MyPlugin";
                 this.currentModule = undefined;
                 this.currentGenerator = undefined;
             }
@@ -31,7 +31,7 @@ define([
         },
         render: function(){
         	this.$el.html(this.template({
-                currentObject: this.currentObject,
+                currentObject: this.model.get('currentObject'),
                 plugins: {},
                 authenticated: this.authenticated,
                 currentPlugin: this.currentPlugin,
@@ -51,7 +51,9 @@ define([
             this.codeEditor.getSession().setMode("aceDir/mode/javascript"); 
         },
         createNewModule: function(event){
-
+            console.log("Logging CURRENT OBJECT");
+            console.log(this.model.get('currentObject'));
+            
             event.stopPropagation();
             event.preventDefault(); 
 
@@ -60,21 +62,24 @@ define([
 
             if (newModuleName !== ""){
                 var currentObject = this.model.get('currentObject');
-                if (this.currentPlugin === undefined){
-                    var randomPluginName = "MyPlugin";
-                    currentObject.generators[randomPluginName] = {}; 
-                    currentObject.generators[randomPluginName][newModuleName] = {};
-                    this.browsingLocalGenerators = true;
-                    this.currentPlugin = randomPluginName;
+                if (this.browsingLocalGenerators){
 
+                    console.log(currentObject);
+
+                    currentObject.generators["MyPlugin"][newModuleName] = {};
+                    this.browsingLocalGenerators = true;
+                    this.currentPlugin = this.currentPlugin;
+                    // Check if we're overriting the plugin after.
                     this.model.set('currentObject', currentObject);
                 }
             }
+            console.log("Logging CURRENT OBJECT");
+            console.log(this.model.get('currentObject'));
             this.refreshSidebar();
         },
         refreshSidebar: function(){
             this.$el.find('#pluginBrowser').html(JST['app/scripts/templates/Sidebar.ejs']({
-                currentObject: this.currentObject,
+                currentObject: this.model.get('currentObject'),
                 plugins: {},
                 authenticated: this.authenticated,
                 currentPlugin: this.currentPlugin,

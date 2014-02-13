@@ -14,8 +14,7 @@ define([
             "module/:pkg/:mdl": "module"
         },              
         index: function() {
-            this.appView.render();
-            this.appView.setTypeahead();
+            
         },
         generator: function(pkg, mdl, gen) {
             var uri = "generators/" + pkg + "/" + mdl + "/" + gen;
