@@ -50,6 +50,10 @@
 
 			</h6>
 
+
+
+				<div class="dropdown">
+
 				  <a class='btn btn-default btn-block btn-default' data-toggle="dropdown" id='moduleSelector' href="#">
 				  		<% if (currentModule === undefined) { %>
 				  			No module selected
@@ -58,12 +62,11 @@
 				  		<% } %>
 				  </a>
 
-				<div class="dropdown">
 				  <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
 				  		<% if (browsingLocalGenerators === true) { %>
-				  			<% var mdls = currentObject.generators %>
+				  			<% var mdls = currentObject.generators[currentPlugin] %>
 				  		<% } else {%>
-				  			<% var mdls = currentObject.plugins %>
+				  			<% var mdls = currentObject.plugins[currentPlugin] %>
 				  		<% } %>
 				  		<li class="list-group-item"> </li>
 				  		<% for (mdl in mdls) {  %>

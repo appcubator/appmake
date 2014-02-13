@@ -23,8 +23,6 @@ define([
         		}.bind(this)
         	});
             this.pluginEditorView =  new PluginEditorView({ model: this, el: $('body') });
-            console.log(this.pluginEditorView);
-
         },
         processList: function(genList){
         	var newGenList = _.map(genList, function (g){

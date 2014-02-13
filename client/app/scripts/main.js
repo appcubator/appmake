@@ -48,9 +48,7 @@ require([
             MyPlugin: {}
         }     
     }});
-    console.log(app.get('currentObject'));
-
-
+    
     var AppView = new AppView({ model: app, el: $('body')});
     var AppRouter = new AppRouter();
     AppRouter.appView = AppView;

@@ -51,8 +51,6 @@ define([
             this.codeEditor.getSession().setMode("ace/mode/javascript"); 
         },
         createNewModule: function(event){
-            console.log("Logging CURRENT OBJECT");
-            console.log(this.model.get('currentObject'));
 
             event.stopPropagation();
             event.preventDefault(); 
@@ -64,29 +62,35 @@ define([
                 var currentObject = this.model.get('currentObject');
                 if (this.browsingLocalGenerators){
 
-                    console.log(currentObject);
 
                     currentObject.generators["MyPlugin"][newModuleName] = {};
                     this.browsingLocalGenerators = true;
                     this.currentPlugin = this.currentPlugin;
+                    this.currentModule = newModuleName;
+
                     // Check if we're overriting the plugin after.
                     this.model.set('currentObject', currentObject);
+
                 }
             }
-            console.log("Logging CURRENT OBJECT");
-            console.log(this.model.get('currentObject'));
             this.refreshSidebar();
         },
         refreshSidebar: function(){
-            this.$el.find('#pluginBrowser').html(JST['app/scripts/templates/Sidebar.ejs']({
-                currentObject: this.model.get('currentObject'),
+            console.log("Refreshing sidebar...");
+            var currentObject = this.model.get('currentObject');
+            console.log(currentObject);
+
+            var str = JST['app/scripts/templates/Sidebar.ejs']({
+                currentObject: currentObject,
                 plugins: {},
                 authenticated: this.authenticated,
                 currentPlugin: this.currentPlugin,
                 currentModule: this.currentModule,
                 currentGenerator: this.currentGenerator,
                 browsingLocalGenerators: this.browsingLocalGenerators
-            }));
+            });
+            this.$el.find('#pluginBrowser').html(str);
+            $(this.$el.find("#moduleSelector")).dropdown();
         },
         loadAppstate: function(){
             $('#myModal').modal();

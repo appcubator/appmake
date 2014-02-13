@@ -15,7 +15,6 @@ define([
         },
         "plugins": {}
     }
-    console.log(defaultObject);
 
     var AppView = Backbone.View.extend({
         template: JST['app/scripts/templates/App.ejs'],
