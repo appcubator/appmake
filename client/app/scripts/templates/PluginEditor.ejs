@@ -97,7 +97,11 @@
 					  	<% for (var i = 0; i < o.length; o++) { %>
 					  		<% if (o[i].name === app.currentGenerator) { %>
 					  			<% for (template in o[i].templates) { %>
-					  				<li> <a href='#'> <%= template %> </a> </li>
+					  				<% if (template == app.currentTemplate) { %>
+					  					<li templatename='<%=template%>'class='active selectTemplateButton'> <a href='#'> <%= template %> </a> </li>
+					  				<% } else { %>
+					  					<li templatename='<%=template%>'class='selectTemplateButton'> <a href='#'> <%= template %> </a> </li>
+					  				<% } %>
 					  			<% } %>
 					  		<% } %>
 					  	<% } %>

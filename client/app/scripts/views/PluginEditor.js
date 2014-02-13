@@ -20,6 +20,7 @@ define([
             'click #createNewGeneratorButton': 'createNewGenerator',
             'click .selectModuleButton': 'moduleSelected',
             'click .selectGeneratorButton': 'generatorSelected',
+            'click .selectTemplateButton': 'templateSelected',
             'click #createNewTemplateButton': 'createNewTemplate',
         },
         initialize: function(){
@@ -41,6 +42,7 @@ define([
                     currentPlugin: this.model.get('currentPlugin'),
                     currentModule: this.model.get('currentModule'),
                     currentGenerator: this.model.get('currentGenerator'),
+                    currentTemplate: this.model.get('currentTemplate'),                    
                     browsingLocalGenerators: this.model.get('browsingLocalGenerators')                    
                 }
             }));
@@ -133,6 +135,7 @@ define([
                     currentPlugin: this.model.get('currentPlugin'),
                     currentModule: this.model.get('currentModule'),
                     currentGenerator: this.model.get('currentGenerator'),
+                    currentTemplate: this.model.get('currentTemplate'),
                     browsingLocalGenerators: this.model.get('browsingLocalGenerators')                    
                 }
             };
@@ -152,6 +155,11 @@ define([
             var generatorName = $($(event.target).closest('.selectGeneratorButton')).attr('generatorname');
             this.model.set('currentGenerator', generatorName);
             console.log(this.model.get('currentGenerator'));            
+        },
+        templateSelected: function (event){
+            var templateName = $($(event.target).closest('.selectTemplateButton')).attr('templatename');
+            this.model.set('currentTemplate', templateName);
+            console.log(this.model.get('currentTemplate'));              
         },
         loadAppstate: function(){
             $('#myModal').modal();

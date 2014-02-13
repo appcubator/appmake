@@ -116,9 +116,21 @@ __p += '\n\t\t\t\t\t  \t\t';
  if (o[i].name === app.currentGenerator) { ;
 __p += '\n\t\t\t\t\t  \t\t\t';
  for (template in o[i].templates) { ;
-__p += '\n\t\t\t\t\t  \t\t\t\t<li> <a href=\'#\'> ' +
+__p += '\n\t\t\t\t\t  \t\t\t\t';
+ if (template == app.currentTemplate) { ;
+__p += '\n\t\t\t\t\t  \t\t\t\t\t<li templatename=\'' +
+((__t = (template)) == null ? '' : __t) +
+'\'class=\'active selectTemplateButton\'> <a href=\'#\'> ' +
 ((__t = ( template )) == null ? '' : __t) +
-' </a> </li>\n\t\t\t\t\t  \t\t\t';
+' </a> </li>\n\t\t\t\t\t  \t\t\t\t';
+ } else { ;
+__p += '\n\t\t\t\t\t  \t\t\t\t\t<li templatename=\'' +
+((__t = (template)) == null ? '' : __t) +
+'\'class=\'selectTemplateButton\'> <a href=\'#\'> ' +
+((__t = ( template )) == null ? '' : __t) +
+' </a> </li>\n\t\t\t\t\t  \t\t\t\t';
+ } ;
+__p += '\n\t\t\t\t\t  \t\t\t';
  } ;
 __p += '\n\t\t\t\t\t  \t\t';
  } ;
