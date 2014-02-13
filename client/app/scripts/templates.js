@@ -154,7 +154,7 @@ __p += '\n\t\t\t';
  for (generator in o[app.currentModule]){ ;
 __p += '\n\t\t  \t\t<li generatorName="' +
 ((__t = (generator)) == null ? '' : __t) +
-'"class="list-group-item">' +
+'"class="list-group-item selectGeneratorButton">' +
 ((__t = (generator)) == null ? '' : __t) +
 '</li>\n\t\t  \t';
  } ;
