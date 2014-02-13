@@ -63,15 +63,13 @@
 				  </a>
 
 				  <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
-				  		<% console.log(app) %>
 				  		<% if (app.browsingLocalGenerators === true) { %>
 				  			<% var mdls = app.currentObject.generators[app.currentPlugin] %>
 				  		<% } else {%>
 				  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
 				  		<% } %>
-				  		<li class="list-group-item"> </li>
 				  		<% for (mdl in mdls) {  %>
-				  			<li class="list-group-item" moduleName='<%=mdl%>'> <%=mdl%> </li>
+				  		<li class="selectModuleButton list-group-item" moduleName='<%=mdl%>'> <%=mdl%> </li>
 				  		<% } %>				  		
 				  </ul>
 				</div>

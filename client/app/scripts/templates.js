@@ -130,9 +130,9 @@ __p += '\n\t\t\t\t  \t\t\t';
  var mdls = app.currentObject.plugins[app.currentPlugin] ;
 __p += '\n\t\t\t\t  \t\t';
  } ;
-__p += '\n\t\t\t\t  \t\t<li class="list-group-item"> </li>\n\t\t\t\t  \t\t';
+__p += '\n\t\t\t\t  \t\t';
  for (mdl in mdls) {  ;
-__p += '\n\t\t\t\t  \t\t\t<li class="list-group-item" moduleName=\'' +
+__p += '\n\t\t\t\t  \t\t<li class="selectModuleButton list-group-item" moduleName=\'' +
 ((__t = (mdl)) == null ? '' : __t) +
 '\'> ' +
 ((__t = (mdl)) == null ? '' : __t) +
