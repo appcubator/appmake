@@ -90,7 +90,14 @@
 		  		<% var o = app.currentObject.plugins[app.currentPlugin]; %>
 		  	<% } %>
 			<% for (generator in o[app.currentModule]){ %>
-		  		<li generatorName="<%=generator%>"class="list-group-item selectGeneratorButton"><%=generator%></li>
+				<% if (o[app.currentModule][generator].name === app.currentGenerator) { %>
+				<li generatorName="<%=o[app.currentModule][generator].name%>"class="active list-group-item selectGeneratorButton">
+		  			<%=generator%> - <b> <%=o[app.currentModule][generator].name%> </b></li>
+				<% } else { %>
+		  		<li generatorName="<%=o[app.currentModule][generator].name%>"class="list-group-item selectGeneratorButton">
+		  			<%=generator%> - <b> <%=o[app.currentModule][generator].name%> </b></li>
+		  		<% }%>
+
 		  	<% } %>
 		  <% } %>
 		</ul>

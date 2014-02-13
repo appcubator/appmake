@@ -20,6 +20,7 @@ define([
             currentPlugin: "MyPlugin",
             currentModule: undefined,
             currentGenerator: undefined,
+            currentTemplate: undefined,
             authenticated: false,            
         },
         initialize: function(){

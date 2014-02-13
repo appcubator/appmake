@@ -85,10 +85,31 @@
 
 			<div class='row' id='templatePanel'> 
 				<ul class="nav nav-tabs">
-				  <li><a href="#">Configuration</a></li>					
-				  <li class="active"><a href="#">html</a></li>
-				  <li><a href="#">js</a></li>
-				  <li><a id='newTemplate' href="#">New template...</a></li>
+				  <li><a href="#">Configuration</a></li>
+				  				  	<% console.log(app) %>
+
+				   	<% if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { %>
+					  	<% if (app.browsingLocalGenerators) { %>
+					  		<% var o = app.currentObject.generators[app.currentPlugin][app.currentModule]; %>
+					  	<%} else { %>
+					  		<% var o = app.currentObject.generators[app.currentPlugin][app.currentModule]; %>
+					  	<% } %>
+					  	<% for (var i = 0; i < o.length; o++) { %>
+					  		<% if (o[i].name === app.currentGenerator) { %>
+					  			<% for (template in o[i].templates) { %>
+					  				<li> <a href='#'> <%= template %> </a> </li>
+					  			<% } %>
+					  		<% } %>
+					  	<% } %>
+				  	<% } %>
+				  <li id='createTemplateGroup'>
+					<div class="input-group">
+					  <span class="input-group-btn">
+					    <button class="btn btn-default" id='createNewTemplateButton' type="button">Create</button>
+					  </span>	
+					  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
+					</div><!-- /input-group -->
+				  </li>
 
 				</ul>
 				<div class='col-md-12' > <div id='templateEditor'> Hello World </div>  </div>

@@ -18,7 +18,9 @@ define([
             'click #publishButton': 'publishPlugin',
             'click #createNewModuleButton': 'createNewModule',
             'click #createNewGeneratorButton': 'createNewGenerator',
-            'click .selectModuleButton': 'moduleSelected'
+            'click .selectModuleButton': 'moduleSelected',
+            'click .selectGeneratorButton': 'generatorSelected',
+            'click #createNewTemplateButton': 'createNewTemplate',
         },
         initialize: function(){
             this.render();
@@ -26,6 +28,9 @@ define([
 
             this.model.on("change:currentPlugin", this.render, this); 
             this.model.on("change:currentModule", this.render, this); 
+            this.model.on("change:currentGenerator", this.render, this); 
+            this.model.on("change:currentTemplate", this.render, this); 
+
 
         },
         render: function(){
@@ -51,6 +56,35 @@ define([
 
             this.refreshSidebar();
         },
+        createNewTemplate: function(event){
+            event.stopPropagation();
+            event.preventDefault();
+
+            console.log("create template");
+             var newTemplateName = $.trim($(this.$el.find('#newTemplateNameInput')).val());
+             var pluginName = this.model.get('currentPlugin');
+             var mdlName = this.model.get('currentModule');
+             var genName = this.model.get('currentGenerator');
+             var obj = this.model.get('currentObject');
+             if (newTemplateName !== "" && mdlName !== undefined && pluginName !== undefined && genName !== undefined){
+                if (this.model.get('browsingLocalGenerators')){
+                    var o = obj.generators[pluginName][mdlName];
+                } else {
+                    var o = obj.plugins[pluginName][mdlName];
+                }
+                for (var i = 0; i < o.length; i++){
+                    if (o[i].name === genName){
+                        console.log(o[i]);
+                        o[i].templates[newTemplateName] = "";
+                        this.model.set('currentTemplate', newTemplateName);
+                        break;
+                    }
+                }
+                this.model.set('currentObject', obj);
+                console.log(this.model.get('currentObject'));
+            }
+        },
+
         createNewGenerator: function(event){
             event.stopPropagation();
             event.preventDefault();
@@ -60,7 +94,13 @@ define([
             if (newGeneratorName !== "" && this.model.get('currentModule') !== undefined){
                 if (this.model.get('browsingLocalGenerators')){
                     var o = this.model.get('currentObject');
-                    o.generators[this.model.get('currentPlugin')][this.model.get('currentModule')][newGeneratorName] = {};
+                    var newGenerator = {
+                        "templates": {},
+                        "code": "",
+                        "version": "0.1",
+                        "name": newGeneratorName
+                    }
+                    o.generators[this.model.get('currentPlugin')][this.model.get('currentModule')].push(newGenerator);
                     // Check if we're overriting the plugin after.
                     this.model.set('currentObject', o);
                 } // handle the else case later
@@ -76,7 +116,7 @@ define([
             if (newModuleName !== ""){
                 if (this.model.get('browsingLocalGenerators')){
                     var o = this.model.get('currentObject');
-                    o.generators[this.model.get('currentPlugin')][newModuleName] = {};
+                    o.generators[this.model.get('currentPlugin')][newModuleName] = [];
                     // Check if we're overriting the plugin after.
                     this.model.set('currentObject', o);
                 }
@@ -107,6 +147,11 @@ define([
             var moduleName = $($(event.target).closest('.selectModuleButton')).attr('modulename');
             this.model.set('currentModule', moduleName);
             console.log(this.model.get('currentModule'));
+        },
+        generatorSelected: function(event){
+            var generatorName = $($(event.target).closest('.selectGeneratorButton')).attr('generatorname');
+            this.model.set('currentGenerator', generatorName);
+            console.log(this.model.get('currentGenerator'));            
         },
         loadAppstate: function(){
             $('#myModal').modal();

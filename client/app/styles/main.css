@@ -7628,7 +7628,12 @@ td.visible-print {
     display: none !important;
   }
 }
-/* line 11, ../../app/styles/main.scss */
+@font-face {
+  font-family: 'verb';
+  src: url("fonts/VerbRegular-webfont.ttf");
+}
+
+/* line 16, ../../app/styles/main.scss */
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
@@ -7636,18 +7641,29 @@ td.visible-print {
   padding: 0.2em 0;
 }
 
+/* line 22, ../../app/styles/main.scss */
+.brand {
+  font-size: 72px;
+  font-family: 'verb';
+}
+/* line 26, ../../app/styles/main.scss */
+.brand small {
+  color: #dddddd;
+}
+
 /* Space out content a bit */
-/* line 19, ../../app/styles/main.scss */
+/* line 31, ../../app/styles/main.scss */
 body {
+  font-family: 'verb';
   padding: 0px;
 }
 
-/* line 23, ../../app/styles/main.scss */
+/* line 36, ../../app/styles/main.scss */
 .tt-query {
   width: 400px;
 }
 
-/* line 26, ../../app/styles/main.scss */
+/* line 39, ../../app/styles/main.scss */
 .tt-hint {
   height: 43px;
   padding: 10px 16px;
@@ -7656,13 +7672,13 @@ body {
   color: #ABABAB;
 }
 
-/* line 33, ../../app/styles/main.scss */
+/* line 46, ../../app/styles/main.scss */
 .tt-suggestions {
   width: 400px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
-/* line 41, ../../app/styles/main.scss */
+/* line 54, ../../app/styles/main.scss */
 .header,
 .marketing,
 .footer {
@@ -7671,13 +7687,13 @@ body {
 }
 
 /* Custom page header */
-/* line 47, ../../app/styles/main.scss */
+/* line 60, ../../app/styles/main.scss */
 .header {
   border-bottom: 1px solid #e5e5e5;
 }
 
 /* Make the masthead heading the same height as the navigation */
-/* line 52, ../../app/styles/main.scss */
+/* line 65, ../../app/styles/main.scss */
 .header h3 {
   margin-top: 0;
   margin-bottom: 0;
@@ -7686,51 +7702,51 @@ body {
 }
 
 /* Custom page footer */
-/* line 60, ../../app/styles/main.scss */
+/* line 73, ../../app/styles/main.scss */
 .footer {
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
 
-/* line 66, ../../app/styles/main.scss */
+/* line 79, ../../app/styles/main.scss */
 .container-narrow > hr {
   margin: 30px 0;
 }
 
 /* Main marketing message and sign up button */
-/* line 71, ../../app/styles/main.scss */
+/* line 84, ../../app/styles/main.scss */
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 }
 
-/* line 76, ../../app/styles/main.scss */
+/* line 89, ../../app/styles/main.scss */
 .jumbotron .btn {
   font-size: 21px;
   padding: 14px 24px;
 }
 
 /* Supporting marketing content */
-/* line 82, ../../app/styles/main.scss */
+/* line 95, ../../app/styles/main.scss */
 .marketing {
   margin: 40px 0;
 }
 
-/* line 86, ../../app/styles/main.scss */
+/* line 99, ../../app/styles/main.scss */
 .marketing p + h4 {
   margin-top: 28px;
 }
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
-  /* line 92, ../../app/styles/main.scss */
+  /* line 105, ../../app/styles/main.scss */
   .container {
     max-width: 730px;
   }
 
   /* Remove the padding we set earlier */
-  /* line 99, ../../app/styles/main.scss */
+  /* line 112, ../../app/styles/main.scss */
   .header,
   .marketing,
   .footer {
@@ -7739,48 +7755,52 @@ body {
   }
 
   /* Space out the masthead */
-  /* line 104, ../../app/styles/main.scss */
+  /* line 117, ../../app/styles/main.scss */
   .header {
     margin-bottom: 30px;
   }
 
   /* Remove the bottom border on the jumbotron for visual effect */
-  /* line 108, ../../app/styles/main.scss */
+  /* line 121, ../../app/styles/main.scss */
   .jumbotron {
     border-bottom: 0;
   }
 }
-/* line 113, ../../app/styles/main.scss */
+/* line 126, ../../app/styles/main.scss */
 #pluginEditor {
   height: 920px;
   padding-top: 3px;
   padding-left: 20px;
 }
-/* line 118, ../../app/styles/main.scss */
+/* line 134, ../../app/styles/main.scss */
+#pluginEditor #createTemplateGroup {
+  width: 200px;
+}
+/* line 137, ../../app/styles/main.scss */
 #pluginEditor .pluginInfo {
   height: 240px;
   padding-left: 5px;
   padding-top: 5px;
   margin-top: 9px;
 }
-/* line 125, ../../app/styles/main.scss */
+/* line 144, ../../app/styles/main.scss */
 #pluginEditor .pluginInfo #newModuleNameInput {
   width: 100%;
   height: 34px;
 }
-/* line 132, ../../app/styles/main.scss */
+/* line 151, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector #pluginSelectorInput {
   width: 97%;
 }
-/* line 135, ../../app/styles/main.scss */
+/* line 154, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector .dropdown-menu {
   width: 220px;
 }
-/* line 138, ../../app/styles/main.scss */
+/* line 157, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector .dropdown-menu li:hover {
   background-color: #ECECEC;
 }
-/* line 142, ../../app/styles/main.scss */
+/* line 161, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector input {
   color: black;
   border-radius: 5px;
@@ -7788,7 +7808,7 @@ body {
   height: 20px;
   padding-left: 6px;
 }
-/* line 150, ../../app/styles/main.scss */
+/* line 169, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector [disabled] {
   color: snow;
   border-radius: 5px;
@@ -7797,7 +7817,7 @@ body {
   height: 20px;
   padding-left: 6px;
 }
-/* line 161, ../../app/styles/main.scss */
+/* line 180, ../../app/styles/main.scss */
 #pluginEditor #pluginImage {
   margin-bottom: 4px;
   margin-top: 4px;
@@ -7805,13 +7825,17 @@ body {
   width: 50px;
   background: #f6f6f6;
 }
-/* line 167, ../../app/styles/main.scss */
+/* line 186, ../../app/styles/main.scss */
 #pluginEditor #pluginImage img {
   -moz-box-shadow: 0 0 5px #ababab;
   -webkit-box-shadow: 0 0 5px #ababab;
   box-shadow: 0 0 5px #ababab;
 }
-/* line 174, ../../app/styles/main.scss */
+/* line 192, ../../app/styles/main.scss */
+#pluginEditor #generatorBrowser .list-group-item:hover {
+  background-color: #dddddd;
+}
+/* line 196, ../../app/styles/main.scss */
 #pluginEditor #templatePanel {
   -moz-box-shadow: 0 0 5px #ababab;
   -webkit-box-shadow: 0 0 5px #ababab;
@@ -7821,12 +7845,12 @@ body {
   margin-top: 20px;
   margin-left: 3px;
 }
-/* line 181, ../../app/styles/main.scss */
+/* line 203, ../../app/styles/main.scss */
 #pluginEditor #templatePanel #templateEditor {
   height: 310px;
   margin-top: 8px;
 }
-/* line 186, ../../app/styles/main.scss */
+/* line 208, ../../app/styles/main.scss */
 #pluginEditor #codePanel {
   margin-left: 4px;
   margin-top: 10px;
@@ -7834,7 +7858,7 @@ body {
   -webkit-box-shadow: 0 0 5px #ababab;
   box-shadow: 0 0 5px #ababab;
 }
-/* line 190, ../../app/styles/main.scss */
+/* line 212, ../../app/styles/main.scss */
 #pluginEditor #codePanel #codeEditor {
   height: 300px;
 }

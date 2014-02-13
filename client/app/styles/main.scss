@@ -8,15 +8,28 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
     box-shadow:         0 0 5px #ababab;
 }
 
+@font-face {
+  font-family: 'verb';
+  src: url("fonts/VerbRegular-webfont.ttf");
+}
+
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
     color: #000;
     padding: 0.2em 0;
 }
+.brand {
+    font-size: 72px;
+    font-family: 'verb';
 
+    small {
+        color: #dddddd;
+    }
+}
 /* Space out content a bit */
 body { 
+    font-family: 'verb';
     padding: 0px;
 }
 
@@ -111,10 +124,16 @@ body {
 }
 
 #pluginEditor {
+
+
+
     height: 920px;
     padding-top: 3px;
     padding-left: 20px;
 
+    #createTemplateGroup {
+        width: 200px;
+    }
     .pluginInfo {
 
         height: 240px;
@@ -170,8 +189,11 @@ body {
     }
     #generatorBrowser {
 
+        .list-group-item:hover {
+            background-color: #dddddd;
+        }
     }
-    #templatePanel {
+    #templatePanel{ 
         @include shadow;
         height: 380px;
         overflow-x: scroll;
