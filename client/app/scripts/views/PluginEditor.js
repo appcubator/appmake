@@ -17,11 +17,11 @@ define([
             'click #previewButton': 'previewGenerator',
             'click #publishButton': 'publishPlugin',
             'click #createNewModuleButton': 'createNewModule',
+            'click #createNewGeneratorButton': 'createNewGenerator',
             'click .selectModuleButton': 'moduleSelected'
         },
         initialize: function(){
             this.render();
-
 
 
             this.model.on("change:currentPlugin", this.render, this); 
@@ -50,8 +50,23 @@ define([
             this.codeEditor.getSession().setMode("ace/mode/javascript");
 
             this.refreshSidebar();
+        },
+        createNewGenerator: function(event){
+            event.stopPropagation();
+            event.preventDefault();
 
-
+            console.log("create generators");
+            var newGeneratorName = $.trim($(this.$el.find('#newGeneratorNameInput')).val());
+            if (newGeneratorName !== "" && this.model.get('currentModule') !== undefined){
+                if (this.model.get('browsingLocalGenerators')){
+                    var o = this.model.get('currentObject');
+                    o.generators[this.model.get('currentPlugin')][this.model.get('currentModule')][newGeneratorName] = {};
+                    // Check if we're overriting the plugin after.
+                    this.model.set('currentObject', o);
+                } // handle the else case later
+                this.model.set('currentGenerator', newGeneratorName);
+            }
+            this.refreshSidebar();
         },
         createNewModule: function(event){
             event.stopPropagation();

@@ -80,7 +80,8 @@
 <div class='row' id='generatorBrowser'>
 
 	<h3> <small> generators </h3>
-		<button class='btn btn-lg btn-default btn-block'> New generator </button>
+		<input id='newGeneratorNameInput' class='form-control' placeholder='Generator Name'> </input>
+		<button id='createNewGeneratorButton' class='btn btn-lg btn-default btn-block'> New generator </button>
 		<ul class="list-group">
 		  <% if ((app.currentObject !== undefined) && (app.currentModule !== undefined) && (app.currentPlugin !== undefined)) { %>
 		  	<% if (app.browsingLocalGenerators) { %>

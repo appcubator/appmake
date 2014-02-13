@@ -119,8 +119,6 @@ __p += '\n\t\t\t\t  \t\t\t' +
 '\n\t\t\t\t  \t\t';
  } ;
 __p += '\n\t\t\t\t  </a>\n\n\t\t\t\t  <ul class="dropdown-menu list-group" id=\'moduleList\' role="menu" aria-labelledby="dLabel">\n\t\t\t\t  \t\t';
- console.log(app) ;
-__p += '\n\t\t\t\t  \t\t';
  if (app.browsingLocalGenerators === true) { ;
 __p += '\n\t\t\t\t  \t\t\t';
  var mdls = app.currentObject.generators[app.currentPlugin] ;
@@ -140,7 +138,7 @@ __p += '\n\t\t\t\t  \t\t<li class="selectModuleButton list-group-item" moduleNam
  } ;
 __p += '\t\t\t\t  \t\t\n\t\t\t\t  </ul>\n\t\t\t\t</div>\n\t\t</div>\n\t</div>\n';
  }  ;
-__p += '\n\n<div class=\'row\' id=\'generatorBrowser\'>\n\n\t<h3> <small> generators </h3>\n\t\t<button class=\'btn btn-lg btn-default btn-block\'> New generator </button>\n\t\t<ul class="list-group">\n\t\t  ';
+__p += '\n\n<div class=\'row\' id=\'generatorBrowser\'>\n\n\t<h3> <small> generators </h3>\n\t\t<input id=\'newGeneratorNameInput\' class=\'form-control\' placeholder=\'Generator Name\'> </input>\n\t\t<button id=\'createNewGeneratorButton\' class=\'btn btn-lg btn-default btn-block\'> New generator </button>\n\t\t<ul class="list-group">\n\t\t  ';
  if ((app.currentObject !== undefined) && (app.currentModule !== undefined) && (app.currentPlugin !== undefined)) { ;
 __p += '\n\t\t  \t';
  if (app.browsingLocalGenerators) { ;
