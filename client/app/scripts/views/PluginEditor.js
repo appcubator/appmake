@@ -31,7 +31,6 @@ define([
             this.model.on("change:currentTemplate", this.render, this); 
         },
         render: function(){
-            this.saveCodeEditor();
         	this.$el.html(this.template({
                 app: {
                     currentObject: this.model.get('currentObject'),
@@ -59,9 +58,6 @@ define([
         createNewTemplate: function(event){
             event.stopPropagation();
             event.preventDefault();
-
-            this.saveCodeEditor();
-
 
             console.log("create template");
              var newTemplateName = $.trim($(this.$el.find('#newTemplateNameInput')).val());
@@ -91,8 +87,6 @@ define([
         createNewGenerator: function(event){
             event.stopPropagation();
             event.preventDefault();
-
-            this.saveCodeEditor();
 
             console.log("create generators");
             var newGeneratorName = $.trim($(this.$el.find('#newGeneratorNameInput')).val());
@@ -149,7 +143,6 @@ define([
         },
 
         moduleSelected: function(event){
-            this.saveCodeEditor();
 
             var moduleName = $($(event.target).closest('.selectModuleButton')).attr('modulename');
             this.model.set('currentModule', moduleName);
@@ -157,7 +150,6 @@ define([
             this.setCodeEditor();
         },
         generatorSelected: function(event){
-            this.saveCodeEditor();
 
             var generatorName = $($(event.target).closest('.selectGeneratorButton')).attr('generatorname');
             this.model.set('currentGenerator', generatorName);
@@ -186,19 +178,17 @@ define([
             var pluginName = this.model.get('currentPlugin');
             var mdlName = this.model.get('currentModule');
             var genName = this.model.get('currentGenerator');
+
             if (currentObject !== undefined && pluginName !== undefined && mdlName !== undefined && genName !== undefined){
                 console.log('all defined');
                 if (this.model.get('browsingLocalGenerators')){
                     var gens = currentObject.generators[pluginName][mdlName];
                     console.log('Browsing local..gens: ');
                     console.log(gens);
-                    for (var i; i < gens.length; i++){
-                        if (gens[i].name === genName){
-                            console.log('were here')
-                            currentObject.generators[pluginName][mdlName][i].code = this.codeEditor.getValue();
-                            console.log(this.codeEditor.getValue());
-                            console.log(currentObject.generators[pluginName][mdlName][i]);
-                        } 
+                    console.log(genName);
+                    for (var i = 0; i < gens.length; i++){
+                        console.log(gens[i].name === this.model.get('currentGenerator'));
+                        gens[i].code = this.codeEditor.getValue();
                     }
                     console.log(currentObject);
                     this.model.set('currentObject', currentObject)
@@ -232,7 +222,7 @@ define([
             $('#myModal').modal();
         },
         saveAppstate: function(){
-            this.saveCodeEditor();
+            this.saveCodeEditor();  
         }
     });
 
