@@ -85,6 +85,16 @@
 
 			<div class='row' id='templatePanel'> 
 				<ul class="nav nav-tabs">
+
+				  <li id='createTemplateGroup'>
+					<div class="input-group">
+					  <span class="input-group-btn">
+					    <button class="btn btn-default" id='createNewTemplateButton' type="button">Create</button>
+					  </span>	
+					  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
+					</div><!-- /input-group -->
+				  </li>
+					
 				  <li><a href="#">Configuration</a></li>
 				  				  	<% console.log(app) %>
 
@@ -106,23 +116,16 @@
 					  		<% } %>
 					  	<% } %>
 				  	<% } %>
-				  <li id='createTemplateGroup'>
-					<div class="input-group">
-					  <span class="input-group-btn">
-					    <button class="btn btn-default" id='createNewTemplateButton' type="button">Create</button>
-					  </span>	
-					  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
-					</div><!-- /input-group -->
-				  </li>
+
 
 				</ul>
-				<div class='col-md-12' > <div id='templateEditor'> Hello World </div>  </div>
+				<div class='col-md-12' > <div id='templateEditor'>  </div>  </div>
 			</div>
 			</hr>
 			<h3> <small> code editor </small> </h3>
 
 			<div class='row' id='codePanel'> 
-				<div class='col-md-12' > <div id='codeEditor'> Code Editor  </div> </div>
+				<div class='col-md-12' > <div id='codeEditor'>   </div> </div>
 			</div>
 
 		</div>
