@@ -5,9 +5,8 @@ define([
     'underscore',
     'backbone',
     'templates',
-    'typeahead',
     'views/PluginEditor'
-], function ($, _, Backbone, JST, typeahead, PluginEditorView) {
+], function ($, _, Backbone, JST, PluginEditorView) {
     'use strict';
 
 

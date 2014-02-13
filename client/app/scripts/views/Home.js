@@ -5,8 +5,7 @@ define([
     'underscore',
     'backbone',
     'templates',
-    'typeahead'
-], function ($, _, Backbone, JST, typeahead) {
+], function ($, _, Backbone, JST) {
     'use strict';
 
     var HomeView = Backbone.View.extend({
@@ -21,12 +20,6 @@ define([
         },
         setTypeahead: function(){
             var generators = this.model.get('generators'); 
-            $('input#repoSearchInput').typeahead({
-                name: 'generators',
-                local: generators,
-                valueKey: 'name',
-                template: JST['app/scripts/templates/Gen.ejs']
-            });
         }
     });
 

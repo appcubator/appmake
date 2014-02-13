@@ -17,10 +17,6 @@ require.config({
         bootstrap: {
             deps: ['jquery'],
             exports: 'jquery'
-        },
-        typeahead: {
-            deps: ['jquery'],
-            exports: '$.fn.typeahead'
         }
     },
     paths: {
@@ -29,7 +25,6 @@ require.config({
         underscore: '../bower_components/underscore/underscore',
         bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
         config: './config',
-        typeahead: "../bower_components/typeahead.js/dist/typeahead.bundle",
         aceDir: '../bower_components/ace/lib/ace',
         ace: '../bower_components/ace/lib/ace/ace'
     }
