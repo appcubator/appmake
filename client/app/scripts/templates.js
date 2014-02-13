@@ -140,7 +140,29 @@ __p += '\n\t\t\t\t  \t\t\t<li class="list-group-item" moduleName=\'' +
  } ;
 __p += '\t\t\t\t  \t\t\n\t\t\t\t  </ul>\n\t\t\t\t</div>\n\t\t</div>\n\t</div>\n';
  }  ;
-__p += '\n\n<div class=\'row\' id=\'generatorBrowser\'>\n\n\t<h3> <small> generators </h3>\n\t\t<button class=\'btn btn-lg btn-default btn-block\'> New generator </button>\n\n\t\t<ul class="list-group">\n\t\t  <li class="list-group-item">flickrsearchbar</li>\n\t\t  <li class="list-group-item">flickrsearchbutton</li>\n\t\t  <li class="list-group-item">flickrsearchbar</li>\n\t\t  <li class="list-group-item">flickrsearchbutton</li>\n\t\t  <li class="list-group-item">flickrsearchbar</li>\n\t\t  <li class="list-group-item">flickrsearchbutton</li>\n\t\t</ul>\n\n\n</div>';
+__p += '\n\n<div class=\'row\' id=\'generatorBrowser\'>\n\n\t<h3> <small> generators </h3>\n\t\t<button class=\'btn btn-lg btn-default btn-block\'> New generator </button>\n\t\t<ul class="list-group">\n\t\t  ';
+ if ((app.currentObject !== undefined) && (app.currentModule !== undefined) && (app.currentPlugin !== undefined)) { ;
+__p += '\n\t\t  \t';
+ if (app.browsingLocalGenerators) { ;
+__p += '\n\t\t  \t\t';
+ var o = app.currentObject.generators[app.currentPlugin]; ;
+__p += '\n\t\t  \t';
+} else { ;
+__p += '\n\t\t  \t\t';
+ var o = app.currentObject.plugins[app.currentPlugin]; ;
+__p += '\n\t\t  \t';
+ } ;
+__p += '\n\t\t\t';
+ for (generator in o[app.currentModule]){ ;
+__p += '\n\t\t  \t\t<li generatorName="' +
+((__t = (generator)) == null ? '' : __t) +
+'"class="list-group-item">' +
+((__t = (generator)) == null ? '' : __t) +
+'</li>\n\t\t  \t';
+ } ;
+__p += '\n\t\t  ';
+ } ;
+__p += '\n\t\t</ul>\n\n\n</div>';
 
 }
 return __p

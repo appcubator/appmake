@@ -83,14 +83,17 @@
 
 	<h3> <small> generators </h3>
 		<button class='btn btn-lg btn-default btn-block'> New generator </button>
-
 		<ul class="list-group">
-		  <li class="list-group-item">flickrsearchbar</li>
-		  <li class="list-group-item">flickrsearchbutton</li>
-		  <li class="list-group-item">flickrsearchbar</li>
-		  <li class="list-group-item">flickrsearchbutton</li>
-		  <li class="list-group-item">flickrsearchbar</li>
-		  <li class="list-group-item">flickrsearchbutton</li>
+		  <% if ((app.currentObject !== undefined) && (app.currentModule !== undefined) && (app.currentPlugin !== undefined)) { %>
+		  	<% if (app.browsingLocalGenerators) { %>
+		  		<% var o = app.currentObject.generators[app.currentPlugin]; %>
+		  	<%} else { %>
+		  		<% var o = app.currentObject.plugins[app.currentPlugin]; %>
+		  	<% } %>
+			<% for (generator in o[app.currentModule]){ %>
+		  		<li generatorName="<%=generator%>"class="list-group-item"><%=generator%></li>
+		  	<% } %>
+		  <% } %>
 		</ul>
 
 
