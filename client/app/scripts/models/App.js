@@ -7,13 +7,20 @@ define([
     'views/PluginEditor'
 ], function ($,_, Backbone, PluginEditorView) {
     'use strict';
-
+    var defaultObject = {
+        generators: {
+            "MyPlugin": {}
+        },
+        plugins: {}
+    }
     var AppModel = Backbone.Model.extend({
         defaults: {
-        	currentObject: {
-                generators: {},
-                plugins: {}
-            }
+            currentObject: defaultObject,
+            browsingLocalGenerators: true,
+            currentPlugin: "MyPlugin",
+            currentModule: undefined,
+            currentGenerator: undefined,
+            authenticated: false,            
         },
         initialize: function(){
         	$.ajax({

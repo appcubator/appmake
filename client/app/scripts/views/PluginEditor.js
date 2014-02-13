@@ -19,25 +19,18 @@ define([
             'click #createNewModuleButton': 'createNewModule'
         },
         initialize: function(){
-            this.authenticated = false; 
-            this.browsingLocalGenerators = true; 
-
-            if (!this.authenticated){
-                this.currentPlugin = "MyPlugin";
-                this.currentModule = undefined;
-                this.currentGenerator = undefined;
-            }
             this.render();
         },
         render: function(){
         	this.$el.html(this.template({
-                currentObject: this.model.get('currentObject'),
-                plugins: {},
-                authenticated: this.authenticated,
-                currentPlugin: this.currentPlugin,
-                currentModule: this.currentModule,
-                currentGenerator: this.currentGenerator,
-                browsingLocalGenerators: this.browsingLocalGenerators
+                app: {
+                    currentObject: this.model.get('currentObject'),
+                    authenticated: this.model.get('authenticated'),
+                    currentPlugin: this.model.get('currentPlugin'),
+                    currentModule: this.model.get('currentModule'),
+                    currentGenerator: this.model.get('currentGenerator'),
+                    browsingLocalGenerators: this.model.get('browsingLocalGenerators')                    
+                }
             }));
             this.refreshSidebar();
 
@@ -55,41 +48,43 @@ define([
             event.stopPropagation();
             event.preventDefault(); 
 
-            var gen = this.generators;
             var newModuleName = $.trim($(this.$el.find('#newModuleNameInput')).val());
-
             if (newModuleName !== ""){
-                var currentObject = this.model.get('currentObject');
-                if (this.browsingLocalGenerators){
+                console.log('Logging currentObject');
 
 
-                    currentObject.generators["MyPlugin"][newModuleName] = {};
-                    this.browsingLocalGenerators = true;
-                    this.currentPlugin = this.currentPlugin;
-                    this.currentModule = newModuleName;
-
+                if (this.model.get('browsingLocalGenerators')){
+                    var o = this.model.get('currentObject');
+                    o.generators[this.model.get('currentPlugin')][newModuleName] = {};
                     // Check if we're overriting the plugin after.
-                    this.model.set('currentObject', currentObject);
-
+                    this.model.set('currentObject', o);
                 }
+                this.model.set('currentModule', newModuleName);
+
             }
             this.refreshSidebar();
         },
+
         refreshSidebar: function(){
             console.log("Refreshing sidebar...");
-            var currentObject = this.model.get('currentObject');
-            console.log(currentObject);
+            console.log(this.currentModule);
+            var state = {
+                app: {
+                    currentObject: this.model.get('currentObject'),
+                    authenticated: this.model.get('authenticated'),
+                    currentPlugin: this.model.get('currentPlugin'),
+                    currentModule: this.model.get('currentModule'),
+                    currentGenerator: this.model.get('currentGenerator'),
+                    browsingLocalGenerators: this.model.get('browsingLocalGenerators')                    
+                }
+            };
+            console.log(state);
+            var str = JST['app/scripts/templates/Sidebar.ejs'](state);
 
-            var str = JST['app/scripts/templates/Sidebar.ejs']({
-                currentObject: currentObject,
-                plugins: {},
-                authenticated: this.authenticated,
-                currentPlugin: this.currentPlugin,
-                currentModule: this.currentModule,
-                currentGenerator: this.currentGenerator,
-                browsingLocalGenerators: this.browsingLocalGenerators
-            });
+            console.log(str);
             this.$el.find('#pluginBrowser').html(str);
+
+            console.log(str)
             $(this.$el.find("#moduleSelector")).dropdown();
         },
         loadAppstate: function(){

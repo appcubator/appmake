@@ -18,9 +18,6 @@ define([
 
     var AppView = Backbone.View.extend({
         template: JST['app/scripts/templates/App.ejs'],
-        defaults: {
-            currentObject: defaultObject
-        },
         events: {
             "click .startPluginEditorButton": "startPluginEditor"
         },

@@ -2,10 +2,10 @@
 	<h4> <small> Appcubator </small></h4>
 </div> 
 
-<% if (browsingLocalGenerators === true) { %>
+<% if (app.browsingLocalGenerators === true) { %>
 	<div class='row' id='pluginSelector'>
 		<div class="dropdown">
-		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#"> <%= currentPlugin %> </a>
+		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#"> <%= app.currentPlugin %> </a>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 		  	<li id='createNewPlugin'> 
 		  		<a href='#'>  
@@ -55,18 +55,19 @@
 				<div class="dropdown">
 
 				  <a class='btn btn-default btn-block btn-default' data-toggle="dropdown" id='moduleSelector' href="#">
-				  		<% if (currentModule === undefined) { %>
+				  		<% if (app.currentModule === undefined) { %>
 				  			No module selected
 				  		<% } else {%>
-				  			<%= currentModule %>
+				  			<%= app.currentModule %>
 				  		<% } %>
 				  </a>
 
 				  <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
-				  		<% if (browsingLocalGenerators === true) { %>
-				  			<% var mdls = currentObject.generators[currentPlugin] %>
+				  		<% console.log(app) %>
+				  		<% if (app.browsingLocalGenerators === true) { %>
+				  			<% var mdls = app.currentObject.generators[app.currentPlugin] %>
 				  		<% } else {%>
-				  			<% var mdls = currentObject.plugins[currentPlugin] %>
+				  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
 				  		<% } %>
 				  		<li class="list-group-item"> </li>
 				  		<% for (mdl in mdls) {  %>

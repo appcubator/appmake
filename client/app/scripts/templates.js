@@ -107,25 +107,27 @@ var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
 with (obj) {
 __p += '<div class=\'row\' class=\'brand\'>\n\t<h4> <small> Appcubator </small></h4>\n</div> \n\n';
- if (browsingLocalGenerators === true) { ;
+ if (app.browsingLocalGenerators === true) { ;
 __p += '\n\t<div class=\'row\' id=\'pluginSelector\'>\n\t\t<div class="dropdown">\n\t\t  <a class=\'btn btn-lg btn-default\' data-toggle="dropdown" id=\'pluginSelectorInput\' href="#"> ' +
-((__t = ( currentPlugin )) == null ? '' : __t) +
+((__t = ( app.currentPlugin )) == null ? '' : __t) +
 ' </a>\n\t\t  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">\n\t\t  \t<li id=\'createNewPlugin\'> \n\t\t  \t\t<a href=\'#\'>  \n\t\t  \t\t<span> <img height=\'40\' width=\'40\' src=\'http://bit.ly/1ePoLZj\'>  </img> \n\t\t  \t \t</span>New Plugin \n\t\t  \t \t</a>\n\t\t  \t</li>\n\n\t\t  \t<li id=\'My Generators\'> \n\t\t  \t\t<a href=\'#\'>  \n\t\t  \t\t<span> <img height=\'40\' width=\'40\' src=\'http://bit.ly/NBhukD\'>  </img> \n\t\t  \t \t</span> My Generators \n\t\t  \t \t</a>\n\t\t  \t</li>\n\n\t\t  </ul>\n\t\t</div>\n\n\t\t<div class=\'pluginInfo\'>\n\t\t\t<h6><span class="label label-default">AUTHOR</span>  \n\t\t\t\t<input disabled type=\'text\' placeholder=\'Your Email\'> </input>  \n\t\t\t</h6>\n\n\t\t\t<h6><span class="label label-default">DOCS</span>   \n\t\t\t\t<input disabled type=\'text\'  placeholder=\'http://yourdocs.com\'> </input>  \n\t\t\t</h6>\n\n\t\t\t<h6><span class="label label-default">REPO</span>  \n\t\t\t\t<input disabled type=\'text\' placeholder=\'git.com/yourRepo\'> </input>  \n\t\t\t</h6>\n\n\t\t\t<hr>\n\t\t\t<h6><span class="label label-default">CURRENT MODULE</span>  \n\n\t\t\t\t<div class="input-group">\n\t\t\t\t  <input type="text" id=\'newModuleNameInput\' class="form-control">\n\t\t\t\t  <span class="input-group-btn">\n\t\t\t\t    <button class="btn btn-default" id=\'createNewModuleButton\'type="button"> Add Module</button>\n\t\t\t\t  </span>\n\n\t\t\t\t</div><!-- /input-group -->\n\n\t\t\t</h6>\n\n\n\n\t\t\t\t<div class="dropdown">\n\n\t\t\t\t  <a class=\'btn btn-default btn-block btn-default\' data-toggle="dropdown" id=\'moduleSelector\' href="#">\n\t\t\t\t  \t\t';
- if (currentModule === undefined) { ;
+ if (app.currentModule === undefined) { ;
 __p += '\n\t\t\t\t  \t\t\tNo module selected\n\t\t\t\t  \t\t';
  } else {;
 __p += '\n\t\t\t\t  \t\t\t' +
-((__t = ( currentModule )) == null ? '' : __t) +
+((__t = ( app.currentModule )) == null ? '' : __t) +
 '\n\t\t\t\t  \t\t';
  } ;
 __p += '\n\t\t\t\t  </a>\n\n\t\t\t\t  <ul class="dropdown-menu list-group" id=\'moduleList\' role="menu" aria-labelledby="dLabel">\n\t\t\t\t  \t\t';
- if (browsingLocalGenerators === true) { ;
+ console.log(app) ;
+__p += '\n\t\t\t\t  \t\t';
+ if (app.browsingLocalGenerators === true) { ;
 __p += '\n\t\t\t\t  \t\t\t';
- var mdls = currentObject.generators[currentPlugin] ;
+ var mdls = app.currentObject.generators[app.currentPlugin] ;
 __p += '\n\t\t\t\t  \t\t';
  } else {;
 __p += '\n\t\t\t\t  \t\t\t';
- var mdls = currentObject.plugins[currentPlugin] ;
+ var mdls = app.currentObject.plugins[app.currentPlugin] ;
 __p += '\n\t\t\t\t  \t\t';
  } ;
 __p += '\n\t\t\t\t  \t\t<li class="list-group-item"> </li>\n\t\t\t\t  \t\t';

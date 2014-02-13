@@ -42,13 +42,8 @@ require([
     'ace'
 ], function ($, config, Backbone, AppRouter, AppModel, AppView, ace) {
 
-    var app = new AppModel({ currentObject: {
-        plugins: {},
-        generators: {
-            MyPlugin: {}
-        }     
-    }});
-    
+    var app = new AppModel();
+
     var AppView = new AppView({ model: app, el: $('body')});
     var AppRouter = new AppRouter();
     AppRouter.appView = AppView;
