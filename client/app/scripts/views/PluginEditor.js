@@ -5,10 +5,10 @@ define([
     'underscore',
     'backbone',
     'templates',
-    'bootstrap'
-], function ($, _, Backbone,  JST) {
+    'ace',
+    'bootstrap',
+], function ($, _, Backbone,  JST, ace) {
     'use strict';
-    var ace = require('ace');
     var PluginEditorView = Backbone.View.extend({
         template: JST['app/scripts/templates/PluginEditor.ejs'],
         events: {
@@ -42,18 +42,18 @@ define([
             this.refreshSidebar();
 
 			this.templateEditor = ace.edit('templateEditor');
-            this.templateEditor.setTheme("aceDir/theme/textmate");
+            this.templateEditor.setTheme("ace/theme/textmate");
 
             // Detect the template mode (later)...
             // =this.templateEditor.getSession().setMode("aceDir/mode/javascript");
             this.codeEditor = ace.edit('codeEditor');
-            this.codeEditor.setTheme("aceDir/theme/textmate");
-            this.codeEditor.getSession().setMode("aceDir/mode/javascript"); 
+            this.codeEditor.setTheme("ace/theme/textmate");
+            this.codeEditor.getSession().setMode("ace/mode/javascript"); 
         },
         createNewModule: function(event){
             console.log("Logging CURRENT OBJECT");
             console.log(this.model.get('currentObject'));
-            
+
             event.stopPropagation();
             event.preventDefault(); 
 

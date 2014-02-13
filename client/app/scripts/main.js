@@ -17,6 +17,9 @@ require.config({
         bootstrap: {
             deps: ['jquery'],
             exports: 'jquery'
+        },
+        ace: {
+            exports: 'ace'
         }
     },
     paths: {
@@ -25,8 +28,7 @@ require.config({
         underscore: '../bower_components/underscore/underscore',
         bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
         config: './config',
-        aceDir: '../bower_components/ace/lib/ace',
-        ace: '../bower_components/ace/lib/ace/ace'
+        ace: '../bower_components/ace-builds/src/ace',
     }
 });
 
