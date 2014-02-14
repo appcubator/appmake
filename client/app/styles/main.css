@@ -7656,14 +7656,30 @@ td.visible-print {
 body {
   font-family: 'verb';
   padding: 0px;
+  background: #eeeeee;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #eeeeee 0%, #eeeeee 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #eeeeee));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #eeeeee 0%, #eeeeee 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #eeeeee 0%, #eeeeee 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #eeeeee 0%, #eeeeee 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #eeeeee 0%, #eeeeee 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 );
+  /* IE6-9 */
 }
 
-/* line 36, ../../app/styles/main.scss */
+/* line 47, ../../app/styles/main.scss */
 .tt-query {
   width: 400px;
 }
 
-/* line 39, ../../app/styles/main.scss */
+/* line 50, ../../app/styles/main.scss */
 .tt-hint {
   height: 43px;
   padding: 10px 16px;
@@ -7672,13 +7688,13 @@ body {
   color: #ABABAB;
 }
 
-/* line 46, ../../app/styles/main.scss */
+/* line 57, ../../app/styles/main.scss */
 .tt-suggestions {
   width: 400px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
-/* line 54, ../../app/styles/main.scss */
+/* line 65, ../../app/styles/main.scss */
 .header,
 .marketing,
 .footer {
@@ -7687,13 +7703,13 @@ body {
 }
 
 /* Custom page header */
-/* line 60, ../../app/styles/main.scss */
+/* line 71, ../../app/styles/main.scss */
 .header {
   border-bottom: 1px solid #e5e5e5;
 }
 
 /* Make the masthead heading the same height as the navigation */
-/* line 65, ../../app/styles/main.scss */
+/* line 76, ../../app/styles/main.scss */
 .header h3 {
   margin-top: 0;
   margin-bottom: 0;
@@ -7702,51 +7718,51 @@ body {
 }
 
 /* Custom page footer */
-/* line 73, ../../app/styles/main.scss */
+/* line 84, ../../app/styles/main.scss */
 .footer {
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
 
-/* line 79, ../../app/styles/main.scss */
+/* line 90, ../../app/styles/main.scss */
 .container-narrow > hr {
   margin: 30px 0;
 }
 
 /* Main marketing message and sign up button */
-/* line 84, ../../app/styles/main.scss */
+/* line 95, ../../app/styles/main.scss */
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 }
 
-/* line 89, ../../app/styles/main.scss */
+/* line 100, ../../app/styles/main.scss */
 .jumbotron .btn {
   font-size: 21px;
   padding: 14px 24px;
 }
 
 /* Supporting marketing content */
-/* line 95, ../../app/styles/main.scss */
+/* line 106, ../../app/styles/main.scss */
 .marketing {
   margin: 40px 0;
 }
 
-/* line 99, ../../app/styles/main.scss */
+/* line 110, ../../app/styles/main.scss */
 .marketing p + h4 {
   margin-top: 28px;
 }
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
-  /* line 105, ../../app/styles/main.scss */
+  /* line 116, ../../app/styles/main.scss */
   .container {
     max-width: 730px;
   }
 
   /* Remove the padding we set earlier */
-  /* line 112, ../../app/styles/main.scss */
+  /* line 123, ../../app/styles/main.scss */
   .header,
   .marketing,
   .footer {
@@ -7755,52 +7771,57 @@ body {
   }
 
   /* Space out the masthead */
-  /* line 117, ../../app/styles/main.scss */
+  /* line 128, ../../app/styles/main.scss */
   .header {
     margin-bottom: 30px;
   }
 
   /* Remove the bottom border on the jumbotron for visual effect */
-  /* line 121, ../../app/styles/main.scss */
+  /* line 132, ../../app/styles/main.scss */
   .jumbotron {
     border-bottom: 0;
   }
 }
-/* line 126, ../../app/styles/main.scss */
+/* line 141, ../../app/styles/main.scss */
 #pluginEditor {
   height: 920px;
   padding-top: 3px;
   padding-left: 20px;
 }
-/* line 134, ../../app/styles/main.scss */
+/* line 149, ../../app/styles/main.scss */
+#pluginEditor #downloadEditor {
+  height: 500px;
+  width: 500px;
+}
+/* line 153, ../../app/styles/main.scss */
 #pluginEditor #createTemplateGroup {
   width: 200px;
 }
-/* line 137, ../../app/styles/main.scss */
+/* line 156, ../../app/styles/main.scss */
 #pluginEditor .pluginInfo {
   height: 240px;
   padding-left: 5px;
   padding-top: 5px;
   margin-top: 9px;
 }
-/* line 144, ../../app/styles/main.scss */
+/* line 163, ../../app/styles/main.scss */
 #pluginEditor .pluginInfo #newModuleNameInput {
   width: 100%;
   height: 34px;
 }
-/* line 151, ../../app/styles/main.scss */
+/* line 170, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector #pluginSelectorInput {
   width: 97%;
 }
-/* line 154, ../../app/styles/main.scss */
+/* line 173, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector .dropdown-menu {
   width: 220px;
 }
-/* line 157, ../../app/styles/main.scss */
+/* line 176, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector .dropdown-menu li:hover {
   background-color: #ECECEC;
 }
-/* line 161, ../../app/styles/main.scss */
+/* line 180, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector input {
   color: black;
   border-radius: 5px;
@@ -7808,7 +7829,7 @@ body {
   height: 20px;
   padding-left: 6px;
 }
-/* line 169, ../../app/styles/main.scss */
+/* line 188, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector [disabled] {
   color: snow;
   border-radius: 5px;
@@ -7817,7 +7838,7 @@ body {
   height: 20px;
   padding-left: 6px;
 }
-/* line 180, ../../app/styles/main.scss */
+/* line 199, ../../app/styles/main.scss */
 #pluginEditor #pluginImage {
   margin-bottom: 4px;
   margin-top: 4px;
@@ -7825,17 +7846,17 @@ body {
   width: 50px;
   background: #f6f6f6;
 }
-/* line 186, ../../app/styles/main.scss */
+/* line 205, ../../app/styles/main.scss */
 #pluginEditor #pluginImage img {
   -moz-box-shadow: 0 0 5px #ababab;
   -webkit-box-shadow: 0 0 5px #ababab;
   box-shadow: 0 0 5px #ababab;
 }
-/* line 192, ../../app/styles/main.scss */
+/* line 211, ../../app/styles/main.scss */
 #pluginEditor #generatorBrowser .list-group-item:hover {
   background-color: #dddddd;
 }
-/* line 196, ../../app/styles/main.scss */
+/* line 215, ../../app/styles/main.scss */
 #pluginEditor #templatePanel {
   -moz-box-shadow: 0 0 5px #ababab;
   -webkit-box-shadow: 0 0 5px #ababab;
@@ -7845,12 +7866,12 @@ body {
   margin-top: 20px;
   margin-left: 3px;
 }
-/* line 203, ../../app/styles/main.scss */
+/* line 222, ../../app/styles/main.scss */
 #pluginEditor #templatePanel #templateEditor {
   height: 310px;
   margin-top: 8px;
 }
-/* line 208, ../../app/styles/main.scss */
+/* line 227, ../../app/styles/main.scss */
 #pluginEditor #codePanel {
   margin-left: 4px;
   margin-top: 10px;
@@ -7858,7 +7879,7 @@ body {
   -webkit-box-shadow: 0 0 5px #ababab;
   box-shadow: 0 0 5px #ababab;
 }
-/* line 212, ../../app/styles/main.scss */
+/* line 231, ../../app/styles/main.scss */
 #pluginEditor #codePanel #codeEditor {
   height: 300px;
 }
