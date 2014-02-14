@@ -28,7 +28,7 @@ require.config({
         underscore: '../bower_components/underscore/underscore',
         bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
         config: './config',
-        ace: '../bower_components/ace-builds/src/ace',
+        ace: '../bower_components/ace-builds/src/ace'
     }
 });
 
