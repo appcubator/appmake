@@ -1,5 +1,5 @@
 <!-- Load file modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -43,12 +43,38 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Download Modal  -->
+
+
+<!-- Load file modal -->
+<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"> Load Resources </h4>
+
+      </div>
+      <div class="modal-body">
+        <h1 class='lead'> These are the droids you are looking for. </h1>
+        <div id='downloadEditor'> </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- End  -->
 
 
 <div id='pluginEditor' class='container-fluid'>
@@ -59,12 +85,14 @@
 
 		<div class='col-md-10' id='editorPanel'> 
 			<div class='row'>
-				<div class='col-md-3 col-md-offset-5' id='actionBar'>
+				<div class='col-md-4 col-md-offset-4' id='actionBar'>
 					<div class="btn-group float-right">
 					  <button id='loadButton' type="button" class="btn btn-default btn-sm">
 					  	Load
 					  </button>
 					  <button id='previewButton' type="button" class="btn btn-default btn-sm">Preview</button>
+					  <button id='downloadButton' type="button" class="btn btn-default btn-sm">Download</button>
+
 					</div> 
 					<div class='btn-group float-right'>
 					  <button id='saveButton' type="button" class="btn btn-default btn-sm">Save</button>
@@ -94,7 +122,7 @@
 					  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
 					</div><!-- /input-group -->
 				  </li>
-					
+
 				  <li><a href="#">Configuration</a></li>
 				  				  	<% console.log(app) %>
 

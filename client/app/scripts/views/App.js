@@ -8,14 +8,6 @@ define([
     'views/PluginEditor'
 ], function ($, _, Backbone, JST, PluginEditorView) {
     'use strict';
-
-    var defaultObject = {
-        "generators": {
-            "MyPlugin": {}
-        },
-        "plugins": {}
-    }
-
     var AppView = Backbone.View.extend({
         template: JST['app/scripts/templates/App.ejs'],
         events: {

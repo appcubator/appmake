@@ -38,6 +38,11 @@ define([
         		return g
         	});
         	this.set('generators', genList);
+        },
+        serialize: function(){
+            var object = this.get('currentObject');
+            console.log(JSON.stringify(object));
+            return JSON.stringify(object);
         }
     });
 

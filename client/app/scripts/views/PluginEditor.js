@@ -16,18 +16,19 @@ define([
             'click #saveButton': 'saveAppstate',
             'click #previewButton': 'previewGenerator',
             'click #publishButton': 'publishPlugin',
+            'click #downloadButton': 'downloadJSON',
             'click #createNewModuleButton': 'createNewModule',
             'click #createNewGeneratorButton': 'createNewGenerator',
             'click .selectModuleButton': 'moduleSelected',
             'click .selectGeneratorButton': 'generatorSelected',
             'click .selectTemplateButton': 'templateSelected',
-            'click #createNewTemplateButton': 'createNewTemplate',
+            'click #createNewTemplateButton': 'createNewTemplate'
         },
         initialize: function(){
             this.model.on("change:currentPlugin", this.render, this); 
             this.model.on("change:currentModule", this.render, this); 
             this.model.on("change:currentGenerator", this.render, this); 
-            this.model.on("change:currentTemplate", this.render, this); 
+            this.model.on("change:currentTemplate", this.render, this);
 
             this.render();
 
@@ -89,6 +90,13 @@ define([
             }
             this.setTemplateEditor();
             this.setCodeEditor();
+
+            this.render();
+        },
+        downloadJSON: function(event){
+            var modal = $('#downloadModal').modal();
+            var o = this.model.serialize();
+            $(modal).find('#downloadEditor').text(o);
         },
         createNewGenerator: function(event){
             event.stopPropagation();
@@ -259,7 +267,7 @@ define([
             }
         },                
         loadAppstate: function(){
-            $('#myModal').modal();
+            $('#loadModal').modal();
         },
         saveAppstate: function(){
             this.saveTemplateEditor();
