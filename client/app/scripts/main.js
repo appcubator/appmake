@@ -1,5 +1,4 @@
 /*global require*/
-'use strict';
 
 require.config({
 
@@ -42,10 +41,10 @@ require([
     'ace'
 ], function ($, config, Backbone, AppRouter, AppModel, AppView, ace) {
 
-    var app = new AppModel();
+    app = new AppModel();
 
-    var AppView = new AppView({ model: app, el: $('body')});
     var AppRouter = new AppRouter();
+    var AppView = new AppView({ model: app, el: $('body'), router: AppRouter});
     AppRouter.appView = AppView;
 
     Backbone.history.start();

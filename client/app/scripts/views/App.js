@@ -17,11 +17,13 @@ define([
         	var result = this.template({});
         	this.$el.html( result );
         },
-        initialize: function(){
+        initialize: function(options){
             this.render();
+            this.router = options.router;
         },
         startPluginEditor: function(){
-            this.pluginEditorView = new PluginEditorView({ model: this.model, el: $("body")});
+            //this.pluginEditorView = new PluginEditorView({ model: this.model, el: $("body")});
+            this.router.navigate('/editor');
         }
     });
 

@@ -82,6 +82,10 @@ app.get('/', function (req, res){
     res.sendfile( __dirname + '/client/app/index.html' );
 });
 
+app.get('/editor/', function (req, res){
+    res.sendfile( __dirname + '/client/app/index.html' );
+});
+
 app.get( '/client/*' , function (req, res, next) {
     var file = req.params[0]; 
     res.sendfile( __dirname + '/client/' + file );

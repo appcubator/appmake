@@ -2,20 +2,28 @@
 
 define([
     'jquery',
-    'backbone'
-], function ($, Backbone) {
+    'backbone',
+    'views/PluginEditor'
+], function ($, Backbone, PluginEditorView) {
     'use strict';
 
     var AppRouter = Backbone.Router.extend({
 		routes: {
             "": "index",
+            "editor": "plugineditor",
             "generators/:pkg/:mdl/:gen": "generator",
             "package/:pkg": "pkg",
             "module/:pkg/:mdl": "module"
-        },              
-        index: function() {
-            
         },
+
+        index: function() {
+            console.log('Router initialized.');
+        },
+
+        plugineditor: function() {
+            this.pluginEditorView = new PluginEditorView({ model: app, el: $("body")});
+        },
+
         generator: function(pkg, mdl, gen) {
             var uri = "generators/" + pkg + "/" + mdl + "/" + gen;
             $.ajax({
@@ -26,6 +34,7 @@ define([
                 }
             })           
         },
+
         pkg: function (packageName){
             var uri = "package/" + pkg
             $.ajax({

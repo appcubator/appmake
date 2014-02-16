@@ -7883,3 +7883,35 @@ body {
 #pluginEditor #codePanel #codeEditor {
   height: 300px;
 }
+
+#pluginNavigator {
+  padding-top: 60px;
+}
+
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 60px;
+  background-color: #fff;
+}
+
+.navbar h3 {
+  display: inline-block;
+  margin-top: 15px;
+}
+
+#searchBar {
+  display: inline-block;
+  width: 330px;
+}
+
+#searchBar input {
+  display: inline-block;
+  width: 200px;
+}
+
+#searchBar button {
+  display: inline-block;
+}
