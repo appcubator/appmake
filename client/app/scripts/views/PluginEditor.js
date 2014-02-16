@@ -7,7 +7,7 @@ define([
     'templates',
     'ace',
     'bootstrap',
-], function ($, _, Backbone,  JST, ace) {
+], function ($, _, Backbone,  JST) {
     'use strict';
     var PluginEditorView = Backbone.View.extend({
         template: JST['app/scripts/templates/PluginEditor.ejs'],

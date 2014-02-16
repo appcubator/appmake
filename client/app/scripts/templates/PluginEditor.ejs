@@ -77,16 +77,23 @@
 <!-- End  -->
 
 
-<div id='pluginEditor' class='container-fluid'>
+<div id='pluginEditor' class='container-fluid' style="padding-top: 120px;">
 	<div class='row' id='pluginNavigator'>
-		<div class='col-md-2' id='pluginBrowser'>
-
-		</div>
-
-		<div class='col-md-10' id='editorPanel'> 
-			<div class='row'>
-				<div class='col-md-4 col-md-offset-4' id='actionBar'>
-					<div class="btn-group float-right">
+		<div class='col-md-2' id='pluginBrowser'></div>
+<nav class="navbar navbar-fixed-top" id="top" role="banner" style="background-color: #fff;">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="../" class="navbar-brand">Appcubator</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <span class="nav navbar-nav" id='actionBar'>
+        <div class="btn-group float-right">
 					  <button id='loadButton' type="button" class="btn btn-default btn-sm">
 					  	Load
 					  </button>
@@ -97,17 +104,22 @@
 					<div class='btn-group float-right'>
 					  <button id='saveButton' type="button" class="btn btn-default btn-sm">Save</button>
 					  <button id='publishButton' type="button" class="btn btn-success btn-sm">Publish</button>
-					</div>
-				</div>
-				<div class='col-md-4' id='searchBar'>
-						<div class="input-group float-right">
-					      <input type="text" class="form-control">
+		</div>
+      </span>
+      <span class="nav navbar-nav navbar-right" id='searchBar'>
+        <div class="input-group float-right">
+					      <input type="text" class="form-control" style="width: 160px;">
 					      <span class="input-group-btn">
 					        <button class="btn btn-default" type="button">Go!</button>
 					      </span>
-					    </div><!-- /input-group -->					
-				</div>
-			</div>
+					    </div>
+      </span>
+    </nav>
+  </div>
+</nav>
+
+
+		<div class='col-md-10' id='editorPanel' > 
 
 			<h3> <small> template editor </small> </h3>
 
