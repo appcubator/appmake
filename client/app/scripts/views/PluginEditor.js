@@ -25,6 +25,8 @@ define([
             'click #createNewTemplateButton': 'createNewTemplate'
         },
         initialize: function(){
+            _.bindAll(this);
+
             this.model.on("change:currentPlugin", this.render, this); 
             this.model.on("change:currentModule", this.render, this); 
             this.model.on("change:currentGenerator", this.render, this); 
@@ -48,7 +50,6 @@ define([
         	this.$el.html(this.template({ app: app }));
             this.templateEditor = ace.edit('templateEditor');
             this.templateEditor.setTheme("ace/theme/textmate");
-
             // Detect the template mode (later)...
             // =this.templateEditor.getSession().setMode("aceDir/mode/javascript");
             this.codeEditor = ace.edit('codeEditor');
@@ -57,6 +58,9 @@ define([
 
             this.setCodeEditor();
             this.setTemplateEditor();
+
+            this.templateEditor.on("change", this.updateCurrentTemplate);
+            this.codeEditor.on("change", this.updateCurrentCode);
 
 
             this.refreshSidebar();
@@ -190,6 +194,7 @@ define([
                 }
             }            
         },
+
         saveTemplateEditor: function(){
             console.log("Saving templates...")
             var currentObject = this.model.get('currentObject');
@@ -215,6 +220,34 @@ define([
                 }
             }
         },
+
+        updateCurrentTemplate: function() {
+            console.log("update template");
+
+            var currentObject = this.model.get('currentObject');
+            var pluginName = this.model.get('currentPlugin');
+            var mdlName = this.model.get('currentModule');
+            var genName = this.model.get('currentGenerator');
+            var tmpName = this.model.get('currentTemplate');
+
+            if (currentObject !== undefined && pluginName !== undefined 
+                && mdlName !== undefined && genName !== undefined && tmpName !== undefined){
+                console.log('all defined');
+                if (this.model.get('browsingLocalGenerators')){
+                    var gens = currentObject.generators[pluginName][mdlName];
+                    console.log(gens);
+                    console.log(genName);
+                    for (var i = 0; i < gens.length; i++){
+                        if (gens[i].name === this.model.get('currentGenerator')) {
+                            gens[i].templates[tmpName] = this.templateEditor.getValue();
+                        }   
+                    }
+                    //console.log(currentObject);
+                    //this.model.set('currentObject', currentObject)
+                }
+            }
+        },
+
         setCodeEditor: function(){
             var currentObject = this.model.get('currentObject');
             var pluginName = this.model.get('currentPlugin');
@@ -229,6 +262,7 @@ define([
                 }
             }
         },
+
         saveCodeEditor: function(){
             console.log("Saving code...")
             var currentObject = this.model.get('currentObject');
@@ -254,6 +288,33 @@ define([
                 }
             }
         },
+
+        updateCurrentCode: function() {
+            console.log("Saving code...")
+            var currentObject = this.model.get('currentObject');
+            var pluginName = this.model.get('currentPlugin');
+            var mdlName = this.model.get('currentModule');
+            var genName = this.model.get('currentGenerator');
+
+            if (currentObject !== undefined && pluginName !== undefined 
+                && mdlName !== undefined && genName !== undefined){
+                console.log('all defined');
+                if (this.model.get('browsingLocalGenerators')){
+                    var gens = currentObject.generators[pluginName][mdlName];
+                    console.log('Browsing local..gens: ');
+                    console.log(gens);
+                    console.log(genName);
+                    for (var i = 0; i < gens.length; i++){
+                        if (gens[i].name === this.model.get('currentGenerator')) {
+                            gens[i].code = this.codeEditor.getValue();
+                        }   
+                    }
+                    console.log(currentObject);
+                    this.model.set('currentObject', currentObject)
+                }
+            }
+        },
+
         findGenByName: function(module, genName){
             for (var i = 0; i < module.length; i++){
                 if (genName === module[i].name){
@@ -273,9 +334,9 @@ define([
         },
         saveAppstate: function(){
 
-            this.saveTemplateEditor();
-            this.saveCodeEditor();
-            
+            // this.saveTemplateEditor();
+            // this.saveCodeEditor();
+
             var o = this.model.serialize();
             console.log(o);
             
