@@ -1,9 +1,5 @@
-<div class='row' class='brand'>
-	<h4> <small> Appcubator </small></h4>
-</div> 
-
 <% if (app.browsingLocalGenerators === true) { %>
-	<div class='row' id='pluginSelector'>
+	<div id='pluginSelector'>
 		<div class="dropdown">
 		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#"> <%= app.currentPlugin %> </a>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -68,7 +64,7 @@
 				  		<% } else {%>
 				  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
 				  		<% } %>
-				  		<% for (mdl in mdls) {  %>
+				  		<% for (mdl in mdls) {  console.log(mdl); %>
 				  		<li class="selectModuleButton list-group-item" moduleName='<%=mdl%>'> <%=mdl%> </li>
 				  		<% } %>				  		
 				  </ul>
@@ -77,7 +73,7 @@
 	</div>
 <% }  %>
 
-<div class='row' id='generatorBrowser'>
+<div class='' id='generatorBrowser'>
 
 	<h3> <small> generators </h3>
 		<input id='newGeneratorNameInput' class='form-control' placeholder='Generator Name'> </input>

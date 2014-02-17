@@ -21,7 +21,9 @@ define([
                 currentGenerator: this.model.get('currentGenerator'),
                 browsingLocalGenerators: this.model.get('browsingLocalGenerators')                    
             }}
-
+            alert('yo');
+            console.log(state);
+            console.log(state.currentObject);
         	var result = this.template(state);
         	this.$el.html( result );
         },

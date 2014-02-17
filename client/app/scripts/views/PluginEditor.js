@@ -151,6 +151,8 @@ define([
                     browsingLocalGenerators: this.model.get('browsingLocalGenerators')                    
                 }
             };
+
+            console.log(state);
             var str = JST['app/scripts/templates/Sidebar.ejs'](state);
             this.$el.find('#pluginBrowser').html(str);
             $(this.$el.find("#moduleSelector")).dropdown();

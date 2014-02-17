@@ -41,8 +41,8 @@ require([
     'ace'
 ], function ($, config, Backbone, AppRouter, AppModel, AppView, ace) {
 
-    app = new AppModel();
-
+    app = new AppModel({ currentObject: appState });
+    console.log(app);
     var AppRouter = new AppRouter();
     var AppView = new AppView({ model: app, el: $('body'), router: AppRouter});
     AppRouter.appView = AppView;
