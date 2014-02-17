@@ -272,8 +272,28 @@ define([
             $('#loadModal').modal();
         },
         saveAppstate: function(){
+
             this.saveTemplateEditor();
-            this.saveCodeEditor();  
+            this.saveCodeEditor();
+            
+            var o = this.model.serialize();
+            console.log(o);
+            
+            function successHandler () {
+                var modal = $('#downloadModal').modal();
+                $(modal).find('#downloadEditor').text("Saved Successfully.");
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/app/' + appId + '/state/',
+                data: JSON.stringify(appState),
+                statusCode: {
+                    200: successHandler
+                },
+                dataType: "JSON"
+            });
+
         }
     });
 
