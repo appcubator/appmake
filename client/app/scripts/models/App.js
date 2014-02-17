@@ -15,21 +15,25 @@ define([
     }
     var AppModel = Backbone.Model.extend({
         defaults: {
+            currentObject: defaultObject,
             browsingLocalGenerators: true,
+            currentPlugin: "MyPlugin",
+            currentModule: undefined,
+            currentGenerator: undefined,
+            currentTemplate: undefined,
             authenticated: false,            
         },
         initialize: function(bone){
-        	$.ajax({
-        		url: "/generators/list",
-        		success: function(res){
-        			this.processList(res);
-        		}.bind(this)
-        	});
-            //this.pluginEditorView =  new PluginEditorView({ model: this, el: $('body') });
 
-            if(!bone.currentPlugin && _.keys(bone.currentObject.generators) ) {
-                console.log(_.keys(bone.currentObject.generators));
+            if (!bone.currentPlugin && _.keys(bone.currentObject.generators) ) {
                 this.set('currentPlugin', _.keys(bone.currentObject.generators)[0]);
+            }
+
+
+            if (!bone.currentModule && this.has('currentPlugin')) {
+                var pluginName = this.get('currentPlugin');
+                var pluginModule = _.keys(bone.currentObject.generators[pluginName])[0];
+                this.set('currentModule', pluginModule);
             }
 
         },
