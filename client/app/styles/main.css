@@ -7887,7 +7887,7 @@ body {
 }
 
 #pluginNavigator {
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 .navbar {
@@ -7897,11 +7897,15 @@ body {
   left: 0;
   height: 60px;
   background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  z-index: 5;
 }
 
 .navbar h3 {
   display: inline-block;
   margin-top: 15px;
+  margin-left: 30px;
+  margin-right: 60px;
 }
 
 #searchBar {

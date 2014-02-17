@@ -78,12 +78,12 @@
 
 
 <div id='pluginEditor' class='container-fluid'>
-	<div class='row' id='pluginNavigator'>
+	<div class='' id='pluginNavigator'>
 		<div class='col-md-3' id='pluginBrowser'>
 
 		</div>
 
-		<div class='col-md-9' id='editorPanel'> 
+		<div class='col-md-8' id='editorPanel'> 
 			<div class='navbar'>
 				<h3>Appcubator</h3>
 				<span class='' id='actionBar'>
@@ -105,23 +105,22 @@
 				</span>
 			</div>
 
-			<h3> <small> template editor </small> </h3>
+			<div><small>Template Editor</small>
 
-			<div class='row' id='templatePanel'> 
-				<ul class="nav nav-tabs">
-
-				  <li id='createTemplateGroup'>
+				<span id='createTemplateGroup' class="pull-right">
 					<div class="input-group">
 					  <span class="input-group-btn">
 					    <button class="btn btn-default" id='createNewTemplateButton' type="button">Create</button>
 					  </span>	
 					  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
 					</div><!-- /input-group -->
-				  </li>
+				</span>
 
-				  <li><a href="#">Configuration</a></li>
-				  				  	<% console.log(app) %>
 
+			</div>
+
+			<div class='row' id='templatePanel'> 
+				<ul class="nav nav-tabs">
 				   	<% if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { %>
 					  	<% if (app.browsingLocalGenerators) { %>
 					  		<% var o = app.currentObject.generators[app.currentPlugin][app.currentModule]; %>
@@ -143,10 +142,11 @@
 
 
 				</ul>
+
 				<div class='col-md-12' > <div id='templateEditor'>  </div>  </div>
 			</div>
 			</hr>
-			<h3> <small> code editor </small> </h3>
+			<h3> <small>Code Editor</small> </h3>
 
 			<div class='row' id='codePanel'> 
 				<div class='col-md-12' > <div id='codeEditor'>   </div> </div>

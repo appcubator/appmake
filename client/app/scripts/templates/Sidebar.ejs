@@ -1,7 +1,9 @@
 <% if (app.browsingLocalGenerators === true) { %>
 	<div id='pluginSelector'>
 		<div class="dropdown">
-		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#"> <%= app.currentPlugin %> </a>
+		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#">
+		  	<%= app.currentPlugin %><span class="caret"></span>
+		  </a>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 		  	<li id='createNewPlugin'> 
 		  		<a href='#'>  
@@ -54,7 +56,7 @@
 				  		<% if (app.currentModule === undefined) { %>
 				  			No module selected
 				  		<% } else {%>
-				  			<%= app.currentModule %>
+				  			<%= app.currentModule %> <span class="caret"></span>
 				  		<% } %>
 				  </a>
 

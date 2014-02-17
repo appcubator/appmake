@@ -15,12 +15,7 @@ define([
     }
     var AppModel = Backbone.Model.extend({
         defaults: {
-            currentObject: defaultObject,
             browsingLocalGenerators: true,
-            currentPlugin: "MyPlugin",
-            currentModule: undefined,
-            currentGenerator: undefined,
-            currentTemplate: undefined,
             authenticated: false,            
         },
         initialize: function(bone){
