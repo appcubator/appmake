@@ -21,14 +21,26 @@ define([
         initialize: function(bone){
 
             if (!bone.currentPlugin && _.keys(bone.currentObject.generators) ) {
-                this.set('currentPlugin', _.keys(bone.currentObject.generators)[0]);
+                var pluginName = _.keys(bone.currentObject.generators)[0];
+                this.set('currentPlugin', pluginName);
             }
 
 
             if (!bone.currentModule && this.has('currentPlugin')) {
-                var pluginName = this.get('currentPlugin');
                 var pluginModule = _.keys(bone.currentObject.generators[pluginName])[0];
                 this.set('currentModule', pluginModule);
+            }
+
+            if (!bone.currentModule && this.has('currentModule')) {
+                var generator = bone.currentObject.generators[pluginName][pluginModule][0];
+                var generatorName = generator.name;
+                this.set('currentGenerator', generatorName);
+            }
+
+
+            if (!bone.currentModule && this.has('currentGenerator') && _.keys(generator.templates)) {
+                var templateName = _.keys(generator.templates)[0];
+                this.set('currentTemplate', templateName);
             }
 
         },

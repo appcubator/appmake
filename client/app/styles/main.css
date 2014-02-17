@@ -7921,3 +7921,7 @@ body {
 #searchBar button {
   display: inline-block;
 }
+
+.list-group.generators li.active {
+  background-color: #dddddd;
+}
