@@ -30,7 +30,7 @@
 
 (function() {
 
-var ACE_NAMESPACE = "";
+var ACE_NAMESPACE = "ace";
 
 var global = (function() {
     return this;
