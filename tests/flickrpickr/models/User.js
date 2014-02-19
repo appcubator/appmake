@@ -92,24 +92,27 @@ functions.push({
   }
 });
 
-var schemaMods = [];
-schemaMods.push(function (schema) {
+functions.push({
+    name: 'validateName',
+    schemaMod: true,
+    code: function (schema) {
   schema.path('name').validate(function (name) {
     return name.trim().length > 0;
   }, 'Please provide a valid name');
+}
 });
 
-schemaMods.push(function (schema) {
+functions.push({ name: 'validateEmail', schemaMod: true, code: function (schema) {
   schema.path('email').validate(function (email) {
     return email.trim().length > 0;
   }, 'Please provide a valid email');
-});
+}});
 
-schemaMods.push(function (schema) {
+functions.push({ name: 'validatePassword', schemaMod: true, code: function (schema) {
   schema.path('hashed_password').validate(function (hashed_password) {
     return hashed_password.length > 0;
   }, 'Please provide a password');
-});
+}});
 
 
 functions.push({
@@ -136,8 +139,7 @@ var model = { generate: "models.model",
               data: {
                   name: 'User',
                   fields: fields,
-                  functions: functions,
-                  schemaMods: schemaMods
+                  functions: functions
               }
 };
 
