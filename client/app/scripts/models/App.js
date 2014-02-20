@@ -20,19 +20,19 @@ define([
         },
         initialize: function(bone){
 
-            if (!bone.currentPlugin && _.keys(bone.currentObject.generators) ) {
-                var pluginName = _.keys(bone.currentObject.generators)[0];
+            if (!bone.currentPlugin && _.keys(bone.currentObject.plugins) ) {
+                var pluginName = _.keys(bone.currentObject.plugins)[0];
                 this.set('currentPlugin', pluginName);
             }
 
 
             if (!bone.currentModule && this.has('currentPlugin')) {
-                var pluginModule = _.keys(bone.currentObject.generators[pluginName])[0];
+                var pluginModule = _.keys(bone.currentObject.plugins[pluginName])[0];
                 this.set('currentModule', pluginModule);
             }
 
             if (!bone.currentModule && this.has('currentModule')) {
-                var generator = bone.currentObject.generators[pluginName][pluginModule][0];
+                var generator = bone.currentObject.plugins[pluginName][pluginModule][0];
                 var generatorName = generator.name;
                 this.set('currentGenerator', generatorName);
             }

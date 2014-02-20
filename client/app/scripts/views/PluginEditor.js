@@ -10,7 +10,9 @@ define([
 ], function ($, _, Backbone,  JST) {
     'use strict';
     var PluginEditorView = Backbone.View.extend({
+        
         template: JST['app/scripts/templates/PluginEditor.ejs'],
+        
         events: {
             'click #loadButton': 'loadAppstate',
             'click #saveButton': 'saveAppstate',
@@ -24,9 +26,10 @@ define([
             'click .selectTemplateButton': 'templateSelected',
             'click #createNewTemplateButton': 'createNewTemplate'
         },
+        
         initialize: function(){
             _.bindAll(this);
-
+            
             this.model.on("change:currentPlugin", this.render, this); 
             this.model.on("change:currentModule", this.render, this); 
             this.model.on("change:currentGenerator", this.render, this); 
@@ -37,6 +40,7 @@ define([
             //setInterval(this.saveAppstate.bind(this), 5000);
 
         },
+        
         render: function(){
             var app =  {
                     currentObject: this.model.get('currentObject'),
@@ -47,6 +51,9 @@ define([
                     currentTemplate: this.model.get('currentTemplate'),                    
                     browsingLocalGenerators: this.model.get('browsingLocalGenerators')                    
             }
+
+            console.log(ace);
+
         	this.$el.html(this.template({ app: app }));
             this.templateEditor = ace.edit('templateEditor');
             this.templateEditor.setTheme("ace/theme/textmate");
@@ -56,14 +63,20 @@ define([
             this.codeEditor.setTheme("ace/theme/textmate");
             this.codeEditor.getSession().setMode("ace/mode/javascript");
 
+            this.defaultsEditor = ace.edit('defaultsEditor');
+            this.defaultsEditor.setTheme("ace/theme/textmate");
+            this.defaultsEditor.getSession().setMode("ace/mode/json");
+
             this.setCodeEditor();
             this.setTemplateEditor();
+            this.setDefaultsEditor();
 
             this.templateEditor.on("change", this.updateCurrentTemplate);
             this.codeEditor.on("change", this.updateCurrentCode);
-
+            this.defaultsEditor.on("change", this.updateDefaultsEditor);
 
             this.refreshSidebar();
+            this.refreshGeneratedCode();
         },
         createNewTemplate: function(event){
             event.stopPropagation();
@@ -77,7 +90,7 @@ define([
              var obj = this.model.get('currentObject');
              if (newTemplateName !== "" && mdlName !== undefined && pluginName !== undefined && genName !== undefined){
                 if (this.model.get('browsingLocalGenerators')){
-                    var o = obj.generators[pluginName][mdlName];
+                    var o = obj.plugins[pluginName][mdlName];
                 } else {
                     var o = obj.plugins[pluginName][mdlName];
                 }
@@ -97,11 +110,13 @@ define([
 
             this.render();
         },
+
         downloadJSON: function(event){
             var modal = $('#downloadModal').modal();
             var o = this.model.serialize();
             $(modal).find('#downloadEditor').text(o);
         },
+
         createNewGenerator: function(event){
             event.stopPropagation();
             event.preventDefault();
@@ -118,7 +133,7 @@ define([
                         "version": "0.1",
                         "name": newGeneratorName
                     }
-                    o.generators[this.model.get('currentPlugin')][this.model.get('currentModule')].push(newGenerator);
+                    o.plugins[this.model.get('currentPlugin')][this.model.get('currentModule')].push(newGenerator);
                     // Check if we're overriting the plugin after.
                     this.model.set('currentObject', o);
                 } // handle the else case later
@@ -134,7 +149,7 @@ define([
             if (newModuleName !== ""){
                 if (this.model.get('browsingLocalGenerators')){
                     var o = this.model.get('currentObject');
-                    o.generators[this.model.get('currentPlugin')][newModuleName] = [];
+                    o.plugins[this.model.get('currentPlugin')][newModuleName] = [];
                     // Check if we're overriting the plugin after.
                     this.model.set('currentObject', o);
                 }
@@ -162,22 +177,73 @@ define([
             $(this.$el.find("#moduleSelector")).dropdown();
         },
 
+        refreshGeneratedCode: function() {
+            var currentObject = this.model.get('currentObject');
+            var pluginName = this.model.get('currentPlugin');
+            var mdlName = this.model.get('currentModule');
+            var genName = this.model.get('currentGenerator');
+
+            var generatorPath = pluginName + "." + mdlName + "." + genName;
+
+            var Vm = function() {
+
+                this.runCode = function(code, globals) {
+                    var templates = globals.templates;
+                    var data = globals.data;
+                    var expand = globals.expand;
+                    return eval(code);
+                };
+
+            };
+
+            var VM = new Vm();
+            var expander = expanderfactory(function(code, globals) {
+                return VM.runCode(code, globals);
+            });
+
+            
+            $('#generatedCode').html("");
+
+            try {
+                var generated = expander.expand(appState.plugins, {generate: generatorPath, data: {}});
+                console.log(generated);
+
+                if(typeof generated == "object") {
+                    var str = "";
+                    _.each(generated, function(val, key) {
+                        str += '<h3>' + key + '</h3><div>'+val+'</div>';
+                    });
+                     $('#generatedCode').html(str);
+                }
+                else if (typeof generated == "string") {
+                    $('#generatedCode').html(generated);
+                }
+
+            }
+            catch (e) {
+                $('#generatedCode').html("Could not be generated: "+ e);
+            }
+        },
+
         moduleSelected: function(event){
             var moduleName = $($(event.target).closest('.selectModuleButton')).attr('modulename');
             this.model.set('currentModule', moduleName);
             this.setCodeEditor();
         },
+
         generatorSelected: function(event){
             var generatorName = $($(event.target).closest('.selectGeneratorButton')).attr('generatorname');
             this.model.set('currentGenerator', generatorName);
             this.setCodeEditor();
         },
+
         templateSelected: function (event){
             var templateName = $($(event.target).closest('.selectTemplateButton')).attr('templatename');
             this.model.set('currentTemplate', templateName);
             this.setCodeEditor();
             this.setTemplateEditor();
         },
+
         setTemplateEditor: function(){
             var currentObject = this.model.get('currentObject');
             var pluginName = this.model.get('currentPlugin');
@@ -207,7 +273,7 @@ define([
                 && mdlName !== undefined && genName !== undefined && tmpName !== undefined){
                 console.log('all defined');
                 if (this.model.get('browsingLocalGenerators')){
-                    var gens = currentObject.generators[pluginName][mdlName];
+                    var gens = currentObject.plugins[pluginName][mdlName];
                     console.log(gens);
                     console.log(genName);
                     for (var i = 0; i < gens.length; i++){
@@ -217,33 +283,6 @@ define([
                     }
                     console.log(currentObject);
                     this.model.set('currentObject', currentObject)
-                }
-            }
-        },
-
-        updateCurrentTemplate: function() {
-            console.log("update template");
-
-            var currentObject = this.model.get('currentObject');
-            var pluginName = this.model.get('currentPlugin');
-            var mdlName = this.model.get('currentModule');
-            var genName = this.model.get('currentGenerator');
-            var tmpName = this.model.get('currentTemplate');
-
-            if (currentObject !== undefined && pluginName !== undefined 
-                && mdlName !== undefined && genName !== undefined && tmpName !== undefined){
-                console.log('all defined');
-                if (this.model.get('browsingLocalGenerators')){
-                    var gens = currentObject.generators[pluginName][mdlName];
-                    console.log(gens);
-                    console.log(genName);
-                    for (var i = 0; i < gens.length; i++){
-                        if (gens[i].name === this.model.get('currentGenerator')) {
-                            gens[i].templates[tmpName] = this.templateEditor.getValue();
-                        }   
-                    }
-                    //console.log(currentObject);
-                    //this.model.set('currentObject', currentObject)
                 }
             }
         },
@@ -263,7 +302,7 @@ define([
             }
         },
 
-        saveCodeEditor: function(){
+        updateCurrentCode: function() {
             console.log("Saving code...")
             var currentObject = this.model.get('currentObject');
             var pluginName = this.model.get('currentPlugin');
@@ -274,7 +313,7 @@ define([
                 && mdlName !== undefined && genName !== undefined){
                 console.log('all defined');
                 if (this.model.get('browsingLocalGenerators')){
-                    var gens = currentObject.generators[pluginName][mdlName];
+                    var gens = currentObject.plugins[pluginName][mdlName];
                     console.log('Browsing local..gens: ');
                     console.log(gens);
                     console.log(genName);
@@ -289,7 +328,22 @@ define([
             }
         },
 
-        updateCurrentCode: function() {
+        setDefaultsEditor: function() {
+            var currentObject = this.model.get('currentObject');
+            var pluginName = this.model.get('currentPlugin');
+            var mdlName = this.model.get('currentModule');
+            var genName = this.model.get('currentGenerator');
+            if (currentObject !== undefined && pluginName !== undefined 
+                && mdlName !== undefined && genName !== undefined){
+                var mdl = this.getCurrentPluginList()[pluginName][mdlName];
+                var gen = this.findGenByName(mdl, genName);
+                if (gen !== undefined && gen.defaults){
+                    this.defaultsEditor.setValue(JSON.stringify(gen.defaults, {}, 4));
+                }
+            }
+        },
+
+        updateDefaultsEditor: function() {
             console.log("Saving code...")
             var currentObject = this.model.get('currentObject');
             var pluginName = this.model.get('currentPlugin');
@@ -300,16 +354,24 @@ define([
                 && mdlName !== undefined && genName !== undefined){
                 console.log('all defined');
                 if (this.model.get('browsingLocalGenerators')){
-                    var gens = currentObject.generators[pluginName][mdlName];
+                    var gens = currentObject.plugins[pluginName][mdlName];
                     console.log('Browsing local..gens: ');
                     console.log(gens);
                     console.log(genName);
                     for (var i = 0; i < gens.length; i++){
                         if (gens[i].name === this.model.get('currentGenerator')) {
-                            gens[i].code = this.codeEditor.getValue();
+                            var defs = {};
+                            
+                            try {
+                                defs = jQuery.parseJSON(this.defaultsEditor.getValue())
+                            }
+                            catch(e) {
+
+                            }
+
+                            gens[i].defaults = defs;
                         }   
                     }
-                    console.log(currentObject);
                     this.model.set('currentObject', currentObject)
                 }
             }
@@ -324,7 +386,7 @@ define([
         },
         getCurrentPluginList: function(){
             if (this.model.get('browsingLocalGenerators')){
-                return (this.model.get('currentObject').generators);
+                return (this.model.get('currentObject').plugins);
             } else {
                 return (this.model.get('currentObject').plugins);
             }

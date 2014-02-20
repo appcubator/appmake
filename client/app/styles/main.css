@@ -7857,7 +7857,8 @@ body {
   background-color: #dddddd;
 }
 /* line 215, ../../app/styles/main.scss */
-#pluginEditor #templatePanel {
+#pluginEditor #templatePanel,
+#defaultsEditor {
   -moz-box-shadow: 0 0 5px #ababab;
   -webkit-box-shadow: 0 0 5px #ababab;
   box-shadow: 0 0 5px #ababab;
@@ -7924,4 +7925,9 @@ body {
 
 .list-group.generators li.active {
   background-color: #dddddd;
+}
+
+
+#pluginEditor #generatedPanel #defaultsEditor {
+  height: 300px;
 }

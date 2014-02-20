@@ -62,7 +62,7 @@
 
 				  <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
 				  		<% if (app.browsingLocalGenerators === true) { %>
-				  			<% var mdls = app.currentObject.generators[app.currentPlugin] %>
+				  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
 				  		<% } else {%>
 				  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
 				  		<% } %>
@@ -83,7 +83,7 @@
 		<ul class="list-group generators">
 		  <% if ((app.currentObject !== undefined) && (app.currentModule !== undefined) && (app.currentPlugin !== undefined)) { %>
 		  	<% if (app.browsingLocalGenerators) { %>
-		  		<% var o = app.currentObject.generators[app.currentPlugin]; %>
+		  		<% var o = app.currentObject.plugins[app.currentPlugin]; %>
 		  	<%} else { %>
 		  		<% var o = app.currentObject.plugins[app.currentPlugin]; %>
 		  	<% } %>
