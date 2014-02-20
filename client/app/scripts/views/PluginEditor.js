@@ -238,10 +238,12 @@ define([
         },
 
         templateSelected: function (event){
-            var templateName = $($(event.target).closest('.selectTemplateButton')).attr('templatename');
+            var templateName = $(event.currentTarget).attr('templatename'); 
+            console.log(templateName);
+            //$(.closest('.selectTemplateButton')).attr('templatename');
             this.model.set('currentTemplate', templateName);
-            this.setCodeEditor();
-            this.setTemplateEditor();
+            //this.setCodeEditor();
+            //this.setTemplateEditor();
         },
 
         setTemplateEditor: function(){
@@ -271,17 +273,13 @@ define([
 
             if (currentObject !== undefined && pluginName !== undefined 
                 && mdlName !== undefined && genName !== undefined && tmpName !== undefined){
-                console.log('all defined');
                 if (this.model.get('browsingLocalGenerators')){
                     var gens = currentObject.plugins[pluginName][mdlName];
-                    console.log(gens);
-                    console.log(genName);
                     for (var i = 0; i < gens.length; i++){
                         if (gens[i].name === this.model.get('currentGenerator')) {
                             gens[i].templates[tmpName] = this.templateEditor.getValue();
                         }   
                     }
-                    console.log(currentObject);
                     this.model.set('currentObject', currentObject)
                 }
             }
@@ -314,15 +312,11 @@ define([
                 console.log('all defined');
                 if (this.model.get('browsingLocalGenerators')){
                     var gens = currentObject.plugins[pluginName][mdlName];
-                    console.log('Browsing local..gens: ');
-                    console.log(gens);
-                    console.log(genName);
                     for (var i = 0; i < gens.length; i++){
                         if (gens[i].name === this.model.get('currentGenerator')) {
                             gens[i].code = this.codeEditor.getValue();
                         }   
                     }
-                    console.log(currentObject);
                     this.model.set('currentObject', currentObject)
                 }
             }
@@ -352,12 +346,8 @@ define([
 
             if (currentObject !== undefined && pluginName !== undefined 
                 && mdlName !== undefined && genName !== undefined){
-                console.log('all defined');
                 if (this.model.get('browsingLocalGenerators')){
                     var gens = currentObject.plugins[pluginName][mdlName];
-                    console.log('Browsing local..gens: ');
-                    console.log(gens);
-                    console.log(genName);
                     for (var i = 0; i < gens.length; i++){
                         if (gens[i].name === this.model.get('currentGenerator')) {
                             var defs = {};
