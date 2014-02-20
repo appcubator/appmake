@@ -135,14 +135,6 @@ functions.push({
     }
 });
 
-var model = { generate: "models.model",
-              data: {
-                  name: 'User',
-                  fields: fields,
-                  functions: functions
-              }
-};
-
 functions.push({
     name: 'login',
     enableAPI: true,
@@ -168,3 +160,10 @@ functions.push({
 }
 });
 
+var model = { generate: "models.model",
+              data: {
+                  name: 'User',
+                  fields: fields,
+                  functions: functions
+              }
+};

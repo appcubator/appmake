@@ -20,7 +20,7 @@ exports.doPostExpandMagic = function(app, callback) {
             if (sm.enableAPI && (!sm.instancemethod)) { // instancemethods cant do this.
                 modelDefs[model.name] = thisModelDef; // this need only happens once but repeatedly doesn't hurt and code is easier this way.
                 modelDefs[model.name].functions[sm.name] = ''; // TODO custom url can go here.
-                app.routes.push(expander.expand(app.plugins, app.generators, {
+                app.routes.push(expander.expand(app.generators, {
                     generate: "routes.apiroute",
                     data: { modelName: model.name,
                             methodName: sm.name } // TODO custom url can go here as well.
