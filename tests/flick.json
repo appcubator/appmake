@@ -270,7 +270,7 @@
       }
     }
   ],
-  "generators": {
+  "plugins": {
     "flickrpickr": {
       "uielements": [
         {
