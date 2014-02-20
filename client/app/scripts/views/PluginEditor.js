@@ -211,12 +211,12 @@ define([
                 if(typeof generated == "object") {
                     var str = "";
                     _.each(generated, function(val, key) {
-                        str += '<h3>' + key + '</h3><div>'+val+'</div>';
+                        str += '<h3>' + key + '</h3><pre>'+val+'</pre>';
                     });
                      $('#generatedCode').html(str);
                 }
                 else if (typeof generated == "string") {
-                    $('#generatedCode').html(generated);
+                    $('#generatedCode').html('<pre>' + generated + '</pre>');
                 }
 
             }
@@ -263,7 +263,7 @@ define([
             }            
         },
 
-        saveTemplateEditor: function(){
+        updateCurrentTemplate: function(){
             console.log("Saving templates...")
             var currentObject = this.model.get('currentObject');
             var pluginName = this.model.get('currentPlugin');
