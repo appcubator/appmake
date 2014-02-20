@@ -109,10 +109,10 @@ exports.parseDir = function (dirPath) {
 
     app.routes = parseRoutes(dirContents['routes.js']);
 
-    app.generators = {};
+    app.plugins = {};
     for (var generatorName in dirContents.generators) {
         // Assume the name of the package is its folder name
-        app.generators[generatorName] = {};
+        app.plugins[generatorName] = {};
         if (typeof(dirContents.generators[generatorName]) !== typeof({})) {
             // case file
             console.log("Warning: root generators should go in appmake. I'm ignoring whatever this is!: " + generatorName);
@@ -121,7 +121,7 @@ exports.parseDir = function (dirPath) {
             for (var moduleFileName in dirContents.generators[generatorName]) {
                 // Assume moduleFileName ends with .js and module structure is only 1 level deep
                 var moduleName = moduleFileName.substr(0, moduleFileName.length - 3);
-                app.generators[generatorName][moduleName] = parseGenerator(moduleName, dirContents.generators[generatorName][moduleFileName]);
+                app.plugins[generatorName][moduleName] = parseGenerator(moduleName, dirContents.generators[generatorName][moduleFileName]);
             }
         }
 

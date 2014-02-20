@@ -12,7 +12,7 @@ app.use(express.bodyParser());
 
 /*
  * Notes:
- *  -Below, app.generators refers to an array of the local app generators. For simple testing, an empty array is sufficient.
+ *  -Below, app.plugins refers to an array of the local app generators. For simple testing, an empty array is sufficient.
  *  -The request bodies should be JSON strings.
  *  -Make sure to set the following HTTP Header
  *      Content-Type: application/json
@@ -22,14 +22,14 @@ app.use(express.bodyParser());
 
 
 // perform one expansion of a generator
-// POST [ app.generators, {generate:'blah', data:{blah} ]
+// POST [ app.plugins, {generate:'blah', data:{blah} ]
 app.post('/expandOnce/', function(req, res){
     var argv = req.body;
     res.json(expander.expandOnce(argv[0], argv[1]));
 });
 
 // expand a generator completely
-// POST [ app.generators, {generate:'blah', data:{blah} ]
+// POST [ app.plugins, {generate:'blah', data:{blah} ]
 app.post('/expand/', function(req, res){
     var argv = req.body;
     res.json(expander.expand(argv[0], argv[1]));
