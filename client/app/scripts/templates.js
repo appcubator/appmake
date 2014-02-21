@@ -101,7 +101,7 @@ __p += '<!-- Load file modal -->\n<div class="modal fade" id="loadModal" tabinde
 __p += '\n\t\t\t\t\t  \t\n\t\t\t\t\t  \t';
  var o = app.currentObject.plugins[app.currentPlugin][app.currentModule]; ;
 __p += '\n\t\t\t\t\t  \t';
- for (var i = 0; i < o.length; o++) { ;
+ for (var i = 0; i < o.length; i++) { ;
 __p += '\n\t\t\t\t\t  \t\t';
  if (o[i].name === app.currentGenerator) { ;
 __p += '\n\t\t\t\t\t  \t\t\t';

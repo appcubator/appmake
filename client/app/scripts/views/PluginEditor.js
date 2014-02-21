@@ -106,6 +106,8 @@ define([
                 }
                 this.model.set('currentObject', obj);
                 console.log(this.model.get('currentObject'));
+            } else {
+                alert('check me out in the debugger');
             }
             this.setTemplateEditor();
             this.setCodeEditor();

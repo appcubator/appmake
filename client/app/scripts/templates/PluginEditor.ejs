@@ -109,7 +109,7 @@
 				   	<% if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { %>
 					  	
 					  	<% var o = app.currentObject.plugins[app.currentPlugin][app.currentModule]; %>
-					  	<% for (var i = 0; i < o.length; o++) { %>
+					  	<% for (var i = 0; i < o.length; i++) { %>
 					  		<% if (o[i].name === app.currentGenerator) { %>
 					  			<% for (template in o[i].templates) { %>
 					  				<% if (template == app.currentTemplate) { %>
