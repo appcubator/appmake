@@ -211,7 +211,7 @@ define([
                 if(typeof generated == "object") {
                     var str = "";
                     _.each(generated, function(val, key) {
-                        str += '<h3>' + key + '</h3><pre>'+val+'</pre>';
+                        str += '<h4>' + key + '</h4><pre>'+val+'</pre>';
                     });
                      $('#generatedCode').html(str);
                 }

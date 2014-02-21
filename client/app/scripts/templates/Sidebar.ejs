@@ -1,5 +1,6 @@
 <% if (app.browsingLocalGenerators === true) { %>
 	<div id='pluginSelector'>
+		<h6><span class="label label-default">CURRENT PLUGIN</span></h6>
 		<div class="dropdown">
 		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#">
 		  	<%= app.currentPlugin %><span class="caret"></span>
@@ -23,7 +24,7 @@
 		</div>
 
 		<div class='pluginInfo'>
-			<h6><span class="label label-default">AUTHOR</span>  
+<!-- 			<h6><span class="label label-default">AUTHOR</span>  
 				<input disabled type='text' placeholder='Your Email'> </input>  
 			</h6>
 
@@ -33,53 +34,44 @@
 
 			<h6><span class="label label-default">REPO</span>  
 				<input disabled type='text' placeholder='git.com/yourRepo'> </input>  
-			</h6>
+			</h6> -->
 
-			<hr>
-			<h6><span class="label label-default">CURRENT MODULE</span>  
-
-				<div class="input-group">
-				  <input type="text" id='newModuleNameInput' class="form-control">
-				  <span class="input-group-btn">
-				    <button class="btn btn-default" id='createNewModuleButton'type="button"> Add Module</button>
-				  </span>
-
-				</div><!-- /input-group -->
-
-			</h6>
-
-
+			<h6><span class="label label-default">CURRENT MODULE</span></h6>
 
 				<div class="dropdown">
 
-				  <a class='btn btn-default btn-block btn-default' data-toggle="dropdown" id='moduleSelector' href="#">
+				  	<a class='btn btn-default btn-block btn-default' data-toggle="dropdown" id='moduleSelector' href="#">
 				  		<% if (app.currentModule === undefined) { %>
 				  			No module selected
 				  		<% } else {%>
 				  			<%= app.currentModule %> <span class="caret"></span>
 				  		<% } %>
-				  </a>
+				  	</a>
 
-				  <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
-				  		<% if (app.browsingLocalGenerators === true) { %>
-				  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
-				  		<% } else {%>
-				  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
-				  		<% } %>
-				  		<% for (mdl in mdls) {  console.log(mdl); %>
-				  		<li class="selectModuleButton list-group-item" moduleName='<%=mdl%>'> <%=mdl%> </li>
-				  		<% } %>				  		
-				  </ul>
+					 <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
+					  		<% if (app.browsingLocalGenerators === true) { %>
+					  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
+					  		<% } else {%>
+					  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
+					  		<% } %>
+					  		<% for (mdl in mdls) {  console.log(mdl); %>
+					  		<li class="selectModuleButton list-group-item" moduleName='<%=mdl%>'> <%=mdl%> </li>
+					  		<% } %>				  		
+					 </ul>
 				</div>
+				<div class="input-group">
+				 	<input type="text" id='newModuleNameInput' class="form-control"></input>
+				  	<span class="input-group-btn">
+				    	<button class="btn btn-primary btn-sm" id='createNewModuleButton'type="button"> Create Module</button>
+				  	</span>
+				</div><!-- /input-group -->
 		</div>
 	</div>
 <% }  %>
 
 <div class='' id='generatorBrowser'>
 
-	<h3> <small> generators </h3>
-		<input id='newGeneratorNameInput' class='form-control' placeholder='Generator Name'> </input>
-		<button id='createNewGeneratorButton' class='btn btn-lg btn-default btn-block'> New generator </button>
+		<h6><span class="label label-default">GENERATORS</span></h6>
 		<ul class="list-group generators">
 		  <% if ((app.currentObject !== undefined) && (app.currentModule !== undefined) && (app.currentPlugin !== undefined)) { %>
 		  	<% if (app.browsingLocalGenerators) { %>
@@ -100,5 +92,10 @@
 		  <% } %>
 		</ul>
 
-
+		<div class="input-group">
+			<input id='newGeneratorNameInput' class='form-control' placeholder='Generator Name'> </input>
+			<span class="input-group-btn">
+			<button id='createNewGeneratorButton' class='btn btn-primary btn-sm'>Create Generator </button>
+			</span>
+		</div>
 </div>

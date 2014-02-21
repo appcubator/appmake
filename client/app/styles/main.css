@@ -7799,10 +7799,10 @@ body {
 }
 /* line 156, ../../app/styles/main.scss */
 #pluginEditor .pluginInfo {
-  height: 240px;
   padding-left: 5px;
   padding-top: 5px;
   margin-top: 9px;
+  margin-bottom: 10px;
 }
 /* line 163, ../../app/styles/main.scss */
 #pluginEditor .pluginInfo #newModuleNameInput {
@@ -7824,7 +7824,6 @@ body {
 /* line 180, ../../app/styles/main.scss */
 #pluginEditor #pluginSelector input {
   color: black;
-  border-radius: 5px;
   background-color: white;
   height: 20px;
   padding-left: 6px;
@@ -7867,6 +7866,11 @@ body {
   margin-top: 20px;
   margin-left: 3px;
   margin-right: 30px;
+}
+
+#defaultsEditor {
+  height: 300px;
+  margin-bottom: 30px;
 }
 /* line 222, ../../app/styles/main.scss */
 #pluginEditor #templatePanel #templateEditor {

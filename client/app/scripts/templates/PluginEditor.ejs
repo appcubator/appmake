@@ -76,15 +76,7 @@
 
 <!-- End  -->
 
-
-<div id='pluginEditor' class='container-fluid'>
-	<div class='' id='pluginNavigator'>
-		<div class='col-md-3' id='pluginBrowser'>
-
-		</div>
-
-		<div class='col-md-6' id='editorPanel'> 
-			<div class='navbar'>
+<div class='navbar'>
 				<h3>Appcubator</h3>
 				<span class='' id='actionBar'>
 					<div class="btn-group float-right">
@@ -99,26 +91,19 @@
 					  <button id='publishButton' type="button" class="btn btn-success btn-sm">Publish</button>
 					</div>
 				</span>
-				<span class='float-right' id='searchBar'>
+<!-- 				<span class='float-right' id='searchBar'>
 					<input type="text" class="form-control">
 				    <button class="btn btn-default" type="button">Go!</button>
-				</span>
-			</div>
+				</span> -->
+</div>
 
-			<div><small>Template Editor</small>
-
-				<span id='createTemplateGroup' class="pull-right">
-					<div class="input-group">
-					  <span class="input-group-btn">
-					    <button class="btn btn-default" id='createNewTemplateButton' type="button">Create</button>
-					  </span>	
-					  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
-					</div><!-- /input-group -->
-				</span>
-
-
-			</div>
-
+<div id='pluginEditor' class='container-fluid'>
+	<div class='' id='pluginNavigator'>
+		
+		<div class='col-md-3' id='pluginBrowser'></div>
+		
+		<div class='col-md-6' id='editorPanel'> 
+			<h3>Template Editor</h3>
 			<div class='row' id='templatePanel'> 
 				<ul class="nav nav-tabs">
 				   	<% if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { %>
@@ -139,24 +124,42 @@
 					  		<% } %>
 					  	<% } %>
 				  	<% } %>
-
-
+				  	<li class="pull-right">
+				  		<span id='createTemplateGroup' class="pull-right">
+							<div class="input-group">
+							  <span class="input-group-btn">
+							    <button class="btn btn-default" id='createNewTemplateButton' type="button">Create</button>
+							  </span>	
+							  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
+							</div><!-- /input-group -->
+						</span>
+				  	</li>
 				</ul>
-
-				<div class='col-md-12' > <div id='templateEditor'>  </div>  </div>
+				<div class='col-md-12'>
+					<div id='templateEditor'></div>
+				</div>
 			</div>
-			</hr>
-			<h3> <small>Code Editor</small> </h3>
 
+			</hr>
+
+			<h3>Code Editor</h3>
 			<div class='row' id='codePanel'> 
 				<div class='col-md-12' > <div id='codeEditor'>   </div> </div>
 			</div>
 
+			</hr>
+
+			<h3>Defaults Editor</h3>
+			<div class='col-md-12' >
+				<div id='defaultsEditor'></div>
+			</div>
+
 		</div>
 		<div class='col-md-3' id='generatedPanel'> 
-			<div><small>Defaults Editor</small>
-			<div class='col-md-12' > <div id='defaultsEditor'>   </div> </div>
-			<div><small>Generated Code</small>
-			<div class='col-md-12' > <div id='generatedCode'>   </div> </div>
+			<h3>Generated Code</h3>
+			<div class='col-md-12'>
+				<div id='generatedCode'></div>
+			</div>
+		</div>
 	</div>
 </div>
