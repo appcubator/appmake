@@ -39,12 +39,8 @@
 				  	</a>
 
 					 <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
-					  		<% if (app.browsingLocalGenerators === true) { %>
-					  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
-					  		<% } else {%>
-					  			<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
-					  		<% } %>
-					  		<% for (mdl in mdls) {  console.log(mdl); %>
+					  		<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
+					  		<% for (mdl in mdls) { if(mdl == "metadata") continue; %>
 					  		<li class="selectModuleButton list-group-item" moduleName='<%=mdl%>'> <%=mdl%> </li>
 					  		<% } %>				  		
 					 </ul>

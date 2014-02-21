@@ -27,6 +27,7 @@ define([
             'click .selectGeneratorButton': 'generatorSelected',
             'click .selectTemplateButton': 'templateSelected',
             'click #createNewTemplateButton': 'createNewTemplate',
+            'click .refreshGeneratedBtn' : 'refreshGeneratedCode',
             'keyup #nameofplugin' : 'pluginNameChanged',
             'keyup #descriptionofplugin': 'pluginDescriptionChanged'
         },
@@ -195,6 +196,7 @@ define([
 
             var o = this.model.get('currentObject');
             o = o.plugins[this.model.get('currentPlugin')];
+            console.log(o);
             if(o.metadata && o.metadata.name) $('#nameofplugin').val(o.metadata.name);
             if(o.metadata && o.metadata.description) $('#descriptionofplugin').val(o.metadata.description);
 
