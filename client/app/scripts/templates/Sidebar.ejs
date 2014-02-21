@@ -6,22 +6,19 @@
 		  	<%= app.currentPlugin %><span class="caret"></span>
 		  </a>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-		  	<li id='createNewPlugin'> 
-		  		<a href='#'>  
-		  		<span> <img height='40' width='40' src='http://bit.ly/1ePoLZj'>  </img> 
-		  	 	</span>New Plugin 
-		  	 	</a>
-		  	</li>
-
-		  	<li id='My Generators'> 
-		  		<a href='#'>  
-		  		<span> <img height='40' width='40' src='http://bit.ly/NBhukD'>  </img> 
-		  	 	</span> My Generators 
-		  	 	</a>
-		  	</li>
-
+		  	<% _.each(app.currentObject.plugins, function(plugin, key) { %>
+				<% if (key != app.currentPlugin) { %>
+				<li pluginname='<%= key %>' class='selectPluginButton'><a href='#'><%= key %></a></li>
+				<% }  %>
+			<% }); %>
 		  </ul>
 		</div>
+		<div class="input-group">
+		 	<input type="text" id='newPluginNameInput' class="form-control"></input>
+		  	<span class="input-group-btn">
+		    	<button class="btn btn-primary btn-sm" id='createNewPluginButton'type="button"> Create Plugin</button>
+			</span>
+		</div><!-- /input-group -->
 
 		<div class='pluginInfo'>
 <!-- 			<h6><span class="label label-default">AUTHOR</span>  

@@ -19,8 +19,10 @@ define([
             'click #previewButton': 'previewGenerator',
             'click #publishButton': 'publishPlugin',
             'click #downloadButton': 'downloadJSON',
+            'click #createNewPluginButton': 'createNewPlugin',
             'click #createNewModuleButton': 'createNewModule',
             'click #createNewGeneratorButton': 'createNewGenerator',
+            'click .selectPluginButton': 'pluginSelected',
             'click .selectModuleButton': 'moduleSelected',
             'click .selectGeneratorButton': 'generatorSelected',
             'click .selectTemplateButton': 'templateSelected',
@@ -117,12 +119,22 @@ define([
             $(modal).find('#downloadEditor').text(o);
         },
 
-        createNewGenerator: function(event){
-            event.stopPropagation();
-            event.preventDefault();
+        createNewPlugin: function(event) {
+            var newPluginName = $.trim($(this.$el.find('#newPluginNameInput')).val());
+            
+            var o = this.model.get('currentObject');
 
-            console.log("create generators");
+            if (newPluginName !== "" && !o.plugins[newPluginName]){
+                o.plugins[newPluginName] = {};
+                this.model.set('currentObject', o, {silent: true});
+                this.model.set('currentPlugin', newPluginName, {silent: true});
+                this.model.setupCurrentModule({});
+            }
+        },
+
+        createNewGenerator: function(event){
             var newGeneratorName = $.trim($(this.$el.find('#newGeneratorNameInput')).val());
+
             if (newGeneratorName !== "" && this.model.get('currentModule') !== undefined){
                 if (this.model.get('browsingLocalGenerators')){
                     var code = "//example " + Math.random().toString().slice(3, 5);
@@ -141,6 +153,7 @@ define([
             }
             this.refreshSidebar();
         },
+
         createNewModule: function(event){
             event.stopPropagation();
             event.preventDefault(); 
@@ -223,6 +236,16 @@ define([
             catch (e) {
                 $('#generatedCode').html("Could not be generated: "+ e);
             }
+        },
+
+        pluginSelected: function(event) {
+
+            var pluginName = $(event.currentTarget).attr('pluginname');
+
+            console.log(pluginName);
+            this.model.set('currentPlugin', pluginName);
+            this.model.setupCurrentModule({});
+            this.setCodeEditor();
         },
 
         moduleSelected: function(event){

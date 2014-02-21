@@ -25,18 +25,45 @@ define([
                 this.set('currentPlugin', pluginName);
             }
 
+            this.setupCurrentModule(bone);
+        },
+
+        setupCurrentModule: function(bone) {
+
+            var o = this.get('currentObject');
 
             if (!bone.currentModule && this.has('currentPlugin')) {
-                var pluginModule = _.keys(bone.currentObject.plugins[pluginName])[0];
+                var pluginName = this.get('currentPlugin');
+                var pluginModule = _.keys(o.plugins[pluginName])[0];
                 this.set('currentModule', pluginModule);
             }
 
+            this.setupCurrentGenerator(bone);
+        },
+
+        setupCurrentGenerator: function (bone) {
+            var o = this.get('currentObject');
+            var pluginModule = this.get('currentModule');
+            var pluginName = this.get('currentPlugin');
+
             if (!bone.currentModule && this.has('currentModule')) {
-                var generator = bone.currentObject.plugins[pluginName][pluginModule][0];
+                var generator = o.plugins[pluginName][pluginModule][0];
                 var generatorName = generator.name;
                 this.set('currentGenerator', generatorName);
             }
 
+            this.setupCurrentTemplate(bone);
+        },
+
+        setupCurrentTemplate: function(bone) {
+
+            var o = this.get('currentObject');
+            var pluginName = this.get('currentPlugin');
+            var pluginModule = this.get('currentModule');
+            
+            if(!o.plugins[pluginName][pluginModule]) return;
+
+            var generator = o.plugins[pluginName][pluginModule][0];
 
             if (!bone.currentModule && this.has('currentGenerator') && _.keys(generator.templates)) {
                 var templateName = _.keys(generator.templates)[0];
@@ -44,6 +71,7 @@ define([
             }
 
         },
+
         processList: function(genList){
         	var newGenList = _.map(genList, function (g){
         		g.tokens = [g.name, g.packageName, g.moduleName, g.version, "all"]

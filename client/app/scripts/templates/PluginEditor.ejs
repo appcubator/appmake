@@ -107,11 +107,8 @@
 			<div class='row' id='templatePanel'> 
 				<ul class="nav nav-tabs">
 				   	<% if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { %>
-					  	<% if (app.browsingLocalGenerators) { %>
-					  		<% var o = app.currentObject.plugins[app.currentPlugin][app.currentModule]; %>
-					  	<%} else { %>
-					  		<% var o = app.currentObject.plugins[app.currentPlugin][app.currentModule]; %>
-					  	<% } %>
+					  	
+					  	<% var o = app.currentObject.plugins[app.currentPlugin][app.currentModule]; %>
 					  	<% for (var i = 0; i < o.length; o++) { %>
 					  		<% if (o[i].name === app.currentGenerator) { %>
 					  			<% for (template in o[i].templates) { %>
