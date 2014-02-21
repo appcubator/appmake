@@ -26,7 +26,9 @@ define([
             'click .selectModuleButton': 'moduleSelected',
             'click .selectGeneratorButton': 'generatorSelected',
             'click .selectTemplateButton': 'templateSelected',
-            'click #createNewTemplateButton': 'createNewTemplate'
+            'click #createNewTemplateButton': 'createNewTemplate',
+            'keyup #nameofplugin' : 'pluginNameChanged',
+            'keyup #descriptionofplugin': 'pluginDescriptionChanged'
         },
         
         initialize: function(){
@@ -190,6 +192,12 @@ define([
             var str = JST['app/scripts/templates/Sidebar.ejs'](state);
             this.$el.find('#pluginBrowser').html(str);
             $(this.$el.find("#moduleSelector")).dropdown();
+
+            var o = this.model.get('currentObject');
+            o = o.plugins[this.model.get('currentPlugin')];
+            if(o.metadata && o.metadata.name) $('#nameofplugin').val(o.metadata.name);
+            if(o.metadata && o.metadata.description) $('#descriptionofplugin').val(o.metadata.description);
+
         },
 
         refreshGeneratedCode: function() {
@@ -399,16 +407,37 @@ define([
                 }
             }
         },
+
+        pluginNameChanged: function() {
+            var o = this.model.get('currentObject');
+            o = o.plugins[this.model.get('currentPlugin')];
+            console.log(o);
+            console.log("changed");
+            if(!o.metadata) o.metadata = {};
+
+            o.metadata.name = $('#nameofplugin').val();
+        },
+
+        pluginDescriptionChanged: function() {
+            var o = this.model.get('currentObject');
+            o = o.plugins[this.model.get('currentPlugin')];
+            if(!o.metadata) o.metadata = {};
+
+            o.metadata.description = $('#descriptionofplugin').val();
+        },
+
         getCurrentPluginList: function(){
             if (this.model.get('browsingLocalGenerators')){
                 return (this.model.get('currentObject').plugins);
             } else {
                 return (this.model.get('currentObject').plugins);
             }
-        },                
+        },    
+
         loadAppstate: function(){
             $('#loadModal').modal();
         },
+
         saveAppstate: function(){
 
             // this.saveTemplateEditor();
