@@ -62,5 +62,23 @@ generators.push({
     }
 });
 
+generators.push({
+    "name": "list",
+    "templates": {
+        "html": "<div id=\"<%= modelName %>-list-<%= id %>\">\n</div>",
+        "js": "models.<%= modelName %>.find<%= modelName %>({}, function(err, data){\n    \n    var $list = $('#<%= modelName %>-list-<%= id %>');\n    var template = <%= rowTemplate %>;\n    \n    _.each(data, function(d) {\n        $list.append(template);\n    });\n\n});"
+    },
+    "code": "function(data, templates) {\n    \n    if(!data.id || data.id == -1) {\n        data.id = Math.floor(Math.random()*11);\n    }\n    \n    return {\n        'html': \"<div id=\\\"piclist\\\"></div>\",\n        'js': templates.js(data),\n        'css': \"\"\n    }\n}",
+    "version": "0.1",
+    "defaults": {
+        "style": "",
+        "modelName": "DefaultTable",
+        "rowHeight": "auto",
+        "className": "",
+        "id": -1,
+        "row": []
+    }
+});
+
 
 exports.generators = generators;
