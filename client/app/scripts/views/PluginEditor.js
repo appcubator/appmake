@@ -418,6 +418,7 @@ define([
             console.log(o);
             console.log("changed");
 
+            if(!o.metadata) o.metadata = {};
             o.metadata.name = $('#nameofplugin').val();
         },
 
@@ -425,6 +426,7 @@ define([
             var o = this.model.get('currentObject');
             o = o.plugins[this.model.get('currentPlugin')];
 
+            if(!o.metadata) o.metadata = {};
             o.metadata.description = $('#descriptionofplugin').val();
         },
 
