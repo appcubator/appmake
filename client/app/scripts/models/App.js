@@ -20,20 +20,26 @@ define([
         },
         initialize: function(bone){
 
-            if (!bone.currentPlugin && _.keys(bone.currentObject.plugins) ) {
+            if (!bone.currentPlugin && _.keys(bone.currentObject.plugins)) {
                 var pluginName = _.keys(bone.currentObject.plugins)[0];
                 this.set('currentPlugin', pluginName);
             }
 
-            this.setupCurrentModule(bone);
+            if(pluginName) {
+                this.setupCurrentModule(bone);
+                var metadata = this.get('currentObject').plugins[pluginName].metadata;
+                this.get('currentObject').plugins[pluginName].metadata = metadata || {};
+            }
         },
 
         setupCurrentModule: function(bone) {
 
             var o = this.get('currentObject');
+            var pluginName = this.get('currentPlugin');
+
+            if(!o.plugins[pluginName]) return;
 
             if (!bone.currentModule && this.has('currentPlugin')) {
-                var pluginName = this.get('currentPlugin');
                 var pluginModule = _.keys(o.plugins[pluginName])[0];
                 this.set('currentModule', pluginModule);
             }

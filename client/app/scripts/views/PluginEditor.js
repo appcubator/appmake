@@ -26,7 +26,10 @@ define([
             'click .selectModuleButton': 'moduleSelected',
             'click .selectGeneratorButton': 'generatorSelected',
             'click .selectTemplateButton': 'templateSelected',
-            'click #createNewTemplateButton': 'createNewTemplate'
+            'click #createNewTemplateButton': 'createNewTemplate',
+            'click .refreshGeneratedBtn' : 'refreshGeneratedCode',
+            'keyup #nameofplugin' : 'pluginNameChanged',
+            'keyup #descriptionofplugin': 'pluginDescriptionChanged'
         },
         
         initialize: function(){
@@ -128,8 +131,9 @@ define([
 
             if (newPluginName !== "" && !o.plugins[newPluginName]){
                 o.plugins[newPluginName] = {};
+
                 this.model.set('currentObject', o, {silent: true});
-                this.model.set('currentPlugin', newPluginName, {silent: true});
+                this.model.set('currentPlugin', newPluginName);
                 this.model.setupCurrentModule({});
             }
         },
@@ -190,6 +194,13 @@ define([
             var str = JST['app/scripts/templates/Sidebar.ejs'](state);
             this.$el.find('#pluginBrowser').html(str);
             $(this.$el.find("#moduleSelector")).dropdown();
+
+            var o = this.model.get('currentObject');
+            o = o.plugins[this.model.get('currentPlugin')];
+            console.log(o);
+            if(o && o.metadata && o.metadata.name) $('#nameofplugin').val(o.metadata.name);
+            if(o && o.metadata && o.metadata.description) $('#descriptionofplugin').val(o.metadata.description);
+
         },
 
         refreshGeneratedCode: function() {
@@ -363,7 +374,7 @@ define([
         },
 
         updateDefaultsEditor: function() {
-            console.log("Saving code...")
+            console.log("Saving defaults...")
             var currentObject = this.model.get('currentObject');
             var pluginName = this.model.get('currentPlugin');
             var mdlName = this.model.get('currentModule');
@@ -381,7 +392,8 @@ define([
                                 defs = jQuery.parseJSON(this.defaultsEditor.getValue())
                             }
                             catch(e) {
-
+                                console.log("Couldnt parse defaults");
+                                console.log(e);
                             }
 
                             gens[i].defaults = defs;
@@ -399,16 +411,37 @@ define([
                 }
             }
         },
+
+        pluginNameChanged: function() {
+            var o = this.model.get('currentObject');
+            o = o.plugins[this.model.get('currentPlugin')];
+            console.log(o);
+            console.log("changed");
+
+            if(!o.metadata) o.metadata = {};
+            o.metadata.name = $('#nameofplugin').val();
+        },
+
+        pluginDescriptionChanged: function() {
+            var o = this.model.get('currentObject');
+            o = o.plugins[this.model.get('currentPlugin')];
+
+            if(!o.metadata) o.metadata = {};
+            o.metadata.description = $('#descriptionofplugin').val();
+        },
+
         getCurrentPluginList: function(){
             if (this.model.get('browsingLocalGenerators')){
                 return (this.model.get('currentObject').plugins);
             } else {
                 return (this.model.get('currentObject').plugins);
             }
-        },                
+        },    
+
         loadAppstate: function(){
             $('#loadModal').modal();
         },
+
         saveAppstate: function(){
 
             // this.saveTemplateEditor();

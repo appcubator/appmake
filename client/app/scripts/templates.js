@@ -128,7 +128,7 @@ __p += '\n\t\t\t\t\t  \t';
  } ;
 __p += '\n\t\t\t\t  \t';
  } ;
-__p += '\n\t\t\t\t  \t<li class="pull-right">\n\t\t\t\t  \t\t<span id=\'createTemplateGroup\' class="pull-right">\n\t\t\t\t\t\t\t<div class="input-group">\n\t\t\t\t\t\t\t  <span class="input-group-btn">\n\t\t\t\t\t\t\t    <button class="btn btn-default" id=\'createNewTemplateButton\' type="button">Create</button>\n\t\t\t\t\t\t\t  </span>\t\n\t\t\t\t\t\t\t  <input type="text" placeholder="template name"id=\'newTemplateNameInput\' class="form-control">\n\t\t\t\t\t\t\t</div><!-- /input-group -->\n\t\t\t\t\t\t</span>\n\t\t\t\t  \t</li>\n\t\t\t\t</ul>\n\t\t\t\t<div class=\'col-md-12\'>\n\t\t\t\t\t<div id=\'templateEditor\'></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t</hr>\n\n\t\t\t<h3>Code Editor</h3>\n\t\t\t<div class=\'row\' id=\'codePanel\'> \n\t\t\t\t<div class=\'col-md-12\' > <div id=\'codeEditor\'>   </div> </div>\n\t\t\t</div>\n\n\t\t\t</hr>\n\n\t\t\t<h3>Defaults Editor</h3>\n\t\t\t<div class=\'col-md-12\' >\n\t\t\t\t<div id=\'defaultsEditor\'></div>\n\t\t\t</div>\n\n\t\t</div>\n\t\t<div class=\'col-md-3\' id=\'generatedPanel\'> \n\t\t\t<h3>Generated Code</h3>\n\t\t\t<div class=\'col-md-12\'>\n\t\t\t\t<div id=\'generatedCode\'></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n';
+__p += '\n\t\t\t\t  \t<li class="pull-right">\n\t\t\t\t  \t\t<span id=\'createTemplateGroup\' class="pull-right">\n\t\t\t\t\t\t\t<div class="input-group">\n\t\t\t\t\t\t\t  <span class="input-group-btn">\n\t\t\t\t\t\t\t    <button class="btn btn-default" id=\'createNewTemplateButton\' type="button">Create</button>\n\t\t\t\t\t\t\t  </span>\t\n\t\t\t\t\t\t\t  <input type="text" placeholder="template name"id=\'newTemplateNameInput\' class="form-control">\n\t\t\t\t\t\t\t</div><!-- /input-group -->\n\t\t\t\t\t\t</span>\n\t\t\t\t  \t</li>\n\t\t\t\t</ul>\n\t\t\t\t<div class=\'col-md-12\'>\n\t\t\t\t\t<div id=\'templateEditor\'></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t</hr>\n\n\t\t\t<h3>Code Editor</h3>\n\t\t\t<div class=\'row\' id=\'codePanel\'> \n\t\t\t\t<div class=\'col-md-12\' > <div id=\'codeEditor\'>   </div> </div>\n\t\t\t</div>\n\n\t\t\t</hr>\n\n\t\t\t<h3>Defaults Editor</h3>\n\t\t\t<div class=\'col-md-12\' >\n\t\t\t\t<div id=\'defaultsEditor\'></div>\n\t\t\t</div>\n\n\t\t</div>\n\t\t<div class=\'col-md-3\' id=\'generatedPanel\'> \n\t\t\t<h3 class="refreshGeneratedBtn">Generated Code</h3>\n\t\t\t<div class=\'col-md-12\'>\n\t\t\t\t<div id=\'generatedCode\'></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n';
 
 }
 return __p
@@ -155,7 +155,7 @@ __p += '\n\t\t\t\t<li pluginname=\'' +
  }  ;
 __p += '\n\t\t\t';
  }); ;
-__p += '\n\t\t  </ul>\n\t\t</div>\n\t\t<div class="input-group">\n\t\t \t<input type="text" id=\'newPluginNameInput\' class="form-control"></input>\n\t\t  \t<span class="input-group-btn">\n\t\t    \t<button class="btn btn-primary btn-sm" id=\'createNewPluginButton\'type="button"> Create Plugin</button>\n\t\t\t</span>\n\t\t</div><!-- /input-group -->\n\n\t\t<div class=\'pluginInfo\'>\n<!-- \t\t\t<h6><span class="label label-default">AUTHOR</span>  \n\t\t\t\t<input disabled type=\'text\' placeholder=\'Your Email\'> </input>  \n\t\t\t</h6>\n\n\t\t\t<h6><span class="label label-default">DOCS</span>   \n\t\t\t\t<input disabled type=\'text\'  placeholder=\'http://yourdocs.com\'> </input>  \n\t\t\t</h6>\n\n\t\t\t<h6><span class="label label-default">REPO</span>  \n\t\t\t\t<input disabled type=\'text\' placeholder=\'git.com/yourRepo\'> </input>  \n\t\t\t</h6> -->\n\n\t\t\t<h6><span class="label label-default">CURRENT MODULE</span></h6>\n\n\t\t\t\t<div class="dropdown">\n\n\t\t\t\t  \t<a class=\'btn btn-default btn-block btn-default\' data-toggle="dropdown" id=\'moduleSelector\' href="#">\n\t\t\t\t  \t\t';
+__p += '\n\t\t  </ul>\n\t\t</div>\n\t\t<div class="input-group">\n\t\t \t<input type="text" id=\'newPluginNameInput\' class="form-control"></input>\n\t\t  \t<span class="input-group-btn">\n\t\t    \t<button class="btn btn-primary btn-sm" id=\'createNewPluginButton\'type="button"> Create Plugin</button>\n\t\t\t</span>\n\t\t</div><!-- /input-group -->\n\n\t\t<div class=\'pluginInfo\'>\n\t\t\t<h6><span class="label label-default">Name</span></h6>\n\t\t\t<input type=\'text\' id="nameofplugin" placeholder=\'Name of the Plugin\'> </input>  \n\t\t\t<h6><span class="label label-default">Description</span></h6>\n\t\t\t<input type=\'text\' id="descriptionofplugin" placeholder=\'This plugin helps you do awesome stuff.\'></input>  \n\t\t\t\n\t\t\t<h6><span class="label label-default">CURRENT MODULE</span></h6>\n\n\t\t\t\t<div class="dropdown">\n\n\t\t\t\t  \t<a class=\'btn btn-default btn-block btn-default\' data-toggle="dropdown" id=\'moduleSelector\' href="#">\n\t\t\t\t  \t\t';
  if (app.currentModule === undefined) { ;
 __p += '\n\t\t\t\t  \t\t\tNo module selected\n\t\t\t\t  \t\t';
  } else {;
@@ -164,17 +164,9 @@ __p += '\n\t\t\t\t  \t\t\t' +
 ' <span class="caret"></span>\n\t\t\t\t  \t\t';
  } ;
 __p += '\n\t\t\t\t  \t</a>\n\n\t\t\t\t\t <ul class="dropdown-menu list-group" id=\'moduleList\' role="menu" aria-labelledby="dLabel">\n\t\t\t\t\t  \t\t';
- if (app.browsingLocalGenerators === true) { ;
-__p += '\n\t\t\t\t\t  \t\t\t';
  var mdls = app.currentObject.plugins[app.currentPlugin] ;
 __p += '\n\t\t\t\t\t  \t\t';
- } else {;
-__p += '\n\t\t\t\t\t  \t\t\t';
- var mdls = app.currentObject.plugins[app.currentPlugin] ;
-__p += '\n\t\t\t\t\t  \t\t';
- } ;
-__p += '\n\t\t\t\t\t  \t\t';
- for (mdl in mdls) {  console.log(mdl); ;
+ for (mdl in mdls) { if(mdl == "metadata") continue; ;
 __p += '\n\t\t\t\t\t  \t\t<li class="selectModuleButton list-group-item" moduleName=\'' +
 ((__t = (mdl)) == null ? '' : __t) +
 '\'> ' +
