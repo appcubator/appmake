@@ -22,7 +22,7 @@ Generator = (function(_){
 
     Generator.prototype.generate = function(generatorPath, data) {
         // TODO figure out how to get plugins in here
-        return this.expander.expand([], [], {generate: generatorPath, data: data});
+        return this.expander.expand([], {generate: generatorPath, data: data});
     };
 
     /**
