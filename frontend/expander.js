@@ -57,6 +57,7 @@ exports.factory = function(_safe_eval_) {
     }
 
     expander.findGenData = findGenData;
+    expander.builtinGenerators = builtinGenerators;
 
     function constructGen(generatorData) {
         // input the generator's data from the json

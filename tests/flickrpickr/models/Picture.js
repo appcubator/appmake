@@ -45,13 +45,13 @@ functions.push({
 });
 
 functions.push({
-    generate: 'crud.models.create',
+    generate: 'crud.model_methods.create',
     data: { modelName: 'Picture',
             enableAPI: true, }
 });
 
 functions.push({
-    generate: 'crud.models.find',
+    generate: 'crud.model_methods.find',
     data: { modelName: 'Picture',
             enableAPI: true, }
 });

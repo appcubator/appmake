@@ -48,14 +48,14 @@
             "code": "function (pic, newUrl, callback, _req, _res) {\n      if (_req.query.test === 'true') {\n          _res.send('pristine');\n      } else {\n          this.findOne({id:pic.id}, function(err, pic){\n              pic.updateUrl(newUrl, function(e, d) {\n                 callback(e, d);\n              });\n          });\n      }\n    }"
           },
           {
-            "generate": "crud.models.create",
+            "generate": "crud.model_methods.create",
             "data": {
               "modelName": "Picture",
               "enableAPI": true
             }
           },
           {
-            "generate": "crud.models.find",
+            "generate": "crud.model_methods.find",
             "data": {
               "modelName": "Picture",
               "enableAPI": true
