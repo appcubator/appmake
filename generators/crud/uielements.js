@@ -40,7 +40,7 @@ generators.push({
         "html": "<form id=\"<%= id %>\" class=\"<%= className %>\" style=\"<%= style %>\">\n" +
             "<%= formFields %>" +
             "<input type=\"submit\" value=\"Submit\"><br>\n" +
-            "</form>\n",
+            "</form>",
 
         "js": "$('#<%= id %>').submit(function(){\n" +
             "    var formdata = {};\n" +

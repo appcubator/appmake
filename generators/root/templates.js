@@ -220,52 +220,66 @@ generators.push({
     }
 });
 
-
 generators.push({
-    name: 'layoutSections',
+    name: 'layoutSection',
     version: '0.1',
     defaults: {
-        "className" : ""
+        "className": ""
     },
     code: function(data, templates) {
-
-        function renderSection(data, templates) {
-
-            var cssLines = [];
-            var jsLines = [];
-            var htmlLines = [];
-
-            _.each(data.columns, function(column) {
-
-                var expanded_column = expand(column);
-                cssLines.push(expanded_column.css);
-                jsLines.push(expanded_column.js);
-                htmlLines.push(expanded_column.html);
-
-            });
-
-
-            data.columns = htmlLines.join('\n');
-            var htmlStr = templates.html(data);
-
-            return {
-                html: htmlStr,
-                js: jsLines.join('\n'),
-                css: cssLines.join('\n')
-            }
-
-        }
 
         var cssLines = [];
         var jsLines = [];
         var htmlLines = [];
-        
-        _.each(data, function (sectionData) {
-            var expanded_section = renderSection(sectionData, templates);
+
+        _.each(data.columns, function(column) {
+
+            var expanded_column = expand(column);
+            cssLines.push(expanded_column.css);
+            jsLines.push(expanded_column.js);
+            htmlLines.push(expanded_column.html);
+
+        });
+
+
+        data.columns = htmlLines.join('\n');
+        var htmlStr = templates.html(data);
+
+        return {
+            html: htmlStr,
+            js: jsLines.join('\n'),
+            css: cssLines.join('\n')
+        }
+    },
+
+    templates: {
+        "html": [
+            '<div class="row <%= className %>">',
+            '<div class="container">',
+            '<%= columns %>',
+            '</div>',
+            '</div>'
+        ].join('\n')
+    }
+
+});
+
+
+generators.push({
+    name: 'layoutSections',
+    version: '0.1',
+    code: function(data, templates) {
+
+        var cssLines = [];
+        var jsLines = [];
+        var htmlLines = [];
+
+        _.each(data.data, function(sectionData) {
+            var expanded_section = expand(sectionData);
             cssLines.push(expanded_section.css);
             jsLines.push(expanded_section.js);
             htmlLines.push(expanded_section.html);
-        })
+        });
 
         return {
             html: htmlLines.join('\n'),
@@ -275,15 +289,7 @@ generators.push({
 
     },
 
-    templates: {
-        "html": [
-            '<div class="row <%= className %>">',
-                '<div class="container">',
-                '<%= columns %>',
-                '</div>',
-            '</div>'
-        ].join('\n')
-    }
+    templates: { }
 });
 
 
