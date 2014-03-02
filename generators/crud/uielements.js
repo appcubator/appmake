@@ -62,7 +62,7 @@ generators.push({
     }
 });
 
-generators.push({
+generators.push(
     {
         "templates": {
             "4-8": "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"text-center ycol\"><%= colheader %></div>\n        <div class=\"col-md-4 ycol\"><%= col0 %></div>\n        <div class=\"col-md-8 ycol\"><%= col1 %></div>\n    </div>\n</div>",
@@ -124,7 +124,7 @@ generators.push({
             }
         }
     }
-});
+);
 
 
 exports.generators = generators;
