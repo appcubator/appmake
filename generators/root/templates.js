@@ -51,7 +51,9 @@ generators.push({
             '<!-- END FOOTER-->',
             '<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>\n',
             '<%= _scripts_include %>',
+            '<script>',
             '<%= uielements_js %>',
+            '</script>',
             ' </body>\n',
             '</html>'
         ].join('\n')
