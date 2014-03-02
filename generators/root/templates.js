@@ -225,6 +225,10 @@ generators.push({
 generators.push({
     name: 'layoutSection',
     version: '0.1',
+    defaults: {
+        className: "",
+        columns: [],
+    },
     code: function(data, templates) {
 
         var cssLines = [];
