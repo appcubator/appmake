@@ -79,11 +79,11 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res){
-    res.sendfile( __dirname + '/client/app/index.html' );
+    res.sendfile( __dirname + '/client/dist/index.html' );
 });
 
 app.get('/editor/', function (req, res){
-    res.sendfile( __dirname + '/client/app/index.html' );
+    res.sendfile( __dirname + '/client/dist/index.html' );
 });
 
 app.get( '/client/*' , function (req, res, next) {

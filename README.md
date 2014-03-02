@@ -17,16 +17,27 @@ The resulting web application can be easily deployed on an appcubator server.
 Getting started
 ---------------
 
-In an empty directory, cd and run:
+Install Grunt and Grunt CLI
 
-    ./appmake.js compile examples.flickrpics .
-
-To run,
-
-    node app.js
-
-To deploy, run the following command. Note that it will ask you to authenticate:
-
-    ./appmake.js deploy .
+cd appmake/
+npm install grunt; npm install grunt-cli
 
 
+Install compass
+
+gem install compass
+
+
+Building 
+--------------
+
+cd appmake/client
+grunt build
+
+-- This will clean and create a directory called client/dist which contains statics to be served. Look at Gruntfile.js and grep for "build" for more details on the build process.
+
+Deplying
+-----------------
+
+
+git push deis master
