@@ -21,7 +21,7 @@ generators.push({
     templates: {
         schema: "new Schema({\n\
 <% for (var i = 0; i < fields.length; i ++) { %>\n\
-    <%= fields[i].name %>: <%= fields[i].type %>,\n\
+    <%= fields[i].name %>: <%= fields[i].type %>,\
 <% } %>\n\
 })",
         main: "var mongoose = require('mongoose');\n\
