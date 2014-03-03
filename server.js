@@ -80,7 +80,11 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res){
-    res.sendfile(path.join(__dirname, 'client', 'dist', 'index.html'));
+    fs.readFile(path.join(__dirname, 'client', 'app', 'index.html'), function(err, data) {
+        if (err) throw err;
+        data = data.toString().replace(/\{\{ STATIC_URL \}\}/g, process.env.STATIC_URL || '/client/app');
+        res.send(data);
+    });
 });
 
 app.get('/generators/list', function (req, res) {

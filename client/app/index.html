@@ -11,11 +11,11 @@
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="/client/app/styles/main.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}styles/main.css">
         <!-- endbuild -->
 
         <!-- build:js scripts/vendor/modernizr.js -->
-        <script src="/client/app/scripts/vendor/modernizr.js"></script>
+        <script src="{{ STATIC_URL }}bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
     </head>
 
@@ -25,16 +25,7 @@
 </style>
 
 <body>
-
-    
-
-
-        <!-- build:js scripts/vendor/require.js -->
-        <script data-main="/client/app/scripts/main" src="/client/app/scripts/vendor/require.js"></script>
-        <!-- endbuild -->
-
-
-     
+        <script data-main="{{ STATIC_URL }}scripts/main" src="{{ STATIC_URL }}bower_components/requirejs/require.js"></script>
 </body>
 </html>
 
