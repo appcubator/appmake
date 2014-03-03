@@ -1,5 +1,6 @@
 var expander = require('./frontend/expander').init(),
     postExpand = require('./frontend/postExpand'),
+    fs = require('fs'),
     writer = require('./backend/writer');
 
 var less = require('less');
@@ -70,7 +71,7 @@ var GeneratorModel = require('./models/Generator.js').Generators;
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
-	app.use('/client', express.static(path.join(__dirname, 'client')));
+	app.use('/client/app', express.static(path.join(__dirname, 'client', 'app')));
 	app.use(express.favicon(path.join(__dirname, 'client', 'app', 'favicon.ico')));
 	app.use(express.logger('dev'));
 	
@@ -79,11 +80,7 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res){
-    res.sendfile( __dirname + '/client/dist/index.html' );
-});
-
-app.get('/editor/', function (req, res){
-    res.sendfile( __dirname + '/client/dist/index.html' );
+    res.sendFile(path.join(__dirname, 'client', 'app', 'index.html'));
 });
 
 app.get('/generators/list', function (req, res) {
