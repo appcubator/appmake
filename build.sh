@@ -12,7 +12,7 @@ grunt build
 
 # TODO check if STATIC_URL is unset
 echo '[BUILD] Replacing /client/app with $STATIC_URL in client/dist/index.html'
-sed -i '' s/\\/client\\/app\\//$STATIC_URL/g dist/index.html
+sed -i '' "s|/client/app/|$STATIC_URL|g" dist/index.html
 
 popd
 
