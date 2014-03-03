@@ -80,7 +80,7 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res){
-    res.sendFile(path.join(__dirname, 'client', 'app', 'index.html'));
+    res.sendfile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
 app.get('/generators/list', function (req, res) {
