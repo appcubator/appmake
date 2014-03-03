@@ -19,25 +19,22 @@ Getting started
 
 Install Grunt and Grunt CLI
 
-cd appmake/
-npm install grunt; npm install grunt-cli
+    cd appmake/
+    npm install -g grunt; npm install -g grunt-cli
+    cd client/
+    npm install
 
 
-Install compass
 
-gem install compass
+Building
+--------
 
-
-Building 
---------------
-
-cd appmake/client
-grunt build
-
--- This will clean and create a directory called client/dist which contains statics to be served. Look at Gruntfile.js and grep for "build" for more details on the build process.
-
-Deplying
------------------
+    sh build.sh
 
 
-git push deis master
+
+Deploying
+---------
+
+    ./push_statics.sh
+    git push deis master
