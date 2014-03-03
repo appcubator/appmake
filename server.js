@@ -70,8 +70,8 @@ var GeneratorModel = require('./models/Generator.js').Generators;
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
-	app.use(express.static(path.join(__dirname, 'public')));
-	app.use(express.favicon());
+	app.use('/client', express.static(path.join(__dirname, 'client')));
+	app.use(express.favicon(path.join(__dirname, 'client', 'app', 'favicon.ico')));
 	app.use(express.logger('dev'));
 	
 	app.use(express.bodyParser());
@@ -84,16 +84,6 @@ app.get('/', function (req, res){
 
 app.get('/editor/', function (req, res){
     res.sendfile( __dirname + '/client/dist/index.html' );
-});
-
-app.get( '/client/*' , function (req, res, next) {
-    var file = req.params[0]; 
-    res.sendfile( __dirname + '/client/' + file );
-});
-
-app.get( '/public/*' , function (req, res, next) {
-    var file = req.params[0]; 
-    res.sendfile( __dirname + '/public/' + file );
 });
 
 app.get('/generators/list', function (req, res) {

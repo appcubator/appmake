@@ -46,5 +46,5 @@ function buildGeneratorDbFromFile(genFileDir, init){
 	console.log("Done!");
 }
 
-buildGeneratorDbFromFile('../public/generators/generators.js', true);
+buildGeneratorDbFromFile('../generators/generators.js', true);
 exports.Generators = generatorModel;
