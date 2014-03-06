@@ -87,7 +87,7 @@ app.get('/', function (req, res){
     });
 });
 
-app.get('/generators/list', function (req, res) {
+app.get('/plugins/list', function (req, res) {
 	GeneratorModel.find({}, function (err, gens) {
 		if (err) {
 			console.log(err);
@@ -96,7 +96,7 @@ app.get('/generators/list', function (req, res) {
 	});
 });
 
-app.get('/generators/:pkg/:mdl/:gen', function (req, res){
+app.get('/plugins/:pkg/:mdl/:gen', function (req, res){
 	GeneratorModel.findOne({
 		packageName: req.params.pkg,
 		moduleName: req.params.mdl,
