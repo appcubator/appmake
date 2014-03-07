@@ -67,7 +67,7 @@ app.get('/less/', function(req, res){
 
 /* Generator DB Routes */
 var path = require('path');
-var GeneratorModel = require('./models/Generator.js').Generators;
+var Plugin = require('./models/Plugin').Plugin;
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
@@ -88,7 +88,7 @@ app.get('/', function (req, res){
 });
 
 app.get('/plugins/list', function (req, res) {
-	GeneratorModel.find({}, function (err, gens) {
+	Plugin.find({}, function (err, gens) {
 		if (err) {
 			console.log(err);
 		}
@@ -97,7 +97,7 @@ app.get('/plugins/list', function (req, res) {
 });
 
 app.get('/plugins/:pkg/:mdl/:gen', function (req, res){
-	GeneratorModel.findOne({
+	Plugin.findOne({
 		packageName: req.params.pkg,
 		moduleName: req.params.mdl,
 		name: req.params.gen

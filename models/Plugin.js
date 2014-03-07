@@ -32,7 +32,7 @@ var jsonToPlugin = function(json) {
 
         var newGens = [];
         plugin.modules.push({
-            name: name,
+            name: moduleName,
             generators: newGens
         });
 
@@ -76,6 +76,11 @@ var pluginToJson = function(plugin) {
  * */
 pluginSchema.statics.fromJSON = function(json) {
     var p = new Plugin(jsonToPlugin(json));
+    return p;
+};
+pluginSchema.methods.toNormalJSON = function() {
+    var j = pluginToJson(this.toObject());
+    return j;
 };
 
 var Plugin = mongoose.model('plugins', pluginSchema);
@@ -85,29 +90,14 @@ function buildPluginDbFromFile(genFileDir, init){
 
 	console.log("Building plugin database...");
 	var plugins = require(genFileDir);
-	for (pkgName in plugins){
-		for (moduleName in plugins[pkgName]){
-			for (var i = 0; i < plugins[pkgName][moduleName].length; i++){
-				var gen = plugins[pkgName][moduleName][i];
-				for (prop in gen.templates) {console.log(prop);}
-				var newPlugin = new Plugin({
-					name: gen.name,
-					moduleName: moduleName,
-					description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut libero nibh, accumsan id enim eu, consequat porta odio. Praesent vitae aliquet lacus.",
-					packageName: pkgName,
-					author: 'Appcubator',
-					version: gen.version,
-					code: gen.code.toString(),
-					templates: gen.templates
-				});
-				newPlugin.save(function (err){
-					if (err) console.log(err);
-				});
-			}
-		}
-	}
+    _.each(plugins, function(p) {
+        var newPlugin = Plugin.fromJSON(p);
+        newPlugin.save(function (err){
+            if (err) console.log(err);
+        });
+    });
 	console.log("Done!");
 }
 
-buildPluginDbFromFile('../plugins/plugins.js', true);
-exports.Plugins = Plugin;
+buildPluginDbFromFile('../generators/generators.js', true);
+exports.Plugin = Plugin;
