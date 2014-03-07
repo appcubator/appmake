@@ -48,9 +48,27 @@ var jsonToPlugin = function(json) {
             newGens.push(newGen);
         });
     });
+    return plugin;
 };
 
 var pluginToJson = function(plugin) {
+    var json = {};
+    json.metadata = {
+        name: plugin.name,
+        description: plugin.description
+    };
+    _.each(plugin.modules, function(module) {
+        json[module.name] = JSON.parse(JSON.stringify(module.generators));
+        _.each(json[module.name], function(gen) {
+            var newTemps = {};
+            _.each(gen.templates, function(t) {
+                newTemps[t.name] = t.value;
+            });
+            gen.templates = newTemps;
+        });
+
+    });
+    return json;
 };
 
 /*
