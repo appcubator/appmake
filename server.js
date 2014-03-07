@@ -89,6 +89,7 @@ app.get('/', function (req, res){
     });
 });
 
+app.options('*', cors()); // include before other routes
 app.get('/plugins/list', cors(), function (req, res) {
 	Plugin.find({}, function (err, gens) {
 		if (err) {
