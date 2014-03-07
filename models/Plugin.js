@@ -37,7 +37,9 @@ var jsonToPlugin = function(json) {
         });
 
         _.each(generators, function(gen) {
+            console.log(gen);
             var newGen = JSON.parse(JSON.stringify(gen)); // deepcopy
+            console.log(newGen);
             newGen.templates = [];
             _.each(gen.templates, function(template, name) {
                 newGen.templates.push({
@@ -66,7 +68,6 @@ var pluginToJson = function(plugin) {
             });
             gen.templates = newTemps;
         });
-
     });
     return json;
 };
@@ -90,7 +91,16 @@ function buildPluginDbFromFile(genFileDir, init){
 
 	console.log("Building plugin database...");
 	var plugins = require(genFileDir);
+
     _.each(plugins, function(p) {
+
+        _.each(p, function(generators, moduleName) {
+            if (moduleName === 'metadata') return;
+            _.each(generators, function(gen) {
+                gen.code = gen.code.toString();
+            });
+        });
+
         var newPlugin = Plugin.fromJSON(p);
         newPlugin.save(function (err){
             if (err) console.log(err);

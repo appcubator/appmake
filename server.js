@@ -1,6 +1,7 @@
 var expander = require('./frontend/expander').init(),
     postExpand = require('./frontend/postExpand'),
     fs = require('fs'),
+    _ = require('underscore'),
     writer = require('./backend/writer');
 
 var less = require('less');
@@ -92,19 +93,15 @@ app.get('/plugins/list', function (req, res) {
 		if (err) {
 			console.log(err);
 		}
-		res.json(gens);
+		res.json(_.map(gens, function(g) { return g.toNormalJSON(); }));
 	});
 });
 
-app.get('/plugins/:pkg/:mdl/:gen', function (req, res){
+app.get('/plugins/:pkg', function (req, res){
 	Plugin.findOne({
-		packageName: req.params.pkg,
-		moduleName: req.params.mdl,
-		name: req.params.gen
+		name: req.params.pkg,
 	}, function (err, gen) {
-		if (err) {
-			console.log(err);
-		}
+        gen = gen.toNormalJSON();
 		res.json(gen);
 	});
 });
