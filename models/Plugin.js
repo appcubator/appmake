@@ -37,9 +37,7 @@ var jsonToPlugin = function(json) {
         });
 
         _.each(generators, function(gen) {
-            console.log(gen);
             var newGen = JSON.parse(JSON.stringify(gen)); // deepcopy
-            console.log(newGen);
             newGen.templates = [];
             _.each(gen.templates, function(template, name) {
                 newGen.templates.push({
@@ -67,6 +65,7 @@ var pluginToJson = function(plugin) {
                 newTemps[t.name] = t.value;
             });
             gen.templates = newTemps;
+            gen.version = '0.1';
         });
     });
     return json;
