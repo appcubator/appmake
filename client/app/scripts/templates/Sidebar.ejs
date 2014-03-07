@@ -1,87 +1,17 @@
-<% if (app.browsingLocalGenerators === true) { %>
-	<div id='pluginSelector'>
-		<h6><span class="label label-default">CURRENT PLUGIN</span></h6>
-		<div class="dropdown">
-		  <a class='btn btn-lg btn-default' data-toggle="dropdown" id='pluginSelectorInput' href="#">
-		  	<%= app.currentPlugin %><span class="caret"></span>
-		  </a>
-		  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-		  	<% _.each(app.currentObject.plugins, function(plugin, key) { %>
-				<% if (key != app.currentPlugin) { %>
-				<li pluginname='<%= key %>' class='selectPluginButton'><a href='#'><%= key %></a></li>
-				<% }  %>
-			<% }); %>
-		  </ul>
-		</div>
-		<div class="input-group">
-		 	<input type="text" id='newPluginNameInput' class="form-control"></input>
-		  	<span class="input-group-btn">
-		    	<button class="btn btn-primary btn-sm" id='createNewPluginButton'type="button"> Create Plugin</button>
-			</span>
-		</div><!-- /input-group -->
+<ul id='sidebar'>
+<% _.each(app.currentObject.plugins, function(plugin, key) { %>
+<li data-pluginname='<%= key %>' class='plugin'><%= key %></li>
 
-		<div class='pluginInfo'>
-			<h6><span class="label label-default">Name</span></h6>
-			<input type='text' id="nameofplugin" placeholder='Name of the Plugin'> </input>  
-			<h6><span class="label label-default">Description</span></h6>
-			<input type='text' id="descriptionofplugin" placeholder='This plugin helps you do awesome stuff.'></input>  
-			
-			<h6><span class="label label-default">CURRENT MODULE</span></h6>
+	<% var mdls = app.currentObject.plugins[key] %>
+	<% for (mdl in mdls) { if(mdl == "metadata") continue; %>
+	<li class="module" data-moduleName='<%=mdl%>'><%=mdl%></li>
+		<% var curPlugin =  app.currentObject.plugins[key] %>
+		<% for (generator in curPlugin[mdl]){ %>
+			<li data-generatorName="<%= curPlugin[mdl][generator].name %>" class="generator">
+				<%= curPlugin[mdl][generator].name %>
+			</li>
+		<% } %>
 
-				<div class="dropdown">
-
-				  	<a class='btn btn-default btn-block btn-default' data-toggle="dropdown" id='moduleSelector' href="#">
-				  		<% if (app.currentModule === undefined) { %>
-				  			No module selected
-				  		<% } else {%>
-				  			<%= app.currentModule %> <span class="caret"></span>
-				  		<% } %>
-				  	</a>
-
-					 <ul class="dropdown-menu list-group" id='moduleList' role="menu" aria-labelledby="dLabel">
-					  		<% var mdls = app.currentObject.plugins[app.currentPlugin] %>
-					  		<% for (mdl in mdls) { if(mdl == "metadata") continue; %>
-					  		<li class="selectModuleButton list-group-item" moduleName='<%=mdl%>'> <%=mdl%> </li>
-					  		<% } %>				  		
-					 </ul>
-				</div>
-				<div class="input-group">
-				 	<input type="text" id='newModuleNameInput' class="form-control"></input>
-				  	<span class="input-group-btn">
-				    	<button class="btn btn-primary btn-sm" id='createNewModuleButton'type="button"> Create Module</button>
-				  	</span>
-				</div><!-- /input-group -->
-		</div>
-	</div>
-<% }  %>
-
-<div class='' id='generatorBrowser'>
-
-		<h6><span class="label label-default">GENERATORS</span></h6>
-		<ul class="list-group generators">
-		  <% if ((app.currentObject !== undefined) && (app.currentModule !== undefined) && (app.currentPlugin !== undefined)) { %>
-		  	<% if (app.browsingLocalGenerators) { %>
-		  		<% var o = app.currentObject.plugins[app.currentPlugin]; %>
-		  	<%} else { %>
-		  		<% var o = app.currentObject.plugins[app.currentPlugin]; %>
-		  	<% } %>
-			<% for (generator in o[app.currentModule]){ %>
-				<% if (o[app.currentModule][generator].name === app.currentGenerator) { %>
-				<li generatorName="<%=o[app.currentModule][generator].name%>"class="active list-group-item selectGeneratorButton">
-		  			<%=generator%> - <b> <%=o[app.currentModule][generator].name%> </b></li>
-				<% } else { %>
-		  		<li generatorName="<%=o[app.currentModule][generator].name%>"class="list-group-item selectGeneratorButton">
-		  			<%=generator%> - <b> <%=o[app.currentModule][generator].name%> </b></li>
-		  		<% }%>
-
-		  	<% } %>
-		  <% } %>
-		</ul>
-
-		<div class="input-group">
-			<input id='newGeneratorNameInput' class='form-control' placeholder='Generator Name'> </input>
-			<span class="input-group-btn">
-			<button id='createNewGeneratorButton' class='btn btn-primary btn-sm'>Create Generator </button>
-			</span>
-		</div>
-</div>
+	<% } %>
+<% }); %>
+</ul>

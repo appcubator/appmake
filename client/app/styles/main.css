@@ -7904,6 +7904,7 @@ body {
   background-color: #fff;
   border-bottom: 1px solid #ccc;
   z-index: 5;
+  border-radius: 0 !important;
 }
 
 .navbar h3 {
@@ -7934,4 +7935,37 @@ body {
 
 #pluginEditor #generatedPanel #defaultsEditor {
   height: 300px;
+}
+
+.plugin-browser {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 80px;
+    height: 100%;
+    width: 240px;
+    background-color: rgb(50, 50, 50);
+    color: rgb(130, 130, 130);
+}
+
+.plugin-browser ul {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.plugin-browser ul li {
+    padding: 7px 0;
+}
+
+.plugin-browser ul li.plugin {
+    font-weight: bold;
+    color: rgb(150, 150, 150);
+}
+
+.plugin-browser ul li.module {
+    padding-left: 20px;
+}
+
+.plugin-browser ul li.generator {
+    padding-left: 40px;
 }
