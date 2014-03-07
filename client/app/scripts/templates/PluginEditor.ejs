@@ -102,9 +102,12 @@
 
 		<div class='plugin-browser' id='pluginBrowser'></div>
 
-		<div class='col-md-6' id='editorPanel' style="margin-left: 250px;">
+        <div class='col-md-6' id='no-generator' style="margin-left: 250px;">
+            No generator selected.
+        </div>
+		<div class='col-md-7' id='editorPanel'>
 			<h3>Template Editor</h3>
-			<div class='row' id='templatePanel'>
+			<div id='templatePanel'>
 				<ul class="nav nav-tabs">
 				   	<% if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { %>
 
@@ -132,27 +135,23 @@
 						</span>
 				  	</li>
 				</ul>
-				<div class='col-md-12'>
-					<div id='templateEditor'></div>
-				</div>
+				<div id='templateEditor'></div>
 			</div>
-
 			</hr>
-
-			<h3>Code Editor</h3>
-			<div class='row' id='codePanel'>
-				<div class='col-md-12' > <div id='codeEditor'>   </div> </div>
-			</div>
-
+            <div class="editor">
+    			<h3>Code Editor</h3>
+    			<div id='codePanel'>
+    				<div id='codeEditor'></div>
+    			</div>
+            </div>
 			</hr>
-
-			<h3>Defaults Editor</h3>
-			<div class='col-md-12' >
-				<div id='defaultsEditor'></div>
-			</div>
+            <div class="editor">
+    			<h3>Defaults Editor</h3>
+    			<div id='defaultsEditor'></div>
+            </div>
 
 		</div>
-		<div class='col-md-3' id='generatedPanel'>
+		<div class='col-md-2' id='generatedPanel'>
 			<h3 class="refreshGeneratedBtn">Generated Code</h3>
 			<div class='col-md-12'>
 				<div id='generatedCode'></div>

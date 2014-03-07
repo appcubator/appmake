@@ -7858,14 +7858,13 @@ body {
 /* line 215, ../../app/styles/main.scss */
 #pluginEditor #templatePanel,
 #defaultsEditor {
-  -moz-box-shadow: 0 0 5px #ababab;
+/*  -moz-box-shadow: 0 0 5px #ababab;
   -webkit-box-shadow: 0 0 5px #ababab;
-  box-shadow: 0 0 5px #ababab;
+  box-shadow: 0 0 5px #ababab;*/
+
+  border-top: 1px solid #ccc;
   height: 380px;
   overflow-x: scroll;
-  margin-top: 20px;
-  margin-left: 3px;
-  margin-right: 30px;
 }
 
 #defaultsEditor {
@@ -7879,12 +7878,10 @@ body {
 }
 /* line 227, ../../app/styles/main.scss */
 #pluginEditor #codePanel {
-  margin-left: 4px;
   margin-top: 10px;
-  -moz-box-shadow: 0 0 5px #ababab;
+/*  -moz-box-shadow: 0 0 5px #ababab;
   -webkit-box-shadow: 0 0 5px #ababab;
-  box-shadow: 0 0 5px #ababab;
-  margin-right: 30px;
+  box-shadow: 0 0 5px #ababab;*/
 }
 /* line 231, ../../app/styles/main.scss */
 #pluginEditor #codePanel #codeEditor {
@@ -7968,4 +7965,17 @@ body {
 
 .plugin-browser ul li.generator {
     padding-left: 40px;
+}
+
+#editorPanel {
+    background-color: #161616;
+    margin-left: 220px;
+    margin-top: -30px;
+    padding: 0;
+}
+
+#editorPanel h3 {
+    font-weight: light;
+    font-size: 16px;
+    padding-left: 30px;
 }

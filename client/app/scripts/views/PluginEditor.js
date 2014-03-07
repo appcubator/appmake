@@ -61,22 +61,21 @@ define([
 
             console.log(ace);
 
+            var theme = "ace/theme/merbivore";
         	this.$el.html(this.template({ app: app }));
             this.templateEditor = ace.edit('templateEditor');
-            this.templateEditor.setTheme("ace/theme/textmate");
+            this.templateEditor.setTheme(theme);
             // Detect the template mode (later)...
             // =this.templateEditor.getSession().setMode("aceDir/mode/javascript");
             this.codeEditor = ace.edit('codeEditor');
-            this.codeEditor.setTheme("ace/theme/textmate");
+            this.codeEditor.setTheme(theme);
             this.codeEditor.getSession().setMode("ace/mode/javascript");
 
             this.defaultsEditor = ace.edit('defaultsEditor');
-            this.defaultsEditor.setTheme("ace/theme/textmate");
+            this.defaultsEditor.setTheme(theme);
             this.defaultsEditor.getSession().setMode("ace/mode/json");
 
-            this.setCodeEditor();
-            this.setTemplateEditor();
-            this.setDefaultsEditor();
+            this.renderGeneratorEditor();
 
             this.templateEditor.on("change", this.updateCurrentTemplate);
             this.codeEditor.on("change", this.updateCurrentCode);
@@ -100,11 +99,18 @@ define([
         },
 
         renderGeneratorEditor: function() {
-            if (!this.currentGenerator) return;
+            if (!this.currentGenerator) {
+                this.$el.find('#no-generator').show();
+                this.$el.find('#editorPanel').hide();
+                return;
+            }
+            else {
+                this.$el.find('#no-generator').hide();
+                this.$el.find('#editorPanel').show();
+            }
 
             var keys = _.keys(this.currentGenerator.templates);
             var tmp = this.currentGenerator.templates[keys[0]];
-            console.log(tmp);
             this.setTemplateEditor(tmp);
             this.setCodeEditor(this.currentGenerator.code);
             this.setDefaultsEditor(this.currentGenerator.defaults);
@@ -284,37 +290,6 @@ define([
             }
         },
 
-        pluginSelected: function(event) {
-
-            var pluginName = $(event.currentTarget).attr('pluginname');
-
-            console.log(pluginName);
-            this.model.set('currentPlugin', pluginName);
-            this.model.setupCurrentModule({});
-            this.setCodeEditor();
-        },
-
-        moduleSelected: function(event){
-            var moduleName = $($(event.target).closest('.selectModuleButton')).attr('modulename');
-            this.model.set('currentModule', moduleName);
-            this.setCodeEditor();
-        },
-
-        generatorSelected: function(event){
-            var generatorName = $($(event.target).closest('.selectGeneratorButton')).attr('generatorname');
-            this.model.set('currentGenerator', generatorName);
-            this.setCodeEditor();
-        },
-
-        templateSelected: function (event){
-            var templateName = $(event.currentTarget).attr('templatename');
-            console.log(templateName);
-            //$(.closest('.selectTemplateButton')).attr('templatename');
-            this.model.set('currentTemplate', templateName);
-            //this.setCodeEditor();
-            //this.setTemplateEditor();
-        },
-
         updateCurrentTemplate: function(){
             console.log("Saving templates...")
             var currentObject = this.model.get('currentObject');
@@ -336,7 +311,6 @@ define([
                 }
             }
         },
-
 
         updateCurrentCode: function() {
             console.log("Saving code...")
