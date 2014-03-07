@@ -7863,7 +7863,7 @@ body {
   box-shadow: 0 0 5px #ababab;*/
 
   border-top: 1px solid #ccc;
-  height: 380px;
+/*  height: 380px;*/
   overflow-x: scroll;
 }
 
@@ -7878,7 +7878,7 @@ body {
 }
 /* line 227, ../../app/styles/main.scss */
 #pluginEditor #codePanel {
-  margin-top: 10px;
+/*  margin-top: 10px;*/
 /*  -moz-box-shadow: 0 0 5px #ababab;
   -webkit-box-shadow: 0 0 5px #ababab;
   box-shadow: 0 0 5px #ababab;*/
@@ -7975,7 +7975,10 @@ body {
 }
 
 #editorPanel h3 {
-    font-weight: light;
     font-size: 16px;
     padding-left: 30px;
+    background-color: #202020;
+    margin: 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
