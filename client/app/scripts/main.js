@@ -25,7 +25,7 @@ require.config({
         jquery: '../bower_components/jquery/jquery',
         backbone: '../bower_components/backbone/backbone',
         underscore: '../bower_components/underscore/underscore',
-	bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
+	    bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
         config: './config',
         ace: '../bower_components/ace-builds/src/ace'
     }
@@ -75,7 +75,7 @@ require([
             }
         });
     });
-
+    appState = { plugins: {}, generators: {}};
     app = new AppModel({ currentObject: appState });
     console.log(app);
     var AppRouter = new AppRouter();

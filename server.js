@@ -1,5 +1,6 @@
 var expander = require('./frontend/expander').init(),
     postExpand = require('./frontend/postExpand'),
+    fs = require('fs'),
     writer = require('./backend/writer');
 
 var less = require('less');
@@ -70,8 +71,8 @@ var GeneratorModel = require('./models/Generator.js').Generators;
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
-	app.use(express.static(path.join(__dirname, 'public')));
-	app.use(express.favicon());
+	app.use('/client/app', express.static(path.join(__dirname, 'client', 'app')));
+	app.use(express.favicon(path.join(__dirname, 'client', 'app', 'favicon.ico')));
 	app.use(express.logger('dev'));
 	
 	app.use(express.bodyParser());
@@ -79,21 +80,11 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res){
-    res.sendfile( __dirname + '/client/app/index.html' );
-});
-
-app.get('/editor/', function (req, res){
-    res.sendfile( __dirname + '/client/app/index.html' );
-});
-
-app.get( '/client/*' , function (req, res, next) {
-    var file = req.params[0]; 
-    res.sendfile( __dirname + '/client/' + file );
-});
-
-app.get( '/public/*' , function (req, res, next) {
-    var file = req.params[0]; 
-    res.sendfile( __dirname + '/public/' + file );
+    fs.readFile(path.join(__dirname, 'client', 'app', 'index.html'), function(err, data) {
+        if (err) throw err;
+        data = data.toString().replace(/\{\{ STATIC_URL \}\}/g, process.env.STATIC_URL || '/client/app');
+        res.send(data);
+    });
 });
 
 app.get('/generators/list', function (req, res) {

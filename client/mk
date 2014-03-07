@@ -1,4 +1,4 @@
 grunt jst;
-echo "Copying complied files...";
+echo "Copying compiled files...";
 cp -rf ./.tmp/scripts/templates.js ./app/scripts/;
 echo "Done!";
