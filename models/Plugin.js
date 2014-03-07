@@ -13,6 +13,7 @@ var pluginSchema = new Schema({
         generators: [{
             name: String,
             code: String,
+            defaults: Schema.Types.Mixed,
             templates: [{
                 name: String,
                 value: String
