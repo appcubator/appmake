@@ -157,7 +157,13 @@ __p += '\n\t<li class="module" data-moduleName=\'' +
  var curPlugin =  app.currentObject.plugins[key] ;
 __p += '\n\t\t';
  for (generator in curPlugin[mdl]){ ;
-__p += '\n\t\t\t<li data-generatorName="' +
+__p += '\n\t\t\t<li data-path="' +
+((__t = ( key )) == null ? '' : __t) +
+'.' +
+((__t = (mdl)) == null ? '' : __t) +
+'.' +
+((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +
+'" data-generatorName="' +
 ((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +
 '" class="generator">\n\t\t\t\t' +
 ((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +

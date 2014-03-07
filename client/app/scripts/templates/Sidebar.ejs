@@ -7,7 +7,7 @@
 	<li class="module" data-moduleName='<%=mdl%>'><%=mdl%></li>
 		<% var curPlugin =  app.currentObject.plugins[key] %>
 		<% for (generator in curPlugin[mdl]){ %>
-			<li data-generatorName="<%= curPlugin[mdl][generator].name %>" class="generator">
+			<li data-path="<%= key %>.<%=mdl%>.<%= curPlugin[mdl][generator].name %>" data-generatorName="<%= curPlugin[mdl][generator].name %>" class="generator">
 				<%= curPlugin[mdl][generator].name %>
 			</li>
 		<% } %>
