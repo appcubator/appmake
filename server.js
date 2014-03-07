@@ -6,7 +6,8 @@ var expander = require('./frontend/expander').init(),
 
 var less = require('less');
 
-var express = require('express');
+var express = require('express'),
+    cors = require('cors');
 var app = express();
 app.use(express.bodyParser());
 
@@ -88,7 +89,7 @@ app.get('/', function (req, res){
     });
 });
 
-app.get('/plugins/list', function (req, res) {
+app.get('/plugins/list', cors(), function (req, res) {
 	Plugin.find({}, function (err, gens) {
 		if (err) {
 			console.log(err);
