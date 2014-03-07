@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    _ = require('underscore');
 mongoose.connect(process.env.MONGO_ADDR || 'mongodb://localhost');
 var Schema = mongoose.Schema;
 
@@ -9,7 +10,7 @@ var pluginSchema = new Schema({
 	description: String,
     modules: [{
         name: String,
-        module: [{
+        generators: [{
             name: String,
             code: String,
             templates: [{
@@ -20,10 +21,49 @@ var pluginSchema = new Schema({
     }],
 });
 
-var pluginModel = mongoose.model('Plugin', pluginSchema);
+var jsonToPlugin = function(json) {
+    var plugin = {};
+    plugin.name = json.metadata.name;
+    plugin.description = json.metadata.description;
+    plugin.modules = [];
+    // convert the modules from one format to the other
+    _.each(json, function(generators, moduleName) {
+        if (moduleName === 'metadata') return;
+
+        var newGens = [];
+        plugin.modules.push({
+            name: name,
+            generators: newGens
+        });
+
+        _.each(generators, function(gen) {
+            var newGen = JSON.parse(JSON.stringify(gen)); // deepcopy
+            newGen.templates = [];
+            _.each(gen.templates, function(template, name) {
+                newGen.templates.push({
+                    name: name,
+                    value: template
+                });
+            });
+            newGens.push(newGen);
+        });
+    });
+};
+
+var pluginToJson = function(plugin) {
+};
+
+/*
+ * Creates and returns a Plugin, given a js object in normal JSON form.
+ * */
+pluginSchema.statics.fromJSON = function(json) {
+    var p = new Plugin(jsonToPlugin(json));
+};
+
+var Plugin = mongoose.model('plugins', pluginSchema);
 
 function buildPluginDbFromFile(genFileDir, init){
-	if (init) pluginModel.collection.drop();
+	if (init) Plugin.collection.drop();
 
 	console.log("Building plugin database...");
 	var plugins = require(genFileDir);
@@ -32,7 +72,7 @@ function buildPluginDbFromFile(genFileDir, init){
 			for (var i = 0; i < plugins[pkgName][moduleName].length; i++){
 				var gen = plugins[pkgName][moduleName][i];
 				for (prop in gen.templates) {console.log(prop);}
-				var newPlugin = new pluginModel({
+				var newPlugin = new Plugin({
 					name: gen.name,
 					moduleName: moduleName,
 					description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut libero nibh, accumsan id enim eu, consequat porta odio. Praesent vitae aliquet lacus.",
@@ -52,4 +92,4 @@ function buildPluginDbFromFile(genFileDir, init){
 }
 
 buildPluginDbFromFile('../plugins/plugins.js', true);
-exports.Plugins = pluginModel;
+exports.Plugins = Plugin;
