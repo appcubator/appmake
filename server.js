@@ -1,11 +1,13 @@
 var expander = require('./frontend/expander').init(),
     postExpand = require('./frontend/postExpand'),
     fs = require('fs'),
+    _ = require('underscore'),
     writer = require('./backend/writer');
 
 var less = require('less');
 
-var express = require('express');
+var express = require('express'),
+    cors = require('cors');
 var app = express();
 app.use(express.bodyParser());
 
@@ -67,7 +69,7 @@ app.get('/less/', function(req, res){
 
 /* Generator DB Routes */
 var path = require('path');
-var GeneratorModel = require('./models/Generator.js').Generators;
+var Plugin = require('./models/Plugin').Plugin;
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
@@ -87,24 +89,21 @@ app.get('/', function (req, res){
     });
 });
 
-app.get('/generators/list', function (req, res) {
-	GeneratorModel.find({}, function (err, gens) {
+app.options('*', cors()); // include before other routes
+app.get('/plugins/list', cors(), function (req, res) {
+	Plugin.find({}, function (err, gens) {
 		if (err) {
 			console.log(err);
 		}
-		res.json(gens);
+		res.json(_.map(gens, function(g) { return g.toNormalJSON(); }));
 	});
 });
 
-app.get('/generators/:pkg/:mdl/:gen', function (req, res){
-	GeneratorModel.findOne({
-		packageName: req.params.pkg,
-		moduleName: req.params.mdl,
-		name: req.params.gen
+app.get('/plugins/:pkg', function (req, res){
+	Plugin.findOne({
+		name: req.params.pkg,
 	}, function (err, gen) {
-		if (err) {
-			console.log(err);
-		}
+        gen = gen.toNormalJSON();
 		res.json(gen);
 	});
 });
