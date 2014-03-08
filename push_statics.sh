@@ -8,4 +8,4 @@ assets=$DIR/client/app
 echo "Deploying: $assets"
 
 s3cmd sync --force --reduced-redundancy --acl-public $assets s3://appmake-hosting/
-
+echo "Done: $?"
