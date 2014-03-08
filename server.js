@@ -108,6 +108,26 @@ app.get('/plugins/:pkg', function (req, res){
 	});
 });
 
+app.post('/plugins/:pkg/:mdl/:gen/update', function(req, res) {
+    // TODO add authorization
+    var gen = req.body;
+    Plugin.findOne()
+    p.save(function(err, data) {
+        if (err) throw err;
+        res.end('ok');
+    });
+});
+
+app.put('/plugins/publish', function(req, res) {
+    // TODO add authorization
+    var plugin = req.body;
+    var p = Plugin.jsonToPlugin(plugin);
+    p.save(function(err, data) {
+        if (err) throw err;
+        res.end('ok');
+    });
+});
+
 
 exports.run = function(port) {
     app.listen(port);
