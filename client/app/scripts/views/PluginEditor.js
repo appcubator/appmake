@@ -152,7 +152,6 @@ define([
             var tmp = this.currentGenerator.templates[this.currentTemplate];
             this.setTemplateEditor(tmp);
 
-            console.log($('.temp-tab.active'));
             $('.temp-tab.active').removeClass('active');
             $('#temp-'+currentTemplate).addClass('active');
 
@@ -174,7 +173,6 @@ define([
             event.stopPropagation();
             event.preventDefault();
 
-            console.log("create template");
              var newTemplateName = $.trim($(this.$el.find('#newTemplateNameInput')).val());
              var pluginName = this.model.get('currentPlugin');
              var mdlName = this.model.get('currentModule');
@@ -335,60 +333,25 @@ define([
         updateCurrentTemplate: function(){
             var str = this.templateEditor.getValue();
             console.log(this.currentGenerator[this.currentTemplate]);
-            this.currentGenerator[this.currentTemplate] = str;
+            this.currentGenerator.templates[this.currentTemplate] = str;
         },
 
         updateCurrentCode: function() {
-            console.log("Saving code...")
-            var currentObject = this.model.get('currentObject');
-            var pluginName = this.model.get('currentPlugin');
-            var mdlName = this.model.get('currentModule');
-            var genName = this.model.get('currentGenerator');
-
-            if (currentObject !== undefined && pluginName !== undefined
-                && mdlName !== undefined && genName !== undefined){
-                console.log('all defined');
-                if (this.model.get('browsingLocalGenerators')){
-                    var gens = currentObject.plugins[pluginName][mdlName];
-                    for (var i = 0; i < gens.length; i++){
-                        if (gens[i].name === this.model.get('currentGenerator')) {
-                            gens[i].code = this.codeEditor.getValue();
-                        }
-                    }
-                    this.model.set('currentObject', currentObject)
-                }
-            }
+            var str = this.codeEditor.getValue();
+            this.currentGenerator.code = str;
         },
 
         updateDefaultsEditor: function() {
-            console.log("Saving defaults...")
-            var currentObject = this.model.get('currentObject');
-            var pluginName = this.model.get('currentPlugin');
-            var mdlName = this.model.get('currentModule');
-            var genName = this.model.get('currentGenerator');
-
-            if (currentObject !== undefined && pluginName !== undefined
-                && mdlName !== undefined && genName !== undefined){
-                if (this.model.get('browsingLocalGenerators')){
-                    var gens = currentObject.plugins[pluginName][mdlName];
-                    for (var i = 0; i < gens.length; i++){
-                        if (gens[i].name === this.model.get('currentGenerator')) {
-                            var defs = {};
-
-                            try {
-                                defs = jQuery.parseJSON(this.defaultsEditor.getValue())
-                            }
-                            catch(e) {
-                                console.log("Couldnt parse defaults");
-                                console.log(e);
-                            }
-
-                            gens[i].defaults = defs;
-                        }
-                    }
-                    this.model.set('currentObject', currentObject)
-                }
+            var defs = {};
+            try {
+                defs = jQuery.parseJSON(this.defaultsEditor.getValue());
             }
+            catch(e) {
+                console.log("Couldnt parse defaults");
+                console.log(e);
+            }
+
+            this.currentGenerator.defaults = defs;
         },
 
         findGenByName: function(module, genName){
@@ -434,9 +397,6 @@ define([
             // this.saveTemplateEditor();
             // this.saveCodeEditor();
 
-            var o = this.model.serialize();
-            console.log(o);
-
             function successHandler () {
                 var modal = $('#downloadModal').modal();
                 $(modal).find('#downloadEditor').text("Saved Successfully.");
@@ -444,7 +404,7 @@ define([
 
             $.ajax({
                 type: "POST",
-                url: '/app/' + appId + '/state/',
+                url: '/app/' + appId + '/state/force/',
                 data: JSON.stringify(appState),
                 statusCode: {
                     200: successHandler
