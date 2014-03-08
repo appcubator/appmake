@@ -7857,14 +7857,10 @@ body {
 }
 /* line 215, ../../app/styles/main.scss */
 #pluginEditor #templatePanel,
-#defaultsEditor {
-/*  -moz-box-shadow: 0 0 5px #ababab;
-  -webkit-box-shadow: 0 0 5px #ababab;
-  box-shadow: 0 0 5px #ababab;*/
+#defaultsEditor, #codeEditor {
 
-  border-top: 1px solid #ccc;
-/*  height: 380px;*/
   overflow-x: scroll;
+  border-bottom: 1px solid #404040;
 }
 
 #defaultsEditor {
@@ -7876,20 +7872,21 @@ body {
   height: 310px;
   margin-top: 8px;
 }
-/* line 227, ../../app/styles/main.scss */
-#pluginEditor #codePanel {
-/*  margin-top: 10px;*/
-/*  -moz-box-shadow: 0 0 5px #ababab;
-  -webkit-box-shadow: 0 0 5px #ababab;
-  box-shadow: 0 0 5px #ababab;*/
-}
+
 /* line 231, ../../app/styles/main.scss */
 #pluginEditor #codePanel #codeEditor {
   height: 300px;
 }
 
+html {
+    background-color: #161616;
+}
 #pluginNavigator {
-  padding-top: 80px;
+    height: 100%;
+    padding-top: 56px;
+    margin-left:  220px;
+    color: rgba(244, 244, 244, 0.2);
+    background-color: #161616;
 }
 
 .navbar {
@@ -7934,6 +7931,23 @@ body {
   height: 300px;
 }
 
+#generatedPanel {
+    height: 100%;
+    opacity: 0.5;
+    background-color: #eeeeee;
+    position: fixed;
+    right: 0;
+    width: 280px;
+    -webkit-transition: all 0.3s; /* For Safari 3.1 to 6.0 */
+    transition: all 0.3s;
+    z-index: 100;
+    color: #222;
+}
+
+#generatedPanel:hover {
+    opacity: 1;
+}
+
 .plugin-browser {
     position: fixed;
     top: 0;
@@ -7943,6 +7957,7 @@ body {
     width: 240px;
     background-color: rgb(50, 50, 50);
     color: rgb(130, 130, 130);
+    border-right: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .plugin-browser ul {
@@ -7959,18 +7974,36 @@ body {
     color: rgb(150, 150, 150);
 }
 
+.plugin-browser ul li.plugin:before {
+    content:'▾';
+    margin-right: 4px;
+}
+
 .plugin-browser ul li.module {
     padding-left: 20px;
 }
 
+.plugin-browser ul li.module:before {
+    content:'▾';
+    margin-right: 4px;
+}
+
 .plugin-browser ul li.generator {
     padding-left: 40px;
+    cursor: pointer;
+}
+
+.plugin-browser ul li.generator:hover {
+    color: rgb(200, 200, 200);
+}
+
+.plugin-browser ul li.generator:before {
+    content:'Þ';
+    margin-right: 4px;
 }
 
 #editorPanel {
     background-color: #161616;
-    margin-left: 220px;
-    margin-top: -30px;
     padding: 0;
 }
 
@@ -7978,7 +8011,56 @@ body {
     font-size: 16px;
     padding-left: 30px;
     background-color: #202020;
+    color: #707070;
     margin: 0;
     padding-top: 12px;
     padding-bottom: 12px;
+    border-bottom: 1px solid #404040;
+}
+
+#editorPanel .tabs {
+    background-color: #404040;
+    list-style:none;
+    height: 38px;
+    overflow: hidden;
+}
+
+#editorPanel .tabs li {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    margin-top: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    line-height: 26px;
+    min-width: 50px;
+    color: #b0b0b0;
+    text-align: center;
+    font-weight: bold;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#editorPanel .tabs li:hover {
+    background-color: #606060;
+}
+
+
+#editorPanel .tabs li.active {
+    background-color: #202020;
+}
+
+.create-tab .icon {
+    line-height: 12px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#no-generator {
+    background-color: #161616;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    height: 100%;
+    padding-top: 60px;
 }

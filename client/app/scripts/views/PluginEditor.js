@@ -31,7 +31,8 @@ define([
             'keyup #nameofplugin' : 'pluginNameChanged',
             'keyup #descriptionofplugin': 'pluginDescriptionChanged',
 
-            'click .generator': 'clickedCurrentGenerator'
+            'click .generator': 'clickedCurrentGenerator',
+            'click .temp-tab':  'clickedCurrentTemplate'
         },
 
         initialize: function(){
@@ -59,8 +60,6 @@ define([
                     browsingLocalGenerators: this.model.get('browsingLocalGenerators')
             }
 
-            console.log(ace);
-
             var theme = "ace/theme/merbivore";
         	this.$el.html(this.template({ app: app }));
             this.templateEditor = ace.edit('templateEditor');
@@ -85,6 +84,13 @@ define([
             this.refreshGeneratedCode();
         },
 
+
+        clickedCurrentTemplate: function(e) {
+            var temp = e.currentTarget.id.replace('temp-','');
+            console.log(temp);
+            this.renderTemplateEditor(temp);
+        },
+
         clickedCurrentGenerator: function(e) {
             var path = e.currentTarget.dataset.path;
             var pMG = path.split('.');
@@ -98,7 +104,10 @@ define([
             this.renderGeneratorEditor();
         },
 
-        renderGeneratorEditor: function() {
+
+
+        renderGeneratorEditor: function(currentTemplate) {
+
             if (!this.currentGenerator) {
                 this.$el.find('#no-generator').show();
                 this.$el.find('#editorPanel').hide();
@@ -109,11 +118,44 @@ define([
                 this.$el.find('#editorPanel').show();
             }
 
-            var keys = _.keys(this.currentGenerator.templates);
-            var tmp = this.currentGenerator.templates[keys[0]];
-            this.setTemplateEditor(tmp);
             this.setCodeEditor(this.currentGenerator.code);
             this.setDefaultsEditor(this.currentGenerator.defaults);
+            this.renderTemplateEditor(currentTemplate);
+
+            this.delegateEvents();
+            console.log("Del");
+        },
+
+        renderTemplateEditor: function(currentTemplate) {
+            var keys = _.keys(this.currentGenerator.templates);
+            var currentTemplate = currentTemplate || keys[0];
+            this.currentTemplate = currentTemplate;
+
+            var tempCreate = [
+            '<li class="create-tab">',
+                '<span class="icon">+</span>',
+                '<span id="createTemplateGroup" style="display:none;">',
+                  '<div class="input-group">',
+                    '<span class="input-group-btn">',
+                     ' <button class="btn btn-default" id="createNewTemplateButton" type="button">Create</button>',
+                    '</span>',
+                    '<input type="text" placeholder="template name"id="newTemplateNameInput" class="form-control">',
+                  '</div>',
+                '</span>',
+            '</li>'
+            ].join('\n');
+
+            var str = _.map(keys, function(key) { return "<li class='temp-tab' id='temp-"+key+"'>"+key+"</li>";  }).join('\n');
+            str = str + tempCreate;
+            this.$el.find('#templateList').html(str);
+
+            var tmp = this.currentGenerator.templates[this.currentTemplate];
+            this.setTemplateEditor(tmp);
+
+            console.log($('.temp-tab.active'));
+            $('.temp-tab.active').removeClass('active');
+            $('#temp-'+currentTemplate).addClass('active');
+
         },
 
         setTemplateEditor: function(template){
@@ -291,25 +333,9 @@ define([
         },
 
         updateCurrentTemplate: function(){
-            console.log("Saving templates...")
-            var currentObject = this.model.get('currentObject');
-            var pluginName = this.model.get('currentPlugin');
-            var mdlName = this.model.get('currentModule');
-            var genName = this.model.get('currentGenerator');
-            var tmpName = this.model.get('currentTemplate');
-
-            if (currentObject !== undefined && pluginName !== undefined
-                && mdlName !== undefined && genName !== undefined && tmpName !== undefined){
-                if (this.model.get('browsingLocalGenerators')){
-                    var gens = currentObject.plugins[pluginName][mdlName];
-                    for (var i = 0; i < gens.length; i++){
-                        if (gens[i].name === this.model.get('currentGenerator')) {
-                            gens[i].templates[tmpName] = this.templateEditor.getValue();
-                        }
-                    }
-                    this.model.set('currentObject', currentObject)
-                }
-            }
+            var str = this.templateEditor.getValue();
+            console.log(this.currentGenerator[this.currentTemplate]);
+            this.currentGenerator[this.currentTemplate] = str;
         },
 
         updateCurrentCode: function() {

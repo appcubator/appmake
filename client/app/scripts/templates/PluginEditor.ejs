@@ -102,38 +102,14 @@
 
 		<div class='plugin-browser' id='pluginBrowser'></div>
 
-        <div class='col-md-6' id='no-generator' style="margin-left: 250px;">
+        <div class='col-md-9' id='no-generator'>
             No generator selected.
         </div>
-		<div class='col-md-7' id='editorPanel'>
+		<div class='col-md-9' id='editorPanel'>
 			<h3>Template Editor</h3>
 			<div id='templatePanel'>
-				<ul class="nav nav-tabs">
-				   	<% if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { %>
+				<ul class="tabs" id="templateList">
 
-					  	<% var o = app.currentObject.plugins[app.currentPlugin][app.currentModule]; %>
-					  	<% for (var i = 0; i < o.length; i++) { %>
-					  		<% if (o[i].name === app.currentGenerator) { %>
-					  			<% for (template in o[i].templates) { %>
-					  				<% if (template == app.currentTemplate) { %>
-					  					<li templatename='<%=template%>'class='active selectTemplateButton'> <a href='#'> <%= template %> </a> </li>
-					  				<% } else { %>
-					  					<li templatename='<%=template%>'class='selectTemplateButton'> <a href='#'> <%= template %> </a> </li>
-					  				<% } %>
-					  			<% } %>
-					  		<% } %>
-					  	<% } %>
-				  	<% } %>
-				  	<li class="pull-right">
-				  		<span id='createTemplateGroup' class="pull-right">
-							<div class="input-group">
-							  <span class="input-group-btn">
-							    <button class="btn btn-default" id='createNewTemplateButton' type="button">Create</button>
-							  </span>
-							  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
-							</div><!-- /input-group -->
-						</span>
-				  	</li>
 				</ul>
 				<div id='templateEditor'></div>
 			</div>
