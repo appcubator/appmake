@@ -112,6 +112,7 @@ app.post('/plugins/:pkg/:mdl/:gen/update', function(req, res) {
     // TODO add authorization
     var gen = req.body;
     Plugin.findOne({ name: req.params.pkg }, function(err, p) {
+        if (err) throw err;
         p_json = Plugin.toJSON(p);
         var gens = p_json[req.params.mdl];
         var found = false;
