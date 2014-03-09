@@ -26,7 +26,7 @@ require.config({
         }
     },
     paths: {
-        jquery: '../bower_components/jquery/dist/jquery',
+        jquery: '../bower_components/jquery/jquery',
         "jquery-hotkeys": "./jquery-hotkeys",
         backbone: '../bower_components/backbone/backbone',
         underscore: '../bower_components/underscore/underscore',
