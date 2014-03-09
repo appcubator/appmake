@@ -7,6 +7,7 @@ define([
     'templates',
     'ace',
     'bootstrap',
+    'jquery-hotkeys'
 ], function ($, _, Backbone,  JST) {
     'use strict';
     var PluginEditorView = Backbone.View.extend({
@@ -26,13 +27,15 @@ define([
             'click .selectModuleButton': 'moduleSelected',
             'click .selectGeneratorButton': 'generatorSelected',
             'click .selectTemplateButton': 'templateSelected',
-            'click #createNewTemplateButton': 'createNewTemplate',
+            // 'click #createNewTemplateButton': 'createNewTemplate',
             'click .refreshGeneratedBtn' : 'refreshGeneratedCode',
             'keyup #nameofplugin' : 'pluginNameChanged',
             'keyup #descriptionofplugin': 'pluginDescriptionChanged',
 
             'click .generator': 'clickedCurrentGenerator',
-            'click .temp-tab':  'clickedCurrentTemplate'
+            'click .temp-tab':  'clickedCurrentTemplate',
+            'click .create-tab' : 'clickedAddTemplate',
+            'submit #newTemplateForm': 'createNewTemplate'
         },
 
         initialize: function(){
@@ -82,12 +85,22 @@ define([
 
             this.refreshSidebar();
             this.refreshGeneratedCode();
+
+            var self = this;
+            $(document).bind('keydown', 'meta+s', function(e) {
+                e.preventDefault();
+                self.saveAppstate();
+            });
+            $(document).bind('keydown', 'ctrl+s', function(e) {
+                e.preventDefault();
+                self.saveAppstate();
+            });
+
         },
 
 
         clickedCurrentTemplate: function(e) {
             var temp = e.currentTarget.id.replace('temp-','');
-            console.log(temp);
             this.renderTemplateEditor(temp);
         },
 
@@ -98,13 +111,19 @@ define([
             _.each(gens, function(gen) {
                 if(gen.name == pMG[2]) {
                     this.currentGenerator = gen;
+                    this.currentPath = path;
                 }
             }, this);
 
             this.renderGeneratorEditor();
         },
 
-
+        clickedAddTemplate: function(e) {
+            var $el = $(e.currentTarget);
+            $el.find('.icon').hide();
+            $('#createTemplateGroup').fadeIn();
+            $('#newTemplateNameInput').focus();
+        },
 
         renderGeneratorEditor: function(currentTemplate) {
 
@@ -116,6 +135,9 @@ define([
             else {
                 this.$el.find('#no-generator').hide();
                 this.$el.find('#editorPanel').show();
+
+                $('.dir.generator.active').removeClass('active');
+                $('[data-path="'+ this.currentPath +'"]').addClass('active');
             }
 
             this.setCodeEditor(this.currentGenerator.code);
@@ -123,7 +145,6 @@ define([
             this.renderTemplateEditor(currentTemplate);
 
             this.delegateEvents();
-            console.log("Del");
         },
 
         renderTemplateEditor: function(currentTemplate) {
@@ -135,17 +156,25 @@ define([
             '<li class="create-tab">',
                 '<span class="icon">+</span>',
                 '<span id="createTemplateGroup" style="display:none;">',
-                  '<div class="input-group">',
+                  '<form class="input-group" id="newTemplateForm">',
                     '<span class="input-group-btn">',
                      ' <button class="btn btn-default" id="createNewTemplateButton" type="button">Create</button>',
                     '</span>',
                     '<input type="text" placeholder="template name"id="newTemplateNameInput" class="form-control">',
-                  '</div>',
+                  '</form>',
                 '</span>',
             '</li>'
             ].join('\n');
 
-            var str = _.map(keys, function(key) { return "<li class='temp-tab' id='temp-"+key+"'>"+key+"</li>";  }).join('\n');
+            var str = "";
+            /* Fix this */
+            if(this.currentGenerator.templates == {} || this.currentGenerator.templates.undefined == "") { str = "<li class='small'>No Templates</li>"; }
+            else {
+                str = _.map(keys, function(key) {
+                    return "<li class='temp-tab' id='temp-"+key+"'>"+key+"</li>";
+                }).join('\n');
+            }
+
             str = str + tempCreate;
             this.$el.find('#templateList').html(str);
 
@@ -170,37 +199,14 @@ define([
         },
 
         createNewTemplate: function(event){
-            event.stopPropagation();
             event.preventDefault();
 
-             var newTemplateName = $.trim($(this.$el.find('#newTemplateNameInput')).val());
-             var pluginName = this.model.get('currentPlugin');
-             var mdlName = this.model.get('currentModule');
-             var genName = this.model.get('currentGenerator');
-             var obj = this.model.get('currentObject');
-             if (newTemplateName !== "" && mdlName !== undefined && pluginName !== undefined && genName !== undefined){
-                if (this.model.get('browsingLocalGenerators')){
-                    var o = obj.plugins[pluginName][mdlName];
-                } else {
-                    var o = obj.plugins[pluginName][mdlName];
-                }
-                for (var i = 0; i < o.length; i++){
-                    if (o[i].name === genName){
-                        console.log(o[i]);
-                        o[i].templates[newTemplateName] = "";
-                        this.model.set('currentTemplate', newTemplateName);
-                        break;
-                    }
-                }
-                this.model.set('currentObject', obj);
-                console.log(this.model.get('currentObject'));
-            } else {
-                alert('check me out in the debugger');
-            }
-            this.setTemplateEditor();
-            this.setCodeEditor();
+            var newTemplateName = $.trim($(this.$el.find('#newTemplateNameInput')).val());
 
-            this.render();
+            this.currentGenerator.templates[newTemplateName] = "";
+            this.currentGenerator.templates = _.omit(this.currentGenerator.templates, "undefined");
+            this.renderTemplateEditor(newTemplateName);
+
         },
 
         downloadJSON: function(event){
@@ -269,6 +275,7 @@ define([
                 }
             };
 
+
             var str = JST['app/scripts/templates/Sidebar.ejs'](state);
 
             this.$el.find('#pluginBrowser').html(str);
@@ -280,6 +287,30 @@ define([
             if(o && o.metadata && o.metadata.name) $('#nameofplugin').val(o.metadata.name);
             if(o && o.metadata && o.metadata.description) $('#descriptionofplugin').val(o.metadata.description);
 
+            $('.module-span').on('click', function(e) {
+
+                var module = e.currentTarget.dataset.modulepath;
+                var $el = $('.dir[data-modulepath="'+ module +'"]');
+
+                if($el.hasClass('shrunk')) {
+                    $el.removeClass('shrunk');
+                }
+                else {
+                    $el.addClass('shrunk');
+                }
+            });
+
+            $('.plugin-span').on('click', function(e) {
+                var module = e.currentTarget.dataset.pluginpath;
+                var $el = $('.dir[data-pluginpath="'+ module +'"]');
+
+                if($el.hasClass('shrunk')) {
+                    $el.removeClass('shrunk');
+                }
+                else {
+                    $el.addClass('shrunk');
+                }
+            });
         },
 
         refreshGeneratedCode: function() {
@@ -311,7 +342,6 @@ define([
 
             try {
                 var generated = expander.expand(appState.plugins, {generate: generatorPath, data: {}});
-                console.log(generated);
 
                 if(typeof generated == "object") {
                     var str = "";
@@ -332,7 +362,6 @@ define([
 
         updateCurrentTemplate: function(){
             var str = this.templateEditor.getValue();
-            console.log(this.currentGenerator[this.currentTemplate]);
             this.currentGenerator.templates[this.currentTemplate] = str;
         },
 
