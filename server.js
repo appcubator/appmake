@@ -73,7 +73,7 @@ var Plugin = require('./models/Plugin').Plugin;
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
-	app.use('/client/app', express.static(path.join(__dirname, 'client', 'app')));
+	app.use('/client/app/', express.static(path.join(__dirname, 'client', 'app')));
 	app.use(express.favicon(path.join(__dirname, 'client', 'app', 'favicon.ico')));
 	app.use(express.logger('dev'));
 	
