@@ -9,5 +9,7 @@ pushd $DIR/client
 
 echo "[BUILD] Compiling templates"
 ./mk
+echo "[BUILD] Compiling expander"
+browserify $DIR/frontend/expander.js -o $DIR/client/app/scripts/expander-browser.js
 
 popd
