@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 mongoose.connect(process.env.MONGO_ADDR || 'mongodb://localhost');
 var Schema = mongoose.Schema;
 
-mongoose.connection.db.dropDatabase();
+// mongoose.connection.db.dropDatabase();
 
 var pluginSchema = new Schema({
 	name: String,

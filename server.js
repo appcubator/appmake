@@ -131,7 +131,7 @@ app.post('/plugins/:pkg/:mdl/:gen/update', function(req, res) {
         // save to DB and respond appropriately
         new_p = Plugin.fromJSON(p_json);
         p.modules = new_p.modules;
-        p.update(function(err) {
+        p.save(function(err) {
             if (err) throw err;
             if (!found) {
                 res.status = 201;
