@@ -7952,6 +7952,8 @@ html {
     background-color: rgb(50, 50, 50);
     color: rgb(130, 130, 130);
     border-right: 1px solid rgba(0, 0, 0, 0.5);
+    overflow-y: scroll;
+    padding-bottom: 15px;
 }
 
 .plugin-browser div#sidebar {
@@ -8120,7 +8122,9 @@ html {
     padding-bottom: 6px;
 }
 
-.create-plugin:hover {
+.create-plugin:hover,
+.create-module:hover,
+.create-generator:hover {
     background-color: rgb(80, 80, 80);
 }
 

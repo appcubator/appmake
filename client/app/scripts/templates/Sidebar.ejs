@@ -14,14 +14,14 @@
 				<span data-generatorName="<%= curPlugin[mdl][generator].name %>" class="generator-span"><%= curPlugin[mdl][generator].name %></span>
 			</div>
 		<% } %>
-	</div>
-	<div class="create-generator">
-		<div class="create-button">
-			<label class="icon">+</label><label class="text">New Generator</label>
+		<div class="create-generator">
+			<div class="create-button">
+				<label class="icon">+</label><label class="text">New Generator</label>
+			</div>
+			<form class="create-generator-form" data-path="<%= key %>.<%= mdl %>" style="display:none;">
+				<input type="text" class="newGeneratorNameInput">
+			</form>
 		</div>
-		<form class="create-generator-form" data-path="<%= key %>.<%= mdl %>" style="display:none;">
-			<input type="text" class="newGeneratorNameInput">
-		</form>
 	</div>
 	<% } %>
 	<div class="create-module">
