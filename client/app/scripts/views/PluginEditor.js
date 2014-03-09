@@ -37,7 +37,11 @@ define([
             'click .create-tab' : 'clickedAddTemplate',
             'submit #newTemplateForm': 'createNewTemplate',
             'click .create-plugin' : 'clickedNewPlugin',
-            'submit .create-plugin-form': 'createNewPlugin'
+            'submit .create-plugin-form': 'createNewPlugin',
+            'click .create-module': 'clickedNewModule',
+            'submit .create-module-form': 'createNewModule',
+            'click .create-generator': 'clickedNewGenerator',
+            'submit .create-generator-form': 'createNewGenerator'
         },
 
         initialize: function(){
@@ -120,6 +124,13 @@ define([
             this.renderGeneratorEditor();
         },
 
+        clickedNewGenerator: function(e) {
+            var $el = $(e.currentTarget);
+            $el.find('.create-button').hide();
+            $el.find('.create-generator-form').fadeIn();
+            $el.find('.newGeneratorNameInput').focus();
+        },
+
         clickedAddTemplate: function(e) {
             var $el = $(e.currentTarget);
             $el.find('.icon').hide();
@@ -132,6 +143,13 @@ define([
             $el.find('.create-button').hide();
             $el.find('.create-plugin-form').fadeIn();
             $el.find('#newPluginNameInput').focus();
+        },
+
+        clickedNewModule: function(e) {
+            var $el = $(e.currentTarget);
+            $el.find('.create-button').hide();
+            $el.find('.create-module-form').fadeIn();
+            $el.find('.newModuleNameInput').focus();
         },
 
         renderGeneratorEditor: function(currentTemplate) {
@@ -225,49 +243,39 @@ define([
             this.refreshSidebar();
         },
 
+        createNewModule: function(e) {
+            e.preventDefault();
+            var $form = $(e.currentTarget);
+            var newModuleName = $.trim($form.find('.newModuleNameInput').val());
+            var path = $form.data('modulepath').split('.');
+            var plugin = path[0];
+            this.currentObj.plugins[plugin][newModuleName] = [];
+            this.refreshSidebar();
+        },
+
+        createNewGenerator: function(e) {
+            e.preventDefault();
+            var $form = $(e.currentTarget);
+            var newGeneratorName = $.trim($form.find('.newGeneratorNameInput').val());
+            var path = $form.data('path').split('.');
+            var plugin = path[0];
+            this.currentObj.plugins[plugin][path[1]].push({
+                name: newGeneratorName,
+                code: "",
+                defaults: {},
+                templates: []
+            });
+            var currentGen = _.last(this.currentObj.plugins[plugin][path[1]]);
+
+            this.currentGenerator = currentGen;
+            this.refreshSidebar();
+            this.renderGeneratorEditor();
+        },
+
         downloadJSON: function(event){
             var modal = $('#downloadModal').modal();
             var o = this.model.serialize();
             $(modal).find('#downloadEditor').text(o);
-        },
-
-        createNewGenerator: function(event){
-            var newGeneratorName = $.trim($(this.$el.find('#newGeneratorNameInput')).val());
-
-            if (newGeneratorName !== "" && this.model.get('currentModule') !== undefined){
-                if (this.model.get('browsingLocalGenerators')){
-                    var code = "//example " + Math.random().toString().slice(3, 5);
-                    var o = this.model.get('currentObject');
-                    var newGenerator = {
-                        "templates": {},
-                        "code": code,
-                        "version": "0.1",
-                        "name": newGeneratorName
-                    }
-                    o.plugins[this.model.get('currentPlugin')][this.model.get('currentModule')].push(newGenerator);
-                    // Check if we're overriting the plugin after.
-                    this.model.set('currentObject', o);
-                } // handle the else case later
-                this.model.set('currentGenerator', newGeneratorName);
-            }
-            this.refreshSidebar();
-        },
-
-        createNewModule: function(event){
-            event.stopPropagation();
-            event.preventDefault();
-
-            var newModuleName = $.trim($(this.$el.find('#newModuleNameInput')).val());
-            if (newModuleName !== ""){
-                if (this.model.get('browsingLocalGenerators')){
-                    var o = this.model.get('currentObject');
-                    o.plugins[this.model.get('currentPlugin')][newModuleName] = [];
-                    // Check if we're overriting the plugin after.
-                    this.model.set('currentObject', o);
-                }
-                this.model.set('currentModule', newModuleName);
-            }
-            this.refreshSidebar();
         },
 
         refreshSidebar: function(){

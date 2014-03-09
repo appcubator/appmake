@@ -144,11 +144,17 @@ __p += '\n\t\t\t<div data-path="' +
 ((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +
 '" class="generator-span">' +
 ((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +
-'</span>\n\n\t\t\t</div>\n\t\t';
+'</span>\n\t\t\t</div>\n\t\t';
  } ;
-__p += '\n\t</div>\n\t';
+__p += '\n\t</div>\n\t<div class="create-generator">\n\t\t<div class="create-button">\n\t\t\t<label class="icon">+</label><label class="text">New Generator</label>\n\t\t</div>\n\t\t<form class="create-generator-form" data-path="' +
+((__t = ( key )) == null ? '' : __t) +
+'.' +
+((__t = ( mdl )) == null ? '' : __t) +
+'" style="display:none;">\n\t\t\t<input type="text" class="newGeneratorNameInput">\n\t\t</form>\n\t</div>\n\t';
  } ;
-__p += '\n\n</div>\n';
+__p += '\n\t<div class="create-module">\n\t\t\t<div class="create-button">\n\t\t\t<label class="icon">+</label><label class="text">New Module</label>\n\t\t</div>\n\t\t<form class="create-module-form" data-modulepath="' +
+((__t = ( key )) == null ? '' : __t) +
+'" style="display:none;"><input type="text" class="newModuleNameInput"></form>\n\t</div>\n</div>\n';
  }); ;
 __p += '\n<div class="create-plugin">\n\t<div class="create-button">\n\t\t<span class="icon">+</span><span class="text">New Plugin</span>\n\t</div>\n\t<form class="create-plugin-form" style="display:none;"><input type="text" id="newPluginNameInput"></form>\n</div>\n</div>\n';
 

@@ -7961,7 +7961,7 @@ html {
 
 .plugin-browser .dir span {
     padding: 7px 0;
-    display:block;
+    display: inline-block;
     cursor: default;
 }
 
@@ -8113,7 +8113,7 @@ html {
     padding-top: 60px;
 }
 
-.create-plugin {
+.create-plugin, .create-module, .create-generator {
     padding-left: 10px;
     cursor: pointer;
     padding-top: 6px;
@@ -8121,15 +8121,34 @@ html {
 }
 
 .create-plugin:hover {
-    display: block;
     background-color: rgb(80, 80, 80);
 }
 
-.create-plugin .icon {
+.create-plugin .icon,
+.create-module .icon,
+.create-generator .icon {
     display: inline-block;
     width: 15px;
     text-align: center;
     margin-right: 4px;
     font-weight: bold;
     font-size: 16px;
+}
+
+.create-button span,
+.create-module span,
+.create-generator span {
+    display: inline-block;
+}
+
+.create-module {
+    margin-top: 2px;
+    padding-left: 28px;
+}
+
+.create-module label.icon {
+}
+
+.create-generator .create-button {
+    padding-left: 38px;
 }
