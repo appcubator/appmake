@@ -101,37 +101,44 @@
 	<div class='' id='pluginNavigator'>
 
 		<div class='plugin-browser' id='pluginBrowser'></div>
+        <table class='right-panel'>
+            <tr>
+                <td class="left-panel">
+                <div class='col-md-9' id='no-generator'>
+                    No generator selected.
+                </div>
+        		<div id='editorPanel'>
+        			<h3>Template Editor</h3>
+        			<div id='templatePanel'>
+        				<ul class="tabs" id="templateList">
 
-        <div class='col-md-9' id='no-generator'>
-            No generator selected.
-        </div>
-		<div class='col-md-9' id='editorPanel'>
-			<h3>Template Editor</h3>
-			<div id='templatePanel'>
-				<ul class="tabs" id="templateList">
+        				</ul>
+        				<div id='templateEditor'></div>
+        			</div>
+        			</hr>
+                    <div class="editor">
+            			<h3>Code Editor</h3>
+            			<div id='codePanel'>
+            				<div id='codeEditor'></div>
+            			</div>
+                    </div>
+        			</hr>
+                    <div class="editor">
+            			<h3>Defaults Editor</h3>
+            			<div id='defaultsEditor'></div>
+                    </div>
 
-				</ul>
-				<div id='templateEditor'></div>
-			</div>
-			</hr>
-            <div class="editor">
-    			<h3>Code Editor</h3>
-    			<div id='codePanel'>
-    				<div id='codeEditor'></div>
-    			</div>
-            </div>
-			</hr>
-            <div class="editor">
-    			<h3>Defaults Editor</h3>
-    			<div id='defaultsEditor'></div>
-            </div>
-
-		</div>
-		<div class='col-md-2' id='generatedPanel'>
-			<h3 class="refreshGeneratedBtn">Generated Code</h3>
-			<div class='col-md-12'>
-				<div id='generatedCode'></div>
-			</div>
-		</div>
+        		</div>
+                </td>
+                <td class="right-cell">
+        		<div id='generatedPanel'>
+        			<h3 class="refreshGeneratedBtn">Generated Code</h3>
+        			<div class='col-md-12'>
+        				<div id='generatedCode'></div>
+        			</div>
+        		</div>
+                </td>
+            </tr>
+        </table>
 	</div>
 </div>
