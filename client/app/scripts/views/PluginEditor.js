@@ -35,7 +35,9 @@ define([
             'click .generator': 'clickedCurrentGenerator',
             'click .temp-tab':  'clickedCurrentTemplate',
             'click .create-tab' : 'clickedAddTemplate',
-            'submit #newTemplateForm': 'createNewTemplate'
+            'submit #newTemplateForm': 'createNewTemplate',
+            'click .create-plugin' : 'clickedNewPlugin',
+            'submit .create-plugin-form': 'createNewPlugin'
         },
 
         initialize: function(){
@@ -125,6 +127,13 @@ define([
             $('#newTemplateNameInput').focus();
         },
 
+        clickedNewPlugin: function(e) {
+            var $el = $(e.currentTarget);
+            $el.find('.create-button').hide();
+            $el.find('.create-plugin-form').fadeIn();
+            $el.find('#newPluginNameInput').focus();
+        },
+
         renderGeneratorEditor: function(currentTemplate) {
 
             if (!this.currentGenerator) {
@@ -209,24 +218,17 @@ define([
 
         },
 
+        createNewPlugin: function(e) {
+            e.preventDefault();
+            var newPluginName = $.trim($(this.$el.find('#newPluginNameInput')).val());
+            this.currentObj.plugins[newPluginName] = {};
+            this.refreshSidebar();
+        },
+
         downloadJSON: function(event){
             var modal = $('#downloadModal').modal();
             var o = this.model.serialize();
             $(modal).find('#downloadEditor').text(o);
-        },
-
-        createNewPlugin: function(event) {
-            var newPluginName = $.trim($(this.$el.find('#newPluginNameInput')).val());
-
-            var o = this.model.get('currentObject');
-
-            if (newPluginName !== "" && !o.plugins[newPluginName]){
-                o.plugins[newPluginName] = {};
-
-                this.model.set('currentObject', o, {silent: true});
-                this.model.set('currentPlugin', newPluginName);
-                this.model.setupCurrentModule({});
-            }
         },
 
         createNewGenerator: function(event){

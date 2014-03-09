@@ -150,7 +150,7 @@ __p += '\n\t</div>\n\t';
  } ;
 __p += '\n\n</div>\n';
  }); ;
-__p += '\n</div>\n';
+__p += '\n<div class="create-plugin">\n\t<div class="create-button">\n\t\t<span class="icon">+</span><span class="text">New Plugin</span>\n\t</div>\n\t<form class="create-plugin-form" style="display:none;"><input type="text" id="newPluginNameInput"></form>\n</div>\n</div>\n';
 
 }
 return __p

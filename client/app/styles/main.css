@@ -8083,9 +8083,11 @@ html {
 }
 
 .create-tab .icon {
+    display: inline-block;
     line-height: 12px;
     font-size: 18px;
     font-weight: bold;
+    margin-top: 6px;
 }
 
 .right-panel {
@@ -8109,4 +8111,25 @@ html {
     text-align: center;
     height: 100%;
     padding-top: 60px;
+}
+
+.create-plugin {
+    padding-left: 10px;
+    cursor: pointer;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.create-plugin:hover {
+    display: block;
+    background-color: rgb(80, 80, 80);
+}
+
+.create-plugin .icon {
+    display: inline-block;
+    width: 15px;
+    text-align: center;
+    margin-right: 4px;
+    font-weight: bold;
+    font-size: 16px;
 }
