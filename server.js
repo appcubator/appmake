@@ -102,9 +102,9 @@ app.get('/plugins/list', cors(), function (req, res) {
 app.get('/plugins/:pkg', function (req, res){
 	Plugin.findOne({
 		name: req.params.pkg,
-	}, function (err, gen) {
-        gen = gen.toNormalJSON();
-		res.json(gen);
+	}, function (err, plugin) {
+        plugin = plugin.toNormalJSON();
+		res.json(plugin);
 	});
 });
 
@@ -113,13 +113,15 @@ app.post('/plugins/:pkg/:mdl/:gen/update', function(req, res) {
     var gen = req.body;
     Plugin.findOne({ name: req.params.pkg }, function(err, p) {
         if (err) throw err;
-        p_json = Plugin.toJSON(p);
+        p_json = p.toNormalJSON();
         var gens = p_json[req.params.mdl];
         var found = false;
         // try to find and replace first occurance
         _.each(gens, function(g, index) {
-            if (!found && g.name === gen.name) {
+            console.log (g.name + '\t' + req.params.gen);
+            if (!found && g.name === req.params.gen) {
                 gens[index] = gen;
+                found = true;
             }
         });
         // if not found, add as new generator.
@@ -128,8 +130,8 @@ app.post('/plugins/:pkg/:mdl/:gen/update', function(req, res) {
         }
         // save to DB and respond appropriately
         new_p = Plugin.fromJSON(p_json);
-        new_p._id = p._id;
-        new_p.save(function(err) {
+        p.modules = new_p.modules;
+        p.update(function(err) {
             if (err) throw err;
             if (!found) {
                 res.status = 201;
@@ -147,9 +149,18 @@ app.put('/plugins/publish', function(req, res) {
     // TODO add authorization
     var plugin = req.body;
     var p = Plugin.fromJSON(plugin);
-    p.save(function(err, data) {
+    Plugin.findOne({ name: p.name }, function(err, existing_p) {
         if (err) throw err;
-        res.end('ok');
+        if (existing_p) {
+            res.status=409;
+            res.end('plugin already exists');
+        } else {
+            p.save(function(err, data) {
+                if (err) throw err;
+                res.status=201;
+                res.end('created plugin');
+            });
+        }
     });
 });
 

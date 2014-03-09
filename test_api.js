@@ -55,6 +55,17 @@ String.prototype.firstNLines = function(n) {
             rest.get('http://127.0.0.1:3000' + url).on('complete', function(data) {
                 console.log('\n\nGET ' + url);
                 console.log( JSON.stringify(data, null, 4).firstNLines(15) );
+                var newgen = {
+                    name: 'testrenamed',
+                    code: 'whole new code',
+                    templates: {test:'im on a boat'}
+                };
+                (function (url) {
+                    rest.post('http://127.0.0.1:3000' + url, {data: newgen}).on('complete', function(data) {
+                        console.log('\n\nPOST ' + url);
+                        console.log( JSON.stringify(data, null, 4).firstNLines(15) );
+                    });
+                }) ('/plugins/testnewplugin/uielements/test2/update');
             });
         }) ('/plugins/testnewplugin');
 
