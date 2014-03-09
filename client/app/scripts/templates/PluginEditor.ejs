@@ -85,7 +85,7 @@
 					  </button>
 					  <button id='previewButton' type="button" class="btn btn-default btn-sm">Preview</button>
 					  <button id='downloadButton' type="button" class="btn btn-default btn-sm">Download</button>
-					</div> 
+					</div>
 					<div class='btn-group float-right'>
 					  <button id='saveButton' type="button" class="btn btn-default btn-sm">Save</button>
 					  <button id='publishButton' type="button" class="btn btn-success btn-sm">Publish</button>
@@ -99,64 +99,46 @@
 
 <div id='pluginEditor' class='container-fluid'>
 	<div class='' id='pluginNavigator'>
-		
-		<div class='col-md-3' id='pluginBrowser'></div>
-		
-		<div class='col-md-6' id='editorPanel'> 
-			<h3>Template Editor</h3>
-			<div class='row' id='templatePanel'> 
-				<ul class="nav nav-tabs">
-				   	<% if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { %>
-					  	
-					  	<% var o = app.currentObject.plugins[app.currentPlugin][app.currentModule]; %>
-					  	<% for (var i = 0; i < o.length; i++) { %>
-					  		<% if (o[i].name === app.currentGenerator) { %>
-					  			<% for (template in o[i].templates) { %>
-					  				<% if (template == app.currentTemplate) { %>
-					  					<li templatename='<%=template%>'class='active selectTemplateButton'> <a href='#'> <%= template %> </a> </li>
-					  				<% } else { %>
-					  					<li templatename='<%=template%>'class='selectTemplateButton'> <a href='#'> <%= template %> </a> </li>
-					  				<% } %>
-					  			<% } %>
-					  		<% } %>
-					  	<% } %>
-				  	<% } %>
-				  	<li class="pull-right">
-				  		<span id='createTemplateGroup' class="pull-right">
-							<div class="input-group">
-							  <span class="input-group-btn">
-							    <button class="btn btn-default" id='createNewTemplateButton' type="button">Create</button>
-							  </span>	
-							  <input type="text" placeholder="template name"id='newTemplateNameInput' class="form-control">
-							</div><!-- /input-group -->
-						</span>
-				  	</li>
-				</ul>
-				<div class='col-md-12'>
-					<div id='templateEditor'></div>
-				</div>
-			</div>
 
-			</hr>
+		<div class='plugin-browser' id='pluginBrowser'></div>
+        <table class='right-panel'>
+            <tr>
+                <td class="left-panel">
+                <div class='col-md-9' id='no-generator'>
+                    No generator selected.
+                </div>
+        		<div id='editorPanel'>
+        			<h3>Template Editor</h3>
+        			<div id='templatePanel'>
+        				<ul class="tabs" id="templateList">
 
-			<h3>Code Editor</h3>
-			<div class='row' id='codePanel'> 
-				<div class='col-md-12' > <div id='codeEditor'>   </div> </div>
-			</div>
+        				</ul>
+        				<div id='templateEditor'></div>
+        			</div>
+        			</hr>
+                    <div class="editor">
+            			<h3>Code Editor</h3>
+            			<div id='codePanel'>
+            				<div id='codeEditor'></div>
+            			</div>
+                    </div>
+        			</hr>
+                    <div class="editor">
+            			<h3>Defaults Editor</h3>
+            			<div id='defaultsEditor'></div>
+                    </div>
 
-			</hr>
-
-			<h3>Defaults Editor</h3>
-			<div class='col-md-12' >
-				<div id='defaultsEditor'></div>
-			</div>
-
-		</div>
-		<div class='col-md-3' id='generatedPanel'> 
-			<h3 class="refreshGeneratedBtn">Generated Code</h3>
-			<div class='col-md-12'>
-				<div id='generatedCode'></div>
-			</div>
-		</div>
+        		</div>
+                </td>
+                <td class="right-cell">
+        		<div id='generatedPanel'>
+        			<h3 class="refreshGeneratedBtn">Generated Code</h3>
+        			<div class='col-md-12'>
+        				<div id='generatedCode'></div>
+        			</div>
+        		</div>
+                </td>
+            </tr>
+        </table>
 	</div>
 </div>

@@ -93,42 +93,9 @@ return __p
 
 this["JST"]["app/scripts/templates/PluginEditor.ejs"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
-function print() { __p += __j.call(arguments, '') }
+var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<!-- Load file modal -->\n<div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\n  <div class="modal-dialog">\n    <div class="modal-content">\n      <div class="modal-header">\n        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n        <h4 class="modal-title" id="myModalLabel"> Load Resources </h4>\n\n      </div>\n      <div class="modal-body">\n        <h1 class=\'lead\'> To get started, log in to your Appcubator account and select an app. Alternatively, you can add, edit and build on existing plugins in the repository. </h1>\n\n\t\t<form class="form-horizontal" role="form">\n\t\t  <div class="form-group">\n\t\t    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>\n\t\t    <div class="col-sm-10">\n\t\t      <input disabled type="email" class="form-control" id="inputEmail3" placeholder="Email">\n\t\t    </div>\n\t\t  </div>\n\t\t  <div class="form-group">\n\t\t    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>\n\t\t    <div class="col-sm-10">\n\t\t      <input disabled type="password" class="form-control" id="inputPassword3" placeholder="Password">\n\t\t    </div>\n\t\t  </div>\n\t\t  <div class="form-group">\n\t\t    <div class="col-sm-offset-2 col-sm-10">\n\t\t      <div class="checkbox">\n\t\t        <label>\n\t\t          <input disabled type="checkbox"> Remember me\n\t\t        </label>\n\t\t      </div>\n\t\t    </div>\n\t\t  </div>\n\t\t  <div class="form-group">\n\t\t    <div class="col-sm-offset-2 col-sm-10">\n\t\t      <button disabled type="submit" class="btn btn-default">Sign in</button>\n\t\t    </div>\n\t\t  </div>\n\t\t</form>\n\n\n      </div>\n      <div class="modal-footer">\n        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- Download Modal  -->\n\n\n<!-- Load file modal -->\n<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\n  <div class="modal-dialog">\n    <div class="modal-content">\n      <div class="modal-header">\n        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n        <h4 class="modal-title" id="myModalLabel"> Load Resources </h4>\n\n      </div>\n      <div class="modal-body">\n        <h1 class=\'lead\'> These are the droids you are looking for. </h1>\n        <div id=\'downloadEditor\'> </div>\n\n      </div>\n      <div class="modal-footer">\n        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n\n\n\n<!-- End  -->\n\n<div class=\'navbar\'>\n\t\t\t\t<h3>Appcubator</h3>\n\t\t\t\t<span class=\'\' id=\'actionBar\'>\n\t\t\t\t\t<div class="btn-group float-right">\n\t\t\t\t\t  <button id=\'loadButton\' type="button" class="btn btn-default btn-sm">\n\t\t\t\t\t  \tLoad\n\t\t\t\t\t  </button>\n\t\t\t\t\t  <button id=\'previewButton\' type="button" class="btn btn-default btn-sm">Preview</button>\n\t\t\t\t\t  <button id=\'downloadButton\' type="button" class="btn btn-default btn-sm">Download</button>\n\t\t\t\t\t</div> \n\t\t\t\t\t<div class=\'btn-group float-right\'>\n\t\t\t\t\t  <button id=\'saveButton\' type="button" class="btn btn-default btn-sm">Save</button>\n\t\t\t\t\t  <button id=\'publishButton\' type="button" class="btn btn-success btn-sm">Publish</button>\n\t\t\t\t\t</div>\n\t\t\t\t</span>\n<!-- \t\t\t\t<span class=\'float-right\' id=\'searchBar\'>\n\t\t\t\t\t<input type="text" class="form-control">\n\t\t\t\t    <button class="btn btn-default" type="button">Go!</button>\n\t\t\t\t</span> -->\n</div>\n\n<div id=\'pluginEditor\' class=\'container-fluid\'>\n\t<div class=\'\' id=\'pluginNavigator\'>\n\t\t\n\t\t<div class=\'col-md-3\' id=\'pluginBrowser\'></div>\n\t\t\n\t\t<div class=\'col-md-6\' id=\'editorPanel\'> \n\t\t\t<h3>Template Editor</h3>\n\t\t\t<div class=\'row\' id=\'templatePanel\'> \n\t\t\t\t<ul class="nav nav-tabs">\n\t\t\t\t   \t';
- if (app.currentGenerator !== undefined && app.currentObject !== undefined && app.currentModule !== undefined && app.currentPlugin !== undefined) { ;
-__p += '\n\t\t\t\t\t  \t\n\t\t\t\t\t  \t';
- var o = app.currentObject.plugins[app.currentPlugin][app.currentModule]; ;
-__p += '\n\t\t\t\t\t  \t';
- for (var i = 0; i < o.length; i++) { ;
-__p += '\n\t\t\t\t\t  \t\t';
- if (o[i].name === app.currentGenerator) { ;
-__p += '\n\t\t\t\t\t  \t\t\t';
- for (template in o[i].templates) { ;
-__p += '\n\t\t\t\t\t  \t\t\t\t';
- if (template == app.currentTemplate) { ;
-__p += '\n\t\t\t\t\t  \t\t\t\t\t<li templatename=\'' +
-((__t = (template)) == null ? '' : __t) +
-'\'class=\'active selectTemplateButton\'> <a href=\'#\'> ' +
-((__t = ( template )) == null ? '' : __t) +
-' </a> </li>\n\t\t\t\t\t  \t\t\t\t';
- } else { ;
-__p += '\n\t\t\t\t\t  \t\t\t\t\t<li templatename=\'' +
-((__t = (template)) == null ? '' : __t) +
-'\'class=\'selectTemplateButton\'> <a href=\'#\'> ' +
-((__t = ( template )) == null ? '' : __t) +
-' </a> </li>\n\t\t\t\t\t  \t\t\t\t';
- } ;
-__p += '\n\t\t\t\t\t  \t\t\t';
- } ;
-__p += '\n\t\t\t\t\t  \t\t';
- } ;
-__p += '\n\t\t\t\t\t  \t';
- } ;
-__p += '\n\t\t\t\t  \t';
- } ;
-__p += '\n\t\t\t\t  \t<li class="pull-right">\n\t\t\t\t  \t\t<span id=\'createTemplateGroup\' class="pull-right">\n\t\t\t\t\t\t\t<div class="input-group">\n\t\t\t\t\t\t\t  <span class="input-group-btn">\n\t\t\t\t\t\t\t    <button class="btn btn-default" id=\'createNewTemplateButton\' type="button">Create</button>\n\t\t\t\t\t\t\t  </span>\t\n\t\t\t\t\t\t\t  <input type="text" placeholder="template name"id=\'newTemplateNameInput\' class="form-control">\n\t\t\t\t\t\t\t</div><!-- /input-group -->\n\t\t\t\t\t\t</span>\n\t\t\t\t  \t</li>\n\t\t\t\t</ul>\n\t\t\t\t<div class=\'col-md-12\'>\n\t\t\t\t\t<div id=\'templateEditor\'></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t</hr>\n\n\t\t\t<h3>Code Editor</h3>\n\t\t\t<div class=\'row\' id=\'codePanel\'> \n\t\t\t\t<div class=\'col-md-12\' > <div id=\'codeEditor\'>   </div> </div>\n\t\t\t</div>\n\n\t\t\t</hr>\n\n\t\t\t<h3>Defaults Editor</h3>\n\t\t\t<div class=\'col-md-12\' >\n\t\t\t\t<div id=\'defaultsEditor\'></div>\n\t\t\t</div>\n\n\t\t</div>\n\t\t<div class=\'col-md-3\' id=\'generatedPanel\'> \n\t\t\t<h3 class="refreshGeneratedBtn">Generated Code</h3>\n\t\t\t<div class=\'col-md-12\'>\n\t\t\t\t<div id=\'generatedCode\'></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n';
+__p += '<!-- Load file modal -->\n<div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\n  <div class="modal-dialog">\n    <div class="modal-content">\n      <div class="modal-header">\n        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n        <h4 class="modal-title" id="myModalLabel"> Load Resources </h4>\n\n      </div>\n      <div class="modal-body">\n        <h1 class=\'lead\'> To get started, log in to your Appcubator account and select an app. Alternatively, you can add, edit and build on existing plugins in the repository. </h1>\n\n\t\t<form class="form-horizontal" role="form">\n\t\t  <div class="form-group">\n\t\t    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>\n\t\t    <div class="col-sm-10">\n\t\t      <input disabled type="email" class="form-control" id="inputEmail3" placeholder="Email">\n\t\t    </div>\n\t\t  </div>\n\t\t  <div class="form-group">\n\t\t    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>\n\t\t    <div class="col-sm-10">\n\t\t      <input disabled type="password" class="form-control" id="inputPassword3" placeholder="Password">\n\t\t    </div>\n\t\t  </div>\n\t\t  <div class="form-group">\n\t\t    <div class="col-sm-offset-2 col-sm-10">\n\t\t      <div class="checkbox">\n\t\t        <label>\n\t\t          <input disabled type="checkbox"> Remember me\n\t\t        </label>\n\t\t      </div>\n\t\t    </div>\n\t\t  </div>\n\t\t  <div class="form-group">\n\t\t    <div class="col-sm-offset-2 col-sm-10">\n\t\t      <button disabled type="submit" class="btn btn-default">Sign in</button>\n\t\t    </div>\n\t\t  </div>\n\t\t</form>\n\n\n      </div>\n      <div class="modal-footer">\n        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- Download Modal  -->\n\n\n<!-- Load file modal -->\n<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\n  <div class="modal-dialog">\n    <div class="modal-content">\n      <div class="modal-header">\n        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n        <h4 class="modal-title" id="myModalLabel"> Load Resources </h4>\n\n      </div>\n      <div class="modal-body">\n        <h1 class=\'lead\'> These are the droids you are looking for. </h1>\n        <div id=\'downloadEditor\'> </div>\n\n      </div>\n      <div class="modal-footer">\n        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n\n\n\n<!-- End  -->\n\n<div class=\'navbar\'>\n\t\t\t\t<h3>Appcubator</h3>\n\t\t\t\t<span class=\'\' id=\'actionBar\'>\n\t\t\t\t\t<div class="btn-group float-right">\n\t\t\t\t\t  <button id=\'loadButton\' type="button" class="btn btn-default btn-sm">\n\t\t\t\t\t  \tLoad\n\t\t\t\t\t  </button>\n\t\t\t\t\t  <button id=\'previewButton\' type="button" class="btn btn-default btn-sm">Preview</button>\n\t\t\t\t\t  <button id=\'downloadButton\' type="button" class="btn btn-default btn-sm">Download</button>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\'btn-group float-right\'>\n\t\t\t\t\t  <button id=\'saveButton\' type="button" class="btn btn-default btn-sm">Save</button>\n\t\t\t\t\t  <button id=\'publishButton\' type="button" class="btn btn-success btn-sm">Publish</button>\n\t\t\t\t\t</div>\n\t\t\t\t</span>\n<!-- \t\t\t\t<span class=\'float-right\' id=\'searchBar\'>\n\t\t\t\t\t<input type="text" class="form-control">\n\t\t\t\t    <button class="btn btn-default" type="button">Go!</button>\n\t\t\t\t</span> -->\n</div>\n\n<div id=\'pluginEditor\' class=\'container-fluid\'>\n\t<div class=\'\' id=\'pluginNavigator\'>\n\n\t\t<div class=\'plugin-browser\' id=\'pluginBrowser\'></div>\n        <table class=\'right-panel\'>\n            <tr>\n                <td class="left-panel">\n                <div class=\'col-md-9\' id=\'no-generator\'>\n                    No generator selected.\n                </div>\n        \t\t<div id=\'editorPanel\'>\n        \t\t\t<h3>Template Editor</h3>\n        \t\t\t<div id=\'templatePanel\'>\n        \t\t\t\t<ul class="tabs" id="templateList">\n\n        \t\t\t\t</ul>\n        \t\t\t\t<div id=\'templateEditor\'></div>\n        \t\t\t</div>\n        \t\t\t</hr>\n                    <div class="editor">\n            \t\t\t<h3>Code Editor</h3>\n            \t\t\t<div id=\'codePanel\'>\n            \t\t\t\t<div id=\'codeEditor\'></div>\n            \t\t\t</div>\n                    </div>\n        \t\t\t</hr>\n                    <div class="editor">\n            \t\t\t<h3>Defaults Editor</h3>\n            \t\t\t<div id=\'defaultsEditor\'></div>\n                    </div>\n\n        \t\t</div>\n                </td>\n                <td class="right-cell">\n        \t\t<div id=\'generatedPanel\'>\n        \t\t\t<h3 class="refreshGeneratedBtn">Generated Code</h3>\n        \t\t\t<div class=\'col-md-12\'>\n        \t\t\t\t<div id=\'generatedCode\'></div>\n        \t\t\t</div>\n        \t\t</div>\n                </td>\n            </tr>\n        </table>\n\t</div>\n</div>\n';
 
 }
 return __p
@@ -139,79 +106,57 @@ obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
 with (obj) {
-
- if (app.browsingLocalGenerators === true) { ;
-__p += '\n\t<div id=\'pluginSelector\'>\n\t\t<h6><span class="label label-default">CURRENT PLUGIN</span></h6>\n\t\t<div class="dropdown">\n\t\t  <a class=\'btn btn-lg btn-default\' data-toggle="dropdown" id=\'pluginSelectorInput\' href="#">\n\t\t  \t' +
-((__t = ( app.currentPlugin )) == null ? '' : __t) +
-'<span class="caret"></span>\n\t\t  </a>\n\t\t  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">\n\t\t  \t';
+__p += '<div id=\'sidebar\'>\n';
  _.each(app.currentObject.plugins, function(plugin, key) { ;
-__p += '\n\t\t\t\t';
- if (key != app.currentPlugin) { ;
-__p += '\n\t\t\t\t<li pluginname=\'' +
+__p += '\n<div data-pluginpath=\'' +
 ((__t = ( key )) == null ? '' : __t) +
-'\' class=\'selectPluginButton\'><a href=\'#\'>' +
+'\' class=\'plugin dir\'>\n\t<span class="plugin-span" data-pluginpath=\'' +
 ((__t = ( key )) == null ? '' : __t) +
-'</a></li>\n\t\t\t\t';
- }  ;
-__p += '\n\t\t\t';
- }); ;
-__p += '\n\t\t  </ul>\n\t\t</div>\n\t\t<div class="input-group">\n\t\t \t<input type="text" id=\'newPluginNameInput\' class="form-control"></input>\n\t\t  \t<span class="input-group-btn">\n\t\t    \t<button class="btn btn-primary btn-sm" id=\'createNewPluginButton\'type="button"> Create Plugin</button>\n\t\t\t</span>\n\t\t</div><!-- /input-group -->\n\n\t\t<div class=\'pluginInfo\'>\n\t\t\t<h6><span class="label label-default">Name</span></h6>\n\t\t\t<input type=\'text\' id="nameofplugin" placeholder=\'Name of the Plugin\'> </input>  \n\t\t\t<h6><span class="label label-default">Description</span></h6>\n\t\t\t<input type=\'text\' id="descriptionofplugin" placeholder=\'This plugin helps you do awesome stuff.\'></input>  \n\t\t\t\n\t\t\t<h6><span class="label label-default">CURRENT MODULE</span></h6>\n\n\t\t\t\t<div class="dropdown">\n\n\t\t\t\t  \t<a class=\'btn btn-default btn-block btn-default\' data-toggle="dropdown" id=\'moduleSelector\' href="#">\n\t\t\t\t  \t\t';
- if (app.currentModule === undefined) { ;
-__p += '\n\t\t\t\t  \t\t\tNo module selected\n\t\t\t\t  \t\t';
- } else {;
-__p += '\n\t\t\t\t  \t\t\t' +
-((__t = ( app.currentModule )) == null ? '' : __t) +
-' <span class="caret"></span>\n\t\t\t\t  \t\t';
- } ;
-__p += '\n\t\t\t\t  \t</a>\n\n\t\t\t\t\t <ul class="dropdown-menu list-group" id=\'moduleList\' role="menu" aria-labelledby="dLabel">\n\t\t\t\t\t  \t\t';
- var mdls = app.currentObject.plugins[app.currentPlugin] ;
-__p += '\n\t\t\t\t\t  \t\t';
+'\'>' +
+((__t = ( key )) == null ? '' : __t) +
+'</span>\n\n\t';
+ var mdls = app.currentObject.plugins[key] ;
+__p += '\n\t';
  for (mdl in mdls) { if(mdl == "metadata") continue; ;
-__p += '\n\t\t\t\t\t  \t\t<li class="selectModuleButton list-group-item" moduleName=\'' +
+__p += '\n\t<div class="module dir" data-modulepath=\'' +
+((__t = ( key )) == null ? '' : __t) +
+'.' +
 ((__t = (mdl)) == null ? '' : __t) +
-'\'> ' +
+'\'>\n\t\t<span class="module-span" data-modulepath=\'' +
+((__t = ( key )) == null ? '' : __t) +
+'.' +
 ((__t = (mdl)) == null ? '' : __t) +
-' </li>\n\t\t\t\t\t  \t\t';
+'\'>' +
+((__t = (mdl)) == null ? '' : __t) +
+'</span>\n\n\t\t';
+ var curPlugin =  app.currentObject.plugins[key] ;
+__p += '\n\t\t';
+ for (generator in curPlugin[mdl]){ ;
+__p += '\n\t\t\t<div data-path="' +
+((__t = ( key )) == null ? '' : __t) +
+'.' +
+((__t = (mdl)) == null ? '' : __t) +
+'.' +
+((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +
+'" data-generatorName="' +
+((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +
+'" class="dir generator">\n\t\t\t\t<span data-generatorName="' +
+((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +
+'" class="generator-span">' +
+((__t = ( curPlugin[mdl][generator].name )) == null ? '' : __t) +
+'</span>\n\t\t\t</div>\n\t\t';
  } ;
-__p += '\t\t\t\t  \t\t\n\t\t\t\t\t </ul>\n\t\t\t\t</div>\n\t\t\t\t<div class="input-group">\n\t\t\t\t \t<input type="text" id=\'newModuleNameInput\' class="form-control"></input>\n\t\t\t\t  \t<span class="input-group-btn">\n\t\t\t\t    \t<button class="btn btn-primary btn-sm" id=\'createNewModuleButton\'type="button"> Create Module</button>\n\t\t\t\t  \t</span>\n\t\t\t\t</div><!-- /input-group -->\n\t\t</div>\n\t</div>\n';
- }  ;
-__p += '\n\n<div class=\'\' id=\'generatorBrowser\'>\n\n\t\t<h6><span class="label label-default">GENERATORS</span></h6>\n\t\t<ul class="list-group generators">\n\t\t  ';
- if ((app.currentObject !== undefined) && (app.currentModule !== undefined) && (app.currentPlugin !== undefined)) { ;
-__p += '\n\t\t  \t';
- if (app.browsingLocalGenerators) { ;
-__p += '\n\t\t  \t\t';
- var o = app.currentObject.plugins[app.currentPlugin]; ;
-__p += '\n\t\t  \t';
-} else { ;
-__p += '\n\t\t  \t\t';
- var o = app.currentObject.plugins[app.currentPlugin]; ;
-__p += '\n\t\t  \t';
+__p += '\n\t</div>\n\t<div class="create-generator">\n\t\t<div class="create-button">\n\t\t\t<label class="icon">+</label><label class="text">New Generator</label>\n\t\t</div>\n\t\t<form class="create-generator-form" data-path="' +
+((__t = ( key )) == null ? '' : __t) +
+'.' +
+((__t = ( mdl )) == null ? '' : __t) +
+'" style="display:none;">\n\t\t\t<input type="text" class="newGeneratorNameInput">\n\t\t</form>\n\t</div>\n\t';
  } ;
-__p += '\n\t\t\t';
- for (generator in o[app.currentModule]){ ;
-__p += '\n\t\t\t\t';
- if (o[app.currentModule][generator].name === app.currentGenerator) { ;
-__p += '\n\t\t\t\t<li generatorName="' +
-((__t = (o[app.currentModule][generator].name)) == null ? '' : __t) +
-'"class="active list-group-item selectGeneratorButton">\n\t\t  \t\t\t' +
-((__t = (generator)) == null ? '' : __t) +
-' - <b> ' +
-((__t = (o[app.currentModule][generator].name)) == null ? '' : __t) +
-' </b></li>\n\t\t\t\t';
- } else { ;
-__p += '\n\t\t  \t\t<li generatorName="' +
-((__t = (o[app.currentModule][generator].name)) == null ? '' : __t) +
-'"class="list-group-item selectGeneratorButton">\n\t\t  \t\t\t' +
-((__t = (generator)) == null ? '' : __t) +
-' - <b> ' +
-((__t = (o[app.currentModule][generator].name)) == null ? '' : __t) +
-' </b></li>\n\t\t  \t\t';
- };
-__p += '\n\n\t\t  \t';
- } ;
-__p += '\n\t\t  ';
- } ;
-__p += '\n\t\t</ul>\n\n\t\t<div class="input-group">\n\t\t\t<input id=\'newGeneratorNameInput\' class=\'form-control\' placeholder=\'Generator Name\'> </input>\n\t\t\t<span class="input-group-btn">\n\t\t\t<button id=\'createNewGeneratorButton\' class=\'btn btn-primary btn-sm\'>Create Generator </button>\n\t\t\t</span>\n\t\t</div>\n</div>';
+__p += '\n\t<div class="create-module">\n\t\t\t<div class="create-button">\n\t\t\t<label class="icon">+</label><label class="text">New Module</label>\n\t\t</div>\n\t\t<form class="create-module-form" data-modulepath="' +
+((__t = ( key )) == null ? '' : __t) +
+'" style="display:none;"><input type="text" class="newModuleNameInput"></form>\n\t</div>\n</div>\n';
+ }); ;
+__p += '\n<div class="create-plugin">\n\t<div class="create-button">\n\t\t<span class="icon">+</span><span class="text">New Plugin</span>\n\t</div>\n\t<form class="create-plugin-form" style="display:none;"><input type="text" id="newPluginNameInput"></form>\n</div>\n</div>\n';
 
 }
 return __p

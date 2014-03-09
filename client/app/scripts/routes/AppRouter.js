@@ -18,9 +18,13 @@ define([
 
         index: function() {
             console.log('Router initialized.');
+            console.log(_.clone(appState));
+
         },
 
         plugineditor: function() {
+            console.log(_.clone(appState));
+
             this.pluginEditorView = new PluginEditorView({ model: app, el: $("body")});
         },
 
@@ -32,7 +36,7 @@ define([
                     console.log(res);
                     currentGeneratorView.render(res);
                 }
-            })           
+            })
         },
 
         pkg: function (packageName){

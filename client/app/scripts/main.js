@@ -19,10 +19,15 @@ require.config({
         },
         ace: {
             exports: 'ace'
+        },
+        "jquery-hotkeys": {
+            exports: "$",
+            deps: ['jquery']
         }
     },
     paths: {
-        jquery: '../bower_components/jquery/jquery',
+        jquery: '../bower_components/jquery/dist/jquery',
+        "jquery-hotkeys": "./jquery-hotkeys",
         backbone: '../bower_components/backbone/backbone',
         underscore: '../bower_components/underscore/underscore',
 	    bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
@@ -38,6 +43,7 @@ require([
     'routes/AppRouter',
     'models/App',
     'views/App',
+    'jquery-hotkeys',
     'ace'
 ], function ($, config, Backbone, AppRouter, AppModel, AppView, ace) {
 
@@ -75,9 +81,8 @@ require([
             }
         });
     });
-    appState = { plugins: {}, generators: {}};
+
     app = new AppModel({ currentObject: appState });
-    console.log(app);
     var AppRouter = new AppRouter();
     var AppView = new AppView({ model: app, el: $('body'), router: AppRouter});
     AppRouter.appView = AppView;
