@@ -111,17 +111,41 @@ app.get('/plugins/:pkg', function (req, res){
 app.post('/plugins/:pkg/:mdl/:gen/update', function(req, res) {
     // TODO add authorization
     var gen = req.body;
-    Plugin.findOne()
-    p.save(function(err, data) {
-        if (err) throw err;
-        res.end('ok');
+    Plugin.findOne({ name: req.params.pkg }, function(err, p) {
+        p_json = Plugin.toJSON(p);
+        var gens = p_json[req.params.mdl];
+        var found = false;
+        // try to find and replace first occurance
+        _.each(gens, function(g, index) {
+            if (!found && g.name === gen.name) {
+                gens[index] = gen;
+            }
+        });
+        // if not found, add as new generator.
+        if (!found) {
+            gens.push(gen);
+        }
+        // save to DB and respond appropriately
+        new_p = Plugin.fromJSON(p_json);
+        new_p._id = p._id;
+        new_p.save(function(err) {
+            if (err) throw err;
+            if (!found) {
+                res.status = 201;
+                res.end('created genenerator');
+            } else {
+                res.status = 200;
+                res.end('updated genenerator');
+            }
+        });
+
     });
 });
 
 app.put('/plugins/publish', function(req, res) {
     // TODO add authorization
     var plugin = req.body;
-    var p = Plugin.jsonToPlugin(plugin);
+    var p = Plugin.fromJSON(plugin);
     p.save(function(err, data) {
         if (err) throw err;
         res.end('ok');
