@@ -1,17 +1,41 @@
-<ul id='sidebar'>
+<div id='sidebar'>
 <% _.each(app.currentObject.plugins, function(plugin, key) { %>
-<li data-pluginname='<%= key %>' class='plugin'><%= key %></li>
+<div data-pluginpath='<%= key %>' class='plugin dir'>
+	<span class="plugin-span" data-pluginpath='<%= key %>'><%= key %></span>
 
 	<% var mdls = app.currentObject.plugins[key] %>
 	<% for (mdl in mdls) { if(mdl == "metadata") continue; %>
-	<li class="module" data-moduleName='<%=mdl%>'><%=mdl%></li>
+	<div class="module dir" data-modulepath='<%= key %>.<%=mdl%>'>
+		<span class="module-span" data-modulepath='<%= key %>.<%=mdl%>'><%=mdl%></span>
+
 		<% var curPlugin =  app.currentObject.plugins[key] %>
 		<% for (generator in curPlugin[mdl]){ %>
-			<li data-generatorName="<%= curPlugin[mdl][generator].name %>" class="generator">
-				<%= curPlugin[mdl][generator].name %>
-			</li>
+			<div data-path="<%= key %>.<%=mdl%>.<%= curPlugin[mdl][generator].name %>" data-generatorName="<%= curPlugin[mdl][generator].name %>" class="dir generator">
+				<span data-generatorName="<%= curPlugin[mdl][generator].name %>" class="generator-span"><%= curPlugin[mdl][generator].name %></span>
+			</div>
 		<% } %>
-
+	</div>
+	<div class="create-generator">
+		<div class="create-button">
+			<label class="icon">+</label><label class="text">New Generator</label>
+		</div>
+		<form class="create-generator-form" data-path="<%= key %>.<%= mdl %>" style="display:none;">
+			<input type="text" class="newGeneratorNameInput">
+		</form>
+	</div>
 	<% } %>
+	<div class="create-module">
+			<div class="create-button">
+			<label class="icon">+</label><label class="text">New Module</label>
+		</div>
+		<form class="create-module-form" data-modulepath="<%= key %>" style="display:none;"><input type="text" class="newModuleNameInput"></form>
+	</div>
+</div>
 <% }); %>
-</ul>
+<div class="create-plugin">
+	<div class="create-button">
+		<span class="icon">+</span><span class="text">New Plugin</span>
+	</div>
+	<form class="create-plugin-form" style="display:none;"><input type="text" id="newPluginNameInput"></form>
+</div>
+</div>

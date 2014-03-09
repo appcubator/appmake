@@ -7796,6 +7796,8 @@ body {
 /* line 153, ../../app/styles/main.scss */
 #pluginEditor #createTemplateGroup {
   width: 200px;
+  display: inline-block;
+  vertical-align: top;
 }
 /* line 156, ../../app/styles/main.scss */
 #pluginEditor .pluginInfo {
@@ -7857,15 +7859,10 @@ body {
 }
 /* line 215, ../../app/styles/main.scss */
 #pluginEditor #templatePanel,
-#defaultsEditor {
-  -moz-box-shadow: 0 0 5px #ababab;
-  -webkit-box-shadow: 0 0 5px #ababab;
-  box-shadow: 0 0 5px #ababab;
-  height: 380px;
+#defaultsEditor, #codeEditor {
+
   overflow-x: scroll;
-  margin-top: 20px;
-  margin-left: 3px;
-  margin-right: 30px;
+  border-bottom: 1px solid #404040;
 }
 
 #defaultsEditor {
@@ -7877,22 +7874,21 @@ body {
   height: 310px;
   margin-top: 8px;
 }
-/* line 227, ../../app/styles/main.scss */
-#pluginEditor #codePanel {
-  margin-left: 4px;
-  margin-top: 10px;
-  -moz-box-shadow: 0 0 5px #ababab;
-  -webkit-box-shadow: 0 0 5px #ababab;
-  box-shadow: 0 0 5px #ababab;
-  margin-right: 30px;
-}
+
 /* line 231, ../../app/styles/main.scss */
 #pluginEditor #codePanel #codeEditor {
   height: 300px;
 }
 
+html {
+    background-color: #161616;
+}
 #pluginNavigator {
-  padding-top: 80px;
+    height: 100%;
+    padding-top: 56px;
+    margin-left:  220px;
+    color: rgba(244, 244, 244, 0.2);
+    background-color: #161616;
 }
 
 .navbar {
@@ -7937,6 +7933,15 @@ body {
   height: 300px;
 }
 
+#generatedPanel {
+    height: 100%;
+    color: #222;
+}
+
+#generatedPanel:hover {
+    opacity: 1;
+}
+
 .plugin-browser {
     position: fixed;
     top: 0;
@@ -7946,26 +7951,204 @@ body {
     width: 240px;
     background-color: rgb(50, 50, 50);
     color: rgb(130, 130, 130);
+    border-right: 1px solid rgba(0, 0, 0, 0.5);
 }
 
-.plugin-browser ul {
-    list-style: none;
-    padding-left: 20px;
+.plugin-browser div#sidebar {
+    padding-left: 0px;
+    font-size: 13px;
 }
 
-.plugin-browser ul li {
+.plugin-browser .dir span {
     padding: 7px 0;
+    display: inline-block;
+    cursor: default;
 }
 
-.plugin-browser ul li.plugin {
+.dir.shrunk {
+    height:32px;
+    overflow: hidden;
+}
+
+.plugin-browser .dir.plugin {
     font-weight: bold;
     color: rgb(150, 150, 150);
 }
 
-.plugin-browser ul li.module {
-    padding-left: 20px;
+.plugin-browser .dir.plugin span {
+    padding-left: 10px;
 }
 
-.plugin-browser ul li.generator {
-    padding-left: 40px;
+.plugin-browser .dir.plugin span:before,
+.plugin-browser .dir.module span:before {
+    display: inline-block;
+    width: 15px;
+    text-align: center;
+    content:'▾';
+    margin-right: 4px;
+}
+
+
+.plugin-browser .dir.module span {
+    padding-left: 28px;
+}
+
+
+.plugin-browser .dir.module.shrunk span:before,
+.plugin-browser .dir.plugin.shrunk span:before {
+    content:'▸';
+}
+
+
+.plugin-browser .dir.generator {
+    cursor: pointer;
+}
+
+.plugin-browser .dir.generator:hover {
+    color: rgb(200, 200, 200);
+}
+
+.plugin-browser .dir.generator.active {
+    background-color: rgb(90, 90, 90);
+}
+
+.plugin-browser .dir.generator span {
+    padding-left: 48px;
+}
+
+.plugin-browser .dir.generator span:before {
+    content:'Þ';
+    margin-right: 4px;
+}
+
+.left-panel {
+    width: 700px;
+}
+
+#editorPanel {
+    background-color: #161616;
+    padding: 0;
+}
+
+#editorPanel h3 {
+    font-size: 16px;
+    padding-left: 30px;
+    background-color: #202020;
+    color: #707070;
+    margin: 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #404040;
+}
+
+#editorPanel .tabs {
+    background-color: #404040;
+    list-style:none;
+    height: 38px;
+    overflow: hidden;
+}
+
+#editorPanel .tabs li {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    margin-top: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    line-height: 26px;
+    min-width: 50px;
+    color: #b0b0b0;
+    text-align: center;
+    font-weight: bold;
+    overflow: hidden;
+    cursor: pointer;
+    vertical-align: top;
+}
+
+#editorPanel .tabs li.small {
+    font-style: italic;
+}
+
+#editorPanel .tabs li.small:hover {
+    background-color: inherit;
+}
+
+#editorPanel .tabs li:hover {
+    background-color: #606060;
+}
+
+
+#editorPanel .tabs li.active {
+    background-color: #202020;
+}
+
+.create-tab .icon {
+    display: inline-block;
+    line-height: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.right-panel {
+    width: 100%;
+}
+
+.right-cell {
+    vertical-align: top;
+    background-color: #eeeeee;
+    opacity: 0.5;
+    -webkit-transition: all 0.3s; /* For Safari 3.1 to 6.0 */
+    transition: all 0.3s;
+    z-index: 100;
+    height: 100%;
+}
+
+#no-generator {
+    background-color: #161616;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    height: 100%;
+    padding-top: 60px;
+}
+
+.create-plugin, .create-module, .create-generator {
+    padding-left: 10px;
+    cursor: pointer;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.create-plugin:hover {
+    background-color: rgb(80, 80, 80);
+}
+
+.create-plugin .icon,
+.create-module .icon,
+.create-generator .icon {
+    display: inline-block;
+    width: 15px;
+    text-align: center;
+    margin-right: 4px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.create-button span,
+.create-module span,
+.create-generator span {
+    display: inline-block;
+}
+
+.create-module {
+    margin-top: 2px;
+    padding-left: 28px;
+}
+
+.create-module label.icon {
+}
+
+.create-generator .create-button {
+    padding-left: 38px;
 }
