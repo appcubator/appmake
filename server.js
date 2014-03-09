@@ -84,7 +84,7 @@ app.configure(function(){
 app.get('/', function (req, res){
     fs.readFile(path.join(__dirname, 'client', 'app', 'index.html'), function(err, data) {
         if (err) throw err;
-        data = data.toString().replace(/\{\{ STATIC_URL \}\}/g, process.env.STATIC_URL || '/client/app');
+        data = data.toString().replace(/\{\{ STATIC_URL \}\}/g, process.env.STATIC_URL || '/client/app/');
         res.send(data);
     });
 });
