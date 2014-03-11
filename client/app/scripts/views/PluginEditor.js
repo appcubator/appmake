@@ -333,22 +333,7 @@ define([
 
             var generatorPath = pluginName + "." + mdlName + "." + genName;
 
-            var Vm = function() {
-
-                this.runCode = function(code, globals) {
-                    var templates = globals.templates;
-                    var data = globals.data;
-                    var expand = globals.expand;
-                    return eval(code);
-                };
-
-            };
-
-            var VM = new Vm();
-            var expander = expanderfactory(function(code, globals) {
-                return VM.runCode(code, globals);
-            });
-
+            var expander = initExpander();
 
             $('#generatedCode').html("");
 
