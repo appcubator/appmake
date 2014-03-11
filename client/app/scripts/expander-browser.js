@@ -49,7 +49,6 @@ exports.factory = function(_safe_eval_) {
         } catch (e) {
             if (e.name === 'GenNotFound') {
                 generator = findGenDataSub(builtinGenerators, genID);
-                generator.code = generator.code.toString(); // turns function into src in case it isn't already, for builtins
             } else {
                 throw e;
             }
@@ -378,6 +377,20 @@ exports.generators = generators;
 exports.root = require('./root/generators');
 exports.crud = require('./crud/generators');
 exports.userauth = require('./userauth/generators');
+
+// turn code from function to string
+var stringalize = function(plugin) {
+    for (var m in plugin) {
+        if (m === 'metadata') continue;
+        for (var i = 0; i < plugin[m].length; i++) {
+            plugin[m][i].code = plugin[m][i].code.toString();
+        }
+    }
+};
+
+stringalize(exports.root);
+stringalize(exports.crud);
+stringalize(exports.userauth);
 
 },{"./crud/generators":2,"./root/generators":7,"./userauth/generators":12}],6:[function(require,module,exports){
 var generators = [];
