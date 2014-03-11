@@ -58,7 +58,6 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel"> Load Resources </h4>
-
       </div>
       <div class="modal-body">
         <h1 class='lead'> These are the droids you are looking for. </h1>
@@ -75,6 +74,72 @@
 
 
 <!-- End  -->
+
+
+
+<!-- Publish Modal  -->
+
+<div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"> Publish Plugin </h4>
+      </div>
+      <div class="modal-body">
+        <label> Name: </label> <input disabled class='form-control input-lg' id="requestedPluginName"> </input> </br>
+        <label> Description </label> <textarea class='form-control' id="pluginDescription" rows='3' placeholder="Enter a short description of your plugin."></textarea>
+        </br> 
+        <button id='finishPublish' class='btn btn-lg btn-success'> Publish </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End  -->
+
+
+<!-- Error Modal  -->
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"> Error </h4>
+      </div>
+      <div class="modal-body">
+        <h2 id='errorMessage' class='lead'> Some error text here </h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End  -->
+
+<!-- success Modal  -->
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"> Success </h4>
+      </div>
+      <div class="modal-body">
+        <h2 id='errorMessage' class='lead'> Success message </h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End  -->
+
+
+
+
+
+
 
 <div class='navbar'>
 				<h3>Appcubator</h3>
