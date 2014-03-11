@@ -35,7 +35,8 @@ define([
             'click .create-module': 'clickedNewModule',
             'submit .create-module-form': 'createNewModule',
             'click .create-generator': 'clickedNewGenerator',
-            'submit .create-generator-form': 'createNewGenerator'
+            'submit .create-generator-form': 'createNewGenerator',
+            'click #finishPublish': 'publishPluginToRepo'
         },
 
         initialize: function(){
@@ -306,8 +307,12 @@ define([
 
             $('.plugin-span').on('click', function(e) {
                 var module = e.currentTarget.dataset.pluginpath;
-                var $el = $('.dir[data-pluginpath="'+ module +'"]');
+                // Set the partial plugin path....
+                $('.plugin-span').removeClass("active")
+                $(e.currentTarget).addClass("active")
 
+                var $el = $('.dir[data-pluginpath="'+ module +'"]');
+                this.currentPath = e.currentTarget.dataset.pluginpath + "."
                 if($el.hasClass('shrunk')) {
                     $el.removeClass('shrunk');
                 }
@@ -315,6 +320,9 @@ define([
                     $el.addClass('shrunk');
                 }
             });
+
+
+
         },
 
         refreshGeneratedCode: function() {
@@ -444,9 +452,50 @@ define([
                 },
                 dataType: "JSON"
             });
+        }, 
+        publishPlugin: function(){
+            var aState = this.currentObj;
+            if (this.currentPath == undefined){
+                $("#errorModal").modal()
+                $($("#errorModal").find("#errorMessage")).text("Please select a generator to publish the cooresponding plugin.")
+            }
+            if (aState === undefined ){ 
+                $("#errorModal").modal()
+                $($("#errorModal").find("#errorMessage")).text("Whoops. Appstate undefined.")              
+            } else {
+                var currentPluginName = this.currentPath.split(".")[0];
+                $('#publishModal').modal()
+                $($('#publishModal').find("#requestedPluginName")).val(currentPluginName);                
+            } 
+        },
+        publishPluginToRepo: function(){
+            var currentPluginName = this.currentPath.split(".")[0];
+            var p = $.extend(true, this.currentObj.plugins[currentPluginName], {});
+            p.metadata = {
+                name: currentPluginName,
+                version: "0.1",
+                description: $('#pluginDescription').val()
+            }
 
+            console.log(p)
+            var repoAddr = DEBUG ? 'http://localhost:3000/' : "http://plugins.appcubator.com/";
+            $.post(repoAddr + "plugins/create", p, function (res){
+                if (res.success){
+                    console.log("Plugin created successfully.")
+                    console.log(res.plugin)
+                } else {
+                    console.log("Plugin already exists...making a new version...");
+                    $.post(repoAddr + "plugins/update", p, function (res){
+                        if (res.success === false) {
+                            console.log("Failed to publish plugin");
+                        } else {
+                            console.log("Plugin updated successfully.")
+                            console.log(res.plugin)
+                        }
+                    })
+                }
+            });         
         }
     });
-
     return PluginEditorView;
 });
