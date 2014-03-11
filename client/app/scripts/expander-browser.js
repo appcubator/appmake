@@ -667,6 +667,19 @@ generators.push({
 generators.push({
     name: 'navbar',
     version: '0.1',
+    defaults: {
+        brandName : "Default Name",
+        links: [
+            {
+                url: "",
+                title: "Page 1"
+            },
+            {
+                url: "",
+                title: "Page 2"
+            }
+        ]
+    },
     code: function(data, templates) {
 
         _.each(data.links, function(link) {
@@ -708,6 +721,19 @@ generators.push({
 generators.push({
     name: 'footer',
     version: '0.1',
+    defaults: {
+        customText : "Default Footer - Copyright",
+        links: [
+            {
+                url: "",
+                title: "Page 1"
+            },
+            {
+                url: "",
+                title: "Page 2"
+            }
+        ]
+    },
     code: function(data, templates) {
 
         var html = templates.html(data);
