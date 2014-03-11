@@ -1,20 +1,6 @@
 var generators = [];
 
 generators.push({
-    name: 'node',
-    version: '0.1',
-    code: function(data, templates) {
-        /* data has isSingle, tagName, idString, classList, styleString, attribs, content */
-
-        return { html: data.html,
-                 css: data.css,
-                 js: data.js,
-                 layout: data.layout };
-    }
-});
-
-
-generators.push({
     name: 'design-header',
     version: '0.1',
     defaults: {
@@ -30,6 +16,11 @@ generators.push({
     },
     templates: {
         html: '<h1 class="<%= className %>" style="<%= style %>"><%= content %></h1>'
+    },
+    displayProps: {
+        name: 'Header',
+        iconType: 'header',
+        halfWidth: true
     }
 });
 
@@ -50,6 +41,11 @@ generators.push({
     },
     templates: {
         html: '<p class="<%= className %>" style="<%= style %>"><%= content %></p>'
+    },
+    displayProps: {
+        name: 'Text',
+        iconType: 'text',
+        halfWidth: true
     }
 });
 
@@ -70,6 +66,11 @@ generators.push({
     },
     templates: {
         html: '<a href="<%= href %>"><img class="<%= className %>" style="<%= style %>" src="<%= src %>"></a>'
+    },
+    displayProps: {
+        name: 'Image',
+        iconType: 'image',
+        halfWidth: true
     }
 });
 
@@ -91,6 +92,11 @@ generators.push({
     },
     templates: {
         html: '<a href="<%= href %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
+    },
+    displayProps: {
+        name: 'Link',
+        iconType: 'link',
+        halfWidth: true
     }
 });
 
@@ -112,6 +118,11 @@ generators.push({
     },
     templates: {
         html: '<a href="<%= href %>" class="btn <%= className %>" style="<%= style %>"><%= content %></a>'
+    },
+    displayProps: {
+        name: 'Button',
+        iconType: 'button',
+        halfWidth: true
     }
 });
 
@@ -133,6 +144,11 @@ generators.push({
     },
     templates: {
         html: '<hr class="<%= className %>" style="<%= style %>">'
+    },
+    displayProps: {
+        name: 'Line',
+        iconType: 'line',
+        halfWidth: true
     }
 });
 
@@ -155,6 +171,11 @@ generators.push({
     },
     templates: {
         html: '<div class="<%= className %>" style="<%= style %>"></div>'
+    },
+    displayProps: {
+        name: 'Box',
+        iconType: 'box',
+        halfWidth: true
     }
 });
 
@@ -195,6 +216,11 @@ generators.push({
         '<a class="carousel-control left" href="#slider-<%= cid %>" data-slide="prev">&lsaquo;</a>',
         '<a class="carousel-control right" href="#slider-<%= cid %>" data-slide="next">&rsaquo;</a>',
       '</div>'].join('\n')
+    },
+    displayProps: {
+        name: 'Image Slider',
+        iconType: 'imageslider',
+        halfWidth: true
     }
 });
 
@@ -232,6 +258,11 @@ generators.push({
                         'data-width="<%= layout.width * 80 %>" data-height="<%= layout.height * 15>" ',
                         'data-show-faces="false" data-header="false" data-stream="false" data-show-border="false"></div>'
                      ].join('')
+    },
+    displayProps: {
+        name: 'FB Share',
+        iconType: 'fbshare',
+        halfWidth: true
     }
 });
 
@@ -255,6 +286,11 @@ generators.push({
     },
     templates: {
         html: '<iframe class="video-embed" src="<%= url %>" width="<%= layout.width * 80 %>" height="<%= layout.height * 15 %>" frameborder="0"></iframe>'
+    },
+    displayProps: {
+        name: 'Embed Video',
+        iconType: 'embedvideo',
+        halfWidth: true
     }
 });
 
@@ -268,7 +304,12 @@ generators.push({
                  js: data.jsC,
                  layout: data.layout };
     },
-    templates: { }
+    templates: { },
+    displayProps: {
+        name: 'Custom Widget',
+        iconType: 'custom-widget',
+        halfWidth: true
+    }
 });
 
 generators.push({
@@ -294,6 +335,10 @@ generators.push({
         "image-uploader": '<div class="upload-image btn">Upload Image</div>',
         "file-uploader": '<div class="upload-file btn">Upload File</div>',
         "date-picker": '<input name="<%= field_name %>" type="text" placeholder="<%= placeholder %>"><img style="margin-left:5px;" src="/static/img/calendar-icon.png">'
+    },
+    displayProps: {
+        name: 'Form Field',
+        halfWidth: true
     }
 });
 
