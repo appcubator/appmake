@@ -49,6 +49,7 @@ exports.factory = function(_safe_eval_) {
         } catch (e) {
             if (e.name === 'GenNotFound') {
                 generator = findGenDataSub(builtinGenerators, genID);
+                generator.code = generator.code.toString(); // turns function into src in case it isn't already, for builtins
             } else {
                 throw e;
             }
