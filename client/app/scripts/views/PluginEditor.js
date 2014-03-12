@@ -85,7 +85,7 @@ define([
             this.defaultsEditor.on("change", this.updateDefaultsEditor);
 
             this.refreshSidebar();
-            this.refreshGeneratedCode();
+            //this.refreshGeneratedCode();
 
             var self = this;
             $(document).bind('keydown', 'meta+s', function(e) {
@@ -148,7 +148,6 @@ define([
         },
 
         renderGeneratorEditor: function(currentTemplate) {
-
             if (!this.currentGenerator) {
                 this.$el.find('#no-generator').show();
                 this.$el.find('#editorPanel').hide();
@@ -222,13 +221,10 @@ define([
 
         createNewTemplate: function(event){
             event.preventDefault();
-
             var newTemplateName = $.trim($(this.$el.find('#newTemplateNameInput')).val());
-
             this.currentGenerator.templates[newTemplateName] = "";
             this.currentGenerator.templates = _.omit(this.currentGenerator.templates, "undefined");
             this.renderTemplateEditor(newTemplateName);
-
         },
 
         createNewPlugin: function(e) {
@@ -331,14 +327,24 @@ define([
             var mdlName = this.model.get('currentModule');
             var genName = this.model.get('currentGenerator');
 
-            var generatorPath = pluginName + "." + mdlName + "." + genName;
-
+            var generatorPath = this.currentPath;
+            console.log(generatorPath)
+            if (generatorPath === undefined){
+                $('#errorModal').modal();
+                $($('#errorModal').find("#errorMessage")).text("Please select a generator.")
+                return
+            }
             var expander = initExpander();
 
             $('#generatedCode').html("");
 
             try {
+                // This will force it to use defaults in the generator
+                console.log("Trying to generate code")
                 var generated = expander.expand(appState.plugins, {generate: generatorPath, data: {}});
+                console.log("Generated code");
+                console.log(generated);
+
 
                 if(typeof generated == "object") {
                     var str = "";
@@ -366,11 +372,11 @@ define([
             var str = this.codeEditor.getValue();
             this.currentGenerator.code = str;
         },
-
         updateDefaultsEditor: function() {
             var defs = {};
             try {
                 defs = jQuery.parseJSON(this.defaultsEditor.getValue());
+                $('#defaultsEditorStatus')
             }
             catch(e) {
                 console.log("Couldnt parse defaults");
@@ -378,8 +384,8 @@ define([
             }
 
             this.currentGenerator.defaults = defs;
+            this.refreshGeneratedCode()
         },
-
         findGenByName: function(module, genName){
             for (var i = 0; i < module.length; i++){
                 if (genName === module[i].name){
@@ -387,7 +393,6 @@ define([
                 }
             }
         },
-
         pluginNameChanged: function() {
             var o = this.model.get('currentObject');
             o = o.plugins[this.model.get('currentPlugin')];
