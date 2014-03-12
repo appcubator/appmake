@@ -26,6 +26,7 @@ var pluginSchema = new Schema({
 
 var jsonToPlugin = function(json) {
     var plugin = {};
+    console.log("we loggin da json", json);
     plugin.name = json.metadata.name;
     plugin.description = json.metadata.description;
     plugin.version = json.metadata.version;

@@ -7968,7 +7968,7 @@ html {
 }
 
 .dir.shrunk {
-    height:32px;
+    height:22px;
     overflow: hidden;
 }
 
@@ -8101,13 +8101,24 @@ html {
 }
 
 .right-cell {
+    position: fixed;
+    right: 0px;
+    width: 32%;
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 10px 6px -6px #777;
+    box-shadow: 0 10px 6px -6px #777;
+
+    border-style: solid;
     vertical-align: top;
-    background-color: #eeeeee;
-    opacity: 0.5;
+    background-color: #ffffff;
     -webkit-transition: all 0.3s; /* For Safari 3.1 to 6.0 */
     transition: all 0.3s;
     z-index: 100;
     height: 100%;
+}
+
+#refreshGeneratedBtn {
+  color: gray;
 }
 
 #no-generator {
@@ -8161,6 +8172,21 @@ html {
     padding-left: 38px;
 }
 
+.status-success {
+  color: greenyellow;
+}
+
+.status-warning {
+  color: orange;
+}
+
+.status-error {
+  color: red;
+}
+
+body {
+  overflow-y: hidden;
+}
 /* custom scrollbars */
 
 ::-webkit-scrollbar {

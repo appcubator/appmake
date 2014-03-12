@@ -1,5 +1,10 @@
 /*global define*/
 
+// TODO 1. Fix publishing 2. get docs working 3. Delete
+
+
+
+
 define([
     'jquery',
     'underscore',
@@ -40,14 +45,20 @@ define([
         },
 
         initialize: function(){
-            _.bindAll(this);
-            // this.model.on("change:currentPlugin", this.render, this);
-            // this.model.on("change:currentModule", this.render, this);
-            // this.model.on("change:currentGenerator", this.render, this);
-            // this.model.on("change:currentTemplate", this.render, this);
+            _.bindAll(this); 
             this.currentObj = appState;
             this.currentGenerator = null;
+
+
+            // This code is for the timer that controls code generation
+            this.generateInterval = 1400;
+            this.maxWait = 1;
+            this.generateWait = 0;
+            this.hasValidGenerator = false;
+            this.expander = initExpander();
+
             this.render();
+            this.generateInterval = setInterval(this.checkCodeGeneration, this.generateInterval);
 
             //setInterval(this.saveAppstate.bind(this), 5000);
 
@@ -85,18 +96,66 @@ define([
             this.defaultsEditor.on("change", this.updateDefaultsEditor);
 
             this.refreshSidebar();
-            this.refreshGeneratedCode();
+            //this.refreshGeneratedCode();
 
             var self = this;
             $(document).bind('keydown', 'meta+s', function(e) {
                 e.preventDefault();
                 self.saveAppstate();
             });
+
+            $("#pluginEditor").bind('keydown', function(e) {
+                if (e.altKey || e.ctrlKey || e.shiftKey){
+                    return
+                } else {
+                    self.generateWait = 0;
+                }
+            });
+
             $(document).bind('keydown', 'ctrl+s', function(e) {
                 e.preventDefault();
                 self.saveAppstate();
             });
+        },
+        checkCodeGeneration: function (force){
+            // console.log("Check code generation");
+            // console.log(this.generateWait);
+            // console.log(this.currentPath);
+            this.generateWait++;
 
+            // force the generation even if 
+            if (this.currentPath !== undefined && (this.generateWait > this.maxWait || force)){
+                // console.log("Generate the damn code");
+                this.generateWait = 0;
+
+                $('#generatedCode').html("");
+                try {
+                    // This will force it to use defaults in the generator
+                    // console.log("Trying to generate code")
+                    var gPath = this.currentPath;
+
+                    var generated = this.expander.expand(appState.plugins, {generate: gPath, data: {}});
+
+
+                    if(typeof generated == "object") {
+                        var str = $("<div>");
+
+                        _.each(generated, function(val, key) {
+                            str.append($("<h4>").text(key));
+                            str.append($("<pre>").text(val));
+                        });
+                         $('#generatedCode').html(str);
+                    }
+                    else if (typeof generated == "string") {
+                        $('#generatedCode').html('<pre>' + generated + '</pre>');
+                    }
+
+
+                }
+                catch (e) {
+                    $('#generatedCode').html("Could not be generated: "+ e);
+                }
+            } 
         },
 
 
@@ -113,6 +172,7 @@ define([
                 if(gen.name == pMG[2]) {
                     this.currentGenerator = gen;
                     this.currentPath = path;
+                    // console.log("Setting currentpath to", this.currentPath)
                 }
             }, this);
 
@@ -257,6 +317,7 @@ define([
             this.currentObj.plugins[plugin][path[1]].push({
                 name: newGeneratorName,
                 code: "",
+                version: "0.1",
                 defaults: {},
                 templates: []
             });
@@ -287,7 +348,11 @@ define([
             $(this.$el.find("#moduleSelector")).dropdown();
 
             var o = this.model.get('currentObject');
-            o = o.plugins[this.model.get('currentPlugin')];
+            if (o.plugins !== undefined){
+                o = o.plugins[this.model.get('currentPlugin')];
+            } else {
+                o.plugins = {};
+            }
 
             if(o && o.metadata && o.metadata.name) $('#nameofplugin').val(o.metadata.name);
             if(o && o.metadata && o.metadata.description) $('#descriptionofplugin').val(o.metadata.description);
@@ -325,37 +390,17 @@ define([
 
         },
 
-        refreshGeneratedCode: function() {
-            var currentObject = this.model.get('currentObject');
-            var pluginName = this.model.get('currentPlugin');
-            var mdlName = this.model.get('currentModule');
-            var genName = this.model.get('currentGenerator');
+        // refreshGeneratedCode: function() {
+        //     var currentObject = this.model.get('currentObject');
+        //     var pluginName = this.model.get('currentPlugin');
+        //     var mdlName = this.model.get('currentModule');
+        //     var genName = this.model.get('currentGenerator');
 
-            var generatorPath = pluginName + "." + mdlName + "." + genName;
+        //     var generatorPath = pluginName + "." + mdlName + "." + genName;
 
-            var expander = initExpander();
 
-            $('#generatedCode').html("");
-
-            try {
-                var generated = expander.expand(appState.plugins, {generate: generatorPath, data: {}});
-
-                if(typeof generated == "object") {
-                    var str = "";
-                    _.each(generated, function(val, key) {
-                        str += '<h4>' + key + '</h4><pre>'+val+'</pre>';
-                    });
-                     $('#generatedCode').html(str);
-                }
-                else if (typeof generated == "string") {
-                    $('#generatedCode').html('<pre>' + generated + '</pre>');
-                }
-
-            }
-            catch (e) {
-                $('#generatedCode').html("Could not be generated: "+ e);
-            }
-        },
+           
+        // },
 
         updateCurrentTemplate: function(){
             var str = this.templateEditor.getValue();
@@ -366,17 +411,27 @@ define([
             var str = this.codeEditor.getValue();
             this.currentGenerator.code = str;
         },
+        updateDefaults: function(){
+            var str = this.defaultsEditor.getValue();
+            thus.currentGenerator.defaults = $.parseJSON(str);
+        },
 
         updateDefaultsEditor: function() {
             var defs = {};
+            var s = $('#defaultsEditorContainer').find(".status");
             try {
+                s.addClass("status status-success");
                 defs = jQuery.parseJSON(this.defaultsEditor.getValue());
+                s.removeClass();
+                s.addClass("status status-success");
+
             }
             catch(e) {
-                console.log("Couldnt parse defaults");
-                console.log(e);
+                // console.log("Couldnt parse defaults");
+                // console.log(e);
+                s.removeClass();
+                s.addClass("status status-warning")
             }
-
             this.currentGenerator.defaults = defs;
         },
 
@@ -391,8 +446,8 @@ define([
         pluginNameChanged: function() {
             var o = this.model.get('currentObject');
             o = o.plugins[this.model.get('currentPlugin')];
-            console.log(o);
-            console.log("changed");
+            // console.log(o);
+            // console.log("changed");
 
             if(!o.metadata) o.metadata = {};
             o.metadata.name = $('#nameofplugin').val();
@@ -454,6 +509,7 @@ define([
             } 
         },
         publishPluginToRepo: function(){
+            console.log("Publishing plugin to repo");
             var currentPluginName = this.currentPath.split(".")[0];
             var p = $.extend(true, this.currentObj.plugins[currentPluginName], {});
             p.metadata = {
@@ -461,9 +517,9 @@ define([
                 version: "0.1",
                 description: $('#pluginDescription').val()
             }
+            console.log("We about to create a new plugin", p);
 
-            console.log(p)
-            var repoAddr = DEBUG ? 'http://localhost:3000/' : "http://plugins.appcubator.com/";
+            var repoAddr = DEBUG ? 'http://127.0.0.1:3000/' : "http://plugins.appcubator.com/";
             $.post(repoAddr + "plugins/create", p, function (res){
                 if (res.success){
                     console.log("Plugin created successfully.")
@@ -471,7 +527,7 @@ define([
                 } else {
                     console.log("Plugin already exists...making a new version...");
                     $.post(repoAddr + "plugins/update", p, function (res){
-                        if (res.success === false) {
+                        if (res.success !== true) {
                             console.log("Failed to publish plugin");
                         } else {
                             console.log("Plugin updated successfully.")
