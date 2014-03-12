@@ -132,7 +132,7 @@ app.post("/plugins/create", cors(), function (req, res) {
                     res.json({success: false, error: err});
                 } else {
                     var j = {};
-                    j.plugin = toNormalJSON();
+                    j.plugin = p.toNormalJSON();
                     j.success = true;
                     res.json(j)
                     res.status = 201

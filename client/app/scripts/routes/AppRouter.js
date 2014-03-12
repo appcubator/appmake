@@ -10,33 +10,20 @@ define([
     var AppRouter = Backbone.Router.extend({
 		routes: {
             "": "index",
-            "editor": "plugineditor",
-            "generators/:pkg/:mdl/:gen": "generator",
-            "package/:pkg": "pkg",
-            "module/:pkg/:mdl": "module"
+            "editor/:module/:pkg/:mdl": "module",
+            ":path": "plugineditor"
+            // "editor": "plugineditor",
+            // "generators/:pkg/:mdl/:gen": "generator",
+            // "package/:pkg": "pkg",
         },
 
         index: function() {
             console.log('Router initialized.');
             console.log(_.clone(appState));
-
         },
 
-        plugineditor: function() {
-            console.log(_.clone(appState));
-
-            this.pluginEditorView = new PluginEditorView({ model: app, el: $("body")});
-        },
-
-        generator: function(pkg, mdl, gen) {
-            var uri = "generators/" + pkg + "/" + mdl + "/" + gen;
-            $.ajax({
-                url: uri,
-                success: function(res){
-                    console.log(res);
-                    currentGeneratorView.render(res);
-                }
-            })
+        plugineditor: function(path) {
+            this.pluginEditorView = new PluginEditorView({ model: app, el: $("body"), path: path});
         },
 
         pkg: function (packageName){

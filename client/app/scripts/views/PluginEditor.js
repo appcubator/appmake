@@ -57,6 +57,7 @@ define([
             this.hasValidGenerator = false;
             this.expander = initExpander();
 
+
             this.render();
             this.generateInterval = setInterval(this.checkCodeGeneration, this.generateInterval);
 
@@ -208,7 +209,6 @@ define([
         },
 
         renderGeneratorEditor: function(currentTemplate) {
-
             if (!this.currentGenerator) {
                 this.$el.find('#no-generator').show();
                 this.$el.find('#editorPanel').hide();
@@ -230,6 +230,7 @@ define([
         },
 
         renderTemplateEditor: function(currentTemplate) {
+            console.log("This is being called");
             var keys = _.keys(this.currentGenerator.templates);
             var currentTemplate = currentTemplate || keys[0];
             this.currentTemplate = currentTemplate;
@@ -282,13 +283,10 @@ define([
 
         createNewTemplate: function(event){
             event.preventDefault();
-
             var newTemplateName = $.trim($(this.$el.find('#newTemplateNameInput')).val());
-
             this.currentGenerator.templates[newTemplateName] = "";
             this.currentGenerator.templates = _.omit(this.currentGenerator.templates, "undefined");
             this.renderTemplateEditor(newTemplateName);
-
         },
 
         createNewPlugin: function(e) {
@@ -390,17 +388,6 @@ define([
 
         },
 
-        // refreshGeneratedCode: function() {
-        //     var currentObject = this.model.get('currentObject');
-        //     var pluginName = this.model.get('currentPlugin');
-        //     var mdlName = this.model.get('currentModule');
-        //     var genName = this.model.get('currentGenerator');
-
-        //     var generatorPath = pluginName + "." + mdlName + "." + genName;
-
-
-           
-        // },
 
         updateCurrentTemplate: function(){
             var str = this.templateEditor.getValue();
@@ -411,10 +398,6 @@ define([
             var str = this.codeEditor.getValue();
             this.currentGenerator.code = str;
         },
-        updateDefaults: function(){
-            var str = this.defaultsEditor.getValue();
-            thus.currentGenerator.defaults = $.parseJSON(str);
-        },
 
         updateDefaultsEditor: function() {
             var defs = {};
@@ -422,6 +405,7 @@ define([
             try {
                 s.addClass("status status-success");
                 defs = jQuery.parseJSON(this.defaultsEditor.getValue());
+
                 s.removeClass();
                 s.addClass("status status-success");
 
@@ -433,8 +417,8 @@ define([
                 s.addClass("status status-warning")
             }
             this.currentGenerator.defaults = defs;
+            //this.refreshGeneratedCode()
         },
-
         findGenByName: function(module, genName){
             for (var i = 0; i < module.length; i++){
                 if (genName === module[i].name){
@@ -442,7 +426,6 @@ define([
                 }
             }
         },
-
         pluginNameChanged: function() {
             var o = this.model.get('currentObject');
             o = o.plugins[this.model.get('currentPlugin')];

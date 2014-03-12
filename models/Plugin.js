@@ -7,8 +7,8 @@ var Schema = mongoose.Schema;
 
 var pluginSchema = new Schema({
 	name: String,
-	description: String,
     version: String,
+	description: String,
     modules: [{
         name: String,
         generators: [{
@@ -28,8 +28,8 @@ var jsonToPlugin = function(json) {
     var plugin = {};
     console.log("we loggin da json", json);
     plugin.name = json.metadata.name;
-    plugin.description = json.metadata.description;
     plugin.version = json.metadata.version;
+    plugin.description = json.metadata.description;
     plugin.modules = [];
     // convert the modules from one format to the other
     _.each(json, function(generators, moduleName) {
@@ -60,8 +60,8 @@ var pluginToJson = function(plugin) {
     var json = {};
     json.metadata = {
         name: plugin.name,
-        description: plugin.description,
-        version: plugin.version
+        version: plugin.version,
+        description: plugin.description
     };
     _.each(plugin.modules, function(module) {
         json[module.name] = JSON.parse(JSON.stringify(module.generators));
