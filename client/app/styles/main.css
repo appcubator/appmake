@@ -8161,6 +8161,27 @@ html {
     padding-left: 38px;
 }
 
+#generatedCode {
+  margin-top:10px;
+}
+
+.status-inactive {
+  color: white;
+}
+
+.status-invalid {
+  color: red;
+}
+
+.status-valid {
+  color: green;
+}
+
+.status-correct {
+  color: yellow;
+}
+
+
 /* custom scrollbars */
 
 ::-webkit-scrollbar {

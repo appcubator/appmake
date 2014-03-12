@@ -39,7 +39,7 @@ define([
             'click #finishPublish': 'publishPluginToRepo'
         },
 
-        initialize: function(){
+        initialize: function(options){
             _.bindAll(this);
             // this.model.on("change:currentPlugin", this.render, this);
             // this.model.on("change:currentModule", this.render, this);
@@ -47,6 +47,19 @@ define([
             // this.model.on("change:currentTemplate", this.render, this);
             this.currentObj = appState;
             this.currentGenerator = null;
+            
+            if(options.path) {
+                var path = options.path;
+                var pMG = path.split('.');
+                var gens = this.currentObj.plugins[pMG[0]][pMG[1]];
+                _.each(gens, function(gen) {
+                    if(gen.name == pMG[2]) {
+                        this.currentGenerator = gen;
+                        this.currentPath = path;
+                    }
+                }, this); 
+            }
+
             this.render();
 
             //setInterval(this.saveAppstate.bind(this), 5000);
