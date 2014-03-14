@@ -42,10 +42,25 @@ generators.push({
             "<input type=\"submit\" value=\"Submit\"><br>\n" +
             "</form>",
 
-        "js": "$('#<%= id %>').submit(function(){\n" +
+            "js": "$.fn.serializeObject = function()\n" +
+                "{ var o = {}; \n" +
+                   "var a = this.serializeArray(); \n" +
+                   "$.each(a, function() { \n" +
+                      " if (o[this.name]) { \n" +
+                           "if (!o[this.name].push) { \n" +
+                               "o[this.name] = [o[this.name]]; \n" +
+                           "} \n" +
+                           "o[this.name].push(this.value || ''); \n" +
+                       "} else { \n" +
+                           "o[this.name] = this.value || ''; \n" +
+                       "} \n" +
+                   "}) \n;" +
+                   "return o; \n" +
+                "}; \n" +
+            " $('#<%= id %>').submit(function(e){\n" +
+            "    e.preventDefault(); \n" +
             "    var formdata = {};\n" +
-            "    formdata.name = $('#<%= id %> input[name=\"name\"]').val();\n" +
-            "    formdata.url = $('#<%= id %> input[name=\"url\"]').val();\n" +
+            "    formdata = $( this ).serializeObject(); console.log(formdata);" +
             "    models.<%= modelName %>.create<%= modelName %>(formdata, function(err, data){\n" +
             "        console.log(data);\n" +
             "        if (err) {\n" +
@@ -70,7 +85,30 @@ generators.push(
             "row_html": "<div class=\"row\">\n    <div class=\"container\">\n        <%= row_content_str %>\n    </div>\n</div>",
             "js": "models.<%= modelName %>.find<%= modelName %>({ }, function(err, data){\n    \n    var $list = $('#<%= modelName %>-list-<%= id %>');\n    var template = '<%= rowTemplate %>';\n    \n    console.log(data);\n    \n    _.each(data, function(d) {\n        $list.append(_.template(template, {obj:d}));\n    });\n    \n    if(!data || data.length == 0) {\n        $list.append('No results listed');\n    }\n});"
         },
-        "code": "function(data, templates) {\n    \n    if(!data.id || data.id == -1) {\n        data.id = Math.floor(Math.random()*11);\n    }\n        \n    function renderRow (rowData) {\n        \n        var expandedEls = {};\n        var rowStr = _.map(rowData.columns, function(column) {\n            console.log(column);\n            return expand(column).html;\n        }).join('\\n');\n\n        return rowStr;\n    }\n\n    data.row_content_str = renderRow(data.row).split('\\n').join('');\n    data.rowTemplate = templates.row_html(data).split('\\n').join('');\n\n    return {\n        'html': templates.html(data),\n        'js': templates.js(data),\n        'css': \"\"\n    }\n}",
+        "code": function(data, templates) {
+            if(!data.id || data.id == -1) {
+                data.id = Math.floor(Math.random()*11);
+            }
+
+            function renderRow (rowData) {
+                var expandedEls = {};
+                var rowStr = _.map(rowData.columns, function(column) {
+                    console.log(column);
+                    return expand(column).html;
+                }).join('\n');
+
+                return rowStr;
+            }
+
+            data.row_content_str = renderRow(data.row).split('\n').join('');
+            data.row_content_str = data.row_content_str.replace(/<%/g, "<' + '%");
+            data.rowTemplate = templates.row_html(data).split('\n').join('');
+            return {
+                'html': templates.html(data),
+                'js': templates.js(data),
+                'css': ''    
+            }
+        },
         "name": "list",
         "version": "0.1",
         "defaults": {

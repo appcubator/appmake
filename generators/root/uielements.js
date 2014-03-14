@@ -40,7 +40,7 @@ generators.push({
                  layout: data.layout };
     },
     templates: {
-        html: '<p class="<%= className %>" style="<%= style %>"><%= content %></p>'
+        html: '<div class="<%= className %>" style="<%= style %>"><%= content %></div>'
     },
     displayProps: {
         name: 'Text',

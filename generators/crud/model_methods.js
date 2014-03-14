@@ -3,6 +3,9 @@ var generators = [];
 generators.push({
     name: 'create',
     version: '0.1',
+    defaults: {
+      enableAPI: true
+    },
     code: function(data, templates){
         var method = { name: 'create'+data.modelName,
                        code: templates.code() };
@@ -18,6 +21,9 @@ generators.push({
 generators.push({
     name: 'find',
     version: '0.1',
+    defaults: {
+      enableAPI: true
+    },
     code: function(data, templates){
         var method = { name: 'find'+data.modelName,
                        code: templates.code() };
