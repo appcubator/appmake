@@ -254,7 +254,7 @@ define([
             if(this.currentGenerator.templates == {} || this.currentGenerator.templates.undefined == "") { str = "<li class='small'>No Templates</li>"; }
             else {
                 str = _.map(keys, function(key) {
-                    return "<li class='temp-tab' id='temp-"+key+"'>"+key+"</li>";
+                    return "<li class='temp-tab' id='temp-"+key+"'>"+key+" <span class='deleteTemplateButton glyphicon glyphicon-remove'></span> </li>";
                 }).join('\n');
             }
 
@@ -478,7 +478,7 @@ define([
         }, 
         publishPlugin: function(){
             var aState = this.currentObj;
-            if (this.currentPath == undefined){
+            if (this.currentPath === undefined){
                 $("#errorModal").modal()
                 $($("#errorModal").find("#errorMessage")).text("Please select a generator to publish the cooresponding plugin.")
             }
