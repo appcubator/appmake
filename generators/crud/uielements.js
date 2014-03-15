@@ -27,7 +27,6 @@ generators.push({
                     redirect: '/?success=true' }
           */
         data.formFields = _.map(data.fields, expand).join('\n');
-
         var uie = {
             html: templates.html(data),
             js: templates.js(data),
@@ -83,26 +82,32 @@ generators.push(
             "4-8": "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"text-center ycol\"><%= colheader %></div>\n        <div class=\"col-md-4 ycol\"><%= col0 %></div>\n        <div class=\"col-md-8 ycol\"><%= col1 %></div>\n    </div>\n</div>",
             "html": "<div id=\"<%= modelName %>-list-<%= id %>\">\n</div>",
             "row_html": "<div class=\"row\">\n    <div class=\"container\">\n        <%= row_content_str %>\n    </div>\n</div>",
-            "js": "models.<%= modelName %>.find<%= modelName %>({ }, function(err, data){\n    \n    var $list = $('#<%= modelName %>-list-<%= id %>');\n    var template = '<%= rowTemplate %>';\n    \n    console.log(data);\n    \n    _.each(data, function(d) {\n        $list.append(_.template(template, {obj:d}));\n    });\n    \n    if(!data || data.length == 0) {\n        $list.append('No results listed');\n    }\n});"
+            "js": "models.<%= modelName %>.find<%= modelName %>({ }, function(err, data){\n    \n    var $list = $('#<%= modelName %>-list-<%= id %>');\n    var template = '<%= rowTemplate %>';\n    \n    console.log(data);\n    \n    _.each(data, function(d) {\n        $list.append(_.template(template, {obj:d}));\n  <%= afterRenderJS %> \n  });\n    \n    if(!data || data.length == 0) {\n        $list.append('No results listed');\n    }\n});"
         },
         "code": function(data, templates) {
             if(!data.id || data.id == -1) {
                 data.id = Math.floor(Math.random()*11);
             }
 
-            function renderRow (rowData) {
-                var expandedEls = {};
-                var rowStr = _.map(rowData.columns, function(column) {
-                    console.log(column);
-                    return expand(column).html;
-                }).join('\n');
+            var rowEls = _.map(data.row.columns, function(column) {
+                return expand(column);
+            });
 
+            function renderRowStr () {
+                var rowStr = rowEls.map(function(rowEl){ return rowEl.html; }).join('\n');
                 return rowStr;
             }
 
-            data.row_content_str = renderRow(data.row).split('\n').join('');
+            function renderRowJs () {
+                var rowStr = rowEls.map(function(rowEl){ return rowEl.js; }).join('\n');
+                return rowStr;
+            }
+
+            data.row_content_str = renderRowStr().split('\n').join('');
             data.row_content_str = data.row_content_str.replace(/<%/g, "<' + '%");
             data.rowTemplate = templates.row_html(data).split('\n').join('');
+            data.afterRenderJS = renderRowJs();
+
             return {
                 'html': templates.html(data),
                 'js': templates.js(data),

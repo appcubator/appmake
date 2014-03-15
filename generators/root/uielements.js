@@ -315,6 +315,10 @@ generators.push({
 generators.push({
     name: 'form-field',
     version: '0.1',
+    defaults: {
+      field_name: "",
+      displayType: "single-line-text"
+    },
     code: function(data, templates) {
         /*  */
 
