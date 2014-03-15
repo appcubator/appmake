@@ -105,7 +105,7 @@ app.get('/plugins/list', cors(), function (req, res) {
             } else {
                 oldGen = unique[pName];
                 if (parseFloat(oldGen.version) < parseFloat(gens[i].version)){
-                    unique[pName] = gens[i]
+                    unique[pName] = gens[i];
                 }
             }
         }
@@ -118,13 +118,13 @@ app.post("/plugins/create", cors(), function (req, res) {
     console.log("Yo wassup!!");
 
 
-    var p = Plugin.fromJSON(req.body)
+    var p = Plugin.fromJSON(req.body);
 
     Plugin.findOne({ name: p.name }, function (err, oldP){
-        if (err) throw err
+        if (err) throw err;
         if (oldP) {
             res.status = 409;
-            res.json({success: false, message: "Plugin already exists", plugin: oldP.toNormalJSON()})
+            res.json({success: false, message: "Plugin already exists", plugin: oldP.toNormalJSON()});
         } else {
             p.save(function (err, data){
                 if (err) {
@@ -134,90 +134,88 @@ app.post("/plugins/create", cors(), function (req, res) {
                     var j = {};
                     j.plugin = p.toNormalJSON();
                     j.success = true;
-                    res.json(j)
-                    res.status = 201
+                    res.json(j);
+                    res.status = 201;
                 }
-            })
+            });
         }
     });
-})
+});
 
 app.get("/plugins/:pname", cors(), function (req, res) {
 
     Plugin.find({}, function (err, plugins){
-    })
+    });
 
     Plugin.find({ name: req.params.pname }, function (err, plugins){
-        if (err) throw err
+        if (err) throw err;
         if (plugins !== undefined && plugins.length > 0) {
             var latestVersion = 0;
             var latesti = 0;
             for (var i = 0; i < plugins.length; i++){
-                var v = parseFloat(plugins[i].version)
+                var v = parseFloat(plugins[i].version);
                 if (v > latestVersion) {
                     latestVersion = v;
                     latesti = i;
                 }
             }
-            res.json(plugins[latesti].toNormalJSON())
+            res.json(plugins[latesti].toNormalJSON());
         } else {
-            res.status = 200;
+            res.status = 404;
             res.json({success: false});
-            res.end();
         }
-    })
-})
+    });
+});
 
 
 function incrementVersion(v){
     var nums = v.split(".");
-    nums[nums.length-1] = (parseInt(nums[nums.length-1]) + 1).toString()
-    return nums.join(".")
+    nums[nums.length-1] = (parseInt(nums[nums.length-1]) + 1).toString();
+    return nums.join(".");
 }
 
 
 app.post("/plugins/update", cors(), function (req, res) {
+    var p;
     try {
-        var p = Plugin.fromJSON(req.body)
+        p = Plugin.fromJSON(req.body);
     }
     catch (e) {
-        res.json({ success: false, message: "Failed to parse plugin"})
+        res.json({ success: false, message: "Failed to parse plugin"});
     }
     Plugin.find({ name: p.name }, function (err, plugins){
-        if (err) throw err
+        if (err) throw err;
         if (plugins) {
             var latestVersion = 0;
             var latesti = 0;
             for (var i = 0; i < plugins.length; i++){
-                var v = parseFloat(plugins[i].version)
+                var v = parseFloat(plugins[i].version);
                 if (v > latestVersion) {
                     latestVersion = v;
                     latesti = i;
                 }
             }
-            p.version = incrementVersion(plugins[latesti].version)
+            p.version = incrementVersion(plugins[latesti].version);
             p.save(function (err, data){
-                if (err) throw err
-                res.json({ success: true, plugin: p.toNormalJSON()})
-                res.status = 201
-            })
+                if (err) throw err;
+                res.status = 201;
+                res.json({ success: true, plugin: p.toNormalJSON()});
+            });
         } else {
-            res.json({ success: false})
             res.status = 404;
-            res.end()
+            res.json({ success: false});
         }
-    })
-})
+    });
+});
 
 app.post("/plugins/destroy", cors(), function (req, res) {
     Plugin.remove({ name: req.body.pname, version: req.body.version }, function (err, oldP){
-        if (err) throw err
+        if (err) throw err;
         else {
-            res.status = 200;
-            res.end()
+            res.end('ok');
         }
-    })
-})
+    });
+});
 
 
 exports.run = function(port) {
