@@ -502,7 +502,9 @@ define([
             }
             console.log("We about to create a new plugin", p);
 
-            var repoAddr = DEBUG ? 'http://127.0.0.1:3000/' : "http://plugins.appcubator.com/";
+            // var repoAddr = DEBUG ? 'http://127.0.0.1:3000/' : "http://plugins.appcubator.com/";
+            var repoAddr = "http://plugins.appcubator.com/";
+
             $.post(repoAddr + "plugins/create", p, function (res){
                 if (res.success){
                     console.log("Plugin created successfully.")

@@ -336,7 +336,7 @@ generators.push({
         "password-text": '<input name="<%= field_name %>" type="password" placeholder="<%= placeholder %>">',
         "email-text": '<div class="email"><input type="text" placeholder="<%= placeholder %>"></div>',
         "button": '<div class="btn"><%= placeholder %></div>',
-        "image-uploader": '<div class="upload-image btn">Upload Image</div>',
+        "image-uploader": '<div class="upload-image btn">Upload Image</div><input type="hidden" name="<%= field_name %>',
         "file-uploader": '<div class="upload-file btn">Upload File</div>',
         "date-picker": '<input name="<%= field_name %>" type="text" placeholder="<%= placeholder %>"><img style="margin-left:5px;" src="/static/img/calendar-icon.png">'
     },

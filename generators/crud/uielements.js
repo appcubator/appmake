@@ -82,7 +82,7 @@ generators.push(
             "4-8": "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"text-center ycol\"><%= colheader %></div>\n        <div class=\"col-md-4 ycol\"><%= col0 %></div>\n        <div class=\"col-md-8 ycol\"><%= col1 %></div>\n    </div>\n</div>",
             "html": "<div id=\"<%= modelName %>-list-<%= id %>\">\n</div>",
             "row_html": "<div class=\"row\">\n    <div class=\"container\">\n        <%= row_content_str %>\n    </div>\n</div>",
-            "js": "models.<%= modelName %>.find<%= modelName %>({ }, function(err, data){\n    \n    var $list = $('#<%= modelName %>-list-<%= id %>');\n    var template = '<%= rowTemplate %>';\n    \n    console.log(data);\n    \n    _.each(data, function(d) {\n        $list.append(_.template(template, {obj:d}));\n  <%= afterRenderJS %> \n  });\n    \n    if(!data || data.length == 0) {\n        $list.append('No results listed');\n    }\n});"
+            "js": "models.<%= modelName %>.find<%= modelName %>({ }, function(err, data){\n    \n    var $list = $('#<%= modelName %>-list-<%= id %>');\n    var template = '<%= rowTemplate %>';\n    \n    \n    _.each(data, function(d) {\n        $list.append(_.template(template, {obj:d}));\n  <%= afterRenderJS %> \n  });\n    \n    if(!data || data.length == 0) {\n        $list.append('No results listed');\n    }\n});"
         },
         "code": function(data, templates) {
             if(!data.id || data.id == -1) {
