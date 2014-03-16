@@ -4,13 +4,27 @@ var expander = require('./frontend/expander').init(),
     _ = require('underscore'),
     writer = require('./backend/writer');
 
+var path = require('path');
+var Plugin = require('./models/Plugin').Plugin;
+
 var less = require('less');
 
 var express = require('express'),
     cors = require('cors');
-var app = express();
-app.use(express.bodyParser());
 
+var app = express();
+
+app.configure(function(){
+	app.set('port', process.env.PORT || 3000);
+	app.use('/client/app/', express.static(path.join(__dirname, 'client', 'app')));
+	app.use(express.favicon(path.join(__dirname, 'client', 'app', 'favicon.ico')));
+	app.use(express.logger('dev'));
+	
+	app.use(express.bodyParser());
+	app.use(express.methodOverride());
+});
+
+app.options('*', cors()); // include before other routes
 
 
 /*
@@ -68,18 +82,6 @@ app.get('/less/', function(req, res){
 
 
 /* Generator DB Routes */
-var path = require('path');
-var Plugin = require('./models/Plugin').Plugin;
-
-app.configure(function(){
-	app.set('port', process.env.PORT || 3000);
-	app.use('/client/app/', express.static(path.join(__dirname, 'client', 'app')));
-	app.use(express.favicon(path.join(__dirname, 'client', 'app', 'favicon.ico')));
-	app.use(express.logger('dev'));
-	
-	app.use(express.bodyParser());
-	app.use(express.methodOverride());
-});
 
 app.get('/', function (req, res){
     fs.readFile(path.join(__dirname, 'client', 'app', 'index.html'), function(err, data) {
@@ -88,8 +90,6 @@ app.get('/', function (req, res){
         res.send(data);
     });
 });
-
-app.options('*', cors()); // include before other routes
 
 app.get('/plugins/list', cors(), function (req, res) {
 	Plugin.find({}, function (err, gens) {
