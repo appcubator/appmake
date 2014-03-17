@@ -3,8 +3,6 @@ var mongoose = require('mongoose'),
 mongoose.connect(process.env.MONGO_ADDR || 'mongodb://localhost');
 var Schema = mongoose.Schema;
 
-// mongoose.connection.db.dropDatabase();
-
 var pluginSchema = new Schema({
 	name: String,
     version: String,
@@ -92,7 +90,7 @@ pluginSchema.methods.toNormalJSON = function() {
 var Plugin = mongoose.model('plugins', pluginSchema);
 
 function buildPluginDbFromFile(genFileDir, init){
-	if (init) Plugin.collection.drop();
+	//if (init) Plugin.collection.drop();
 
 	console.log("Building plugin database...");
 	var plugins = require(genFileDir);
@@ -115,5 +113,5 @@ function buildPluginDbFromFile(genFileDir, init){
 	console.log("Done!");
 }
 
-buildPluginDbFromFile('../generators/generators.js', true);
+//buildPluginDbFromFile('../generators/generators.js', true);
 exports.Plugin = Plugin;
