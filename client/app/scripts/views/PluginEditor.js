@@ -44,7 +44,7 @@ define([
             'click #finishPublish': 'publishPluginToRepo'
         },
 
-        initialize: function(){
+        initialize: function(options){
             _.bindAll(this); 
             this.currentObj = appState;
             this.currentGenerator = null;
@@ -57,6 +57,20 @@ define([
             this.hasValidGenerator = false;
             this.expander = initExpander();
 
+            if (options.path) {
+
+                var path = options.path;
+                var pMG = path.split('.');
+                var gens = this.currentObj.plugins[pMG[0]][pMG[1]];
+                _.each(gens, function(gen) {
+                    if(gen.name == pMG[2]) {
+                        this.currentGenerator = gen;
+                        this.currentPath = path;
+                        // console.log("Setting currentpath to", this.currentPath)
+                    }
+                }, this);
+
+            }
 
             this.render();
             this.generateInterval = setInterval(this.checkCodeGeneration, this.generateInterval);
