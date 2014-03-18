@@ -10,10 +10,11 @@ define([
     'underscore',
     'backbone',
     'templates',
+    'Markdown',
     'ace',
     'bootstrap',
     'jquery-hotkeys'
-], function ($, _, Backbone,  JST) {
+], function ($, _, Backbone,  JST, Markdown) {
     'use strict';
     var PluginEditorView = Backbone.View.extend({
 
@@ -41,7 +42,14 @@ define([
             'submit .create-module-form': 'createNewModule',
             'click .create-generator': 'clickedNewGenerator',
             'submit .create-generator-form': 'createNewGenerator',
-            'click #finishPublish': 'publishPluginToRepo'
+            'click #finishPublish': 'publishPluginToRepo',
+            'click #toggleSidebar': 'toggleSidebar',
+            'click .deleteTemplateButton': 'deleteTemplate',
+            'click #showDocsButton': 'showDocs',
+            'click #showGeneratedCodeButton': 'showGenCode',
+            'click #readDocsButton': 'renderCurrentDocs',
+            'click #editDocsButton': 'editDocs',
+            'click #saveDocsButton': 'saveDocs'
         },
 
         initialize: function(){
@@ -57,6 +65,8 @@ define([
             this.hasValidGenerator = false;
             this.expander = initExpander();
 
+            // Documentation
+            this.currentDocs = "";
 
             this.render();
             this.generateInterval = setInterval(this.checkCodeGeneration, this.generateInterval);
@@ -80,21 +90,32 @@ define([
         	this.$el.html(this.template({ app: app }));
             this.templateEditor = ace.edit('templateEditor');
             this.templateEditor.setTheme(theme);
+            this.templateEditor.setShowPrintMargin(false);
+
             // Detect the template mode (later)...
             // =this.templateEditor.getSession().setMode("aceDir/mode/javascript");
             this.codeEditor = ace.edit('codeEditor');
             this.codeEditor.setTheme(theme);
             this.codeEditor.getSession().setMode("ace/mode/javascript");
+            this.codeEditor.setShowPrintMargin(false);
+
 
             this.defaultsEditor = ace.edit('defaultsEditor');
             this.defaultsEditor.setTheme(theme);
             this.defaultsEditor.getSession().setMode("ace/mode/json");
+            this.defaultsEditor.setShowPrintMargin(false);
+
+            this.docsEditor = ace.edit('docsEditor');
+            this.docsEditor.setValue(this.currentDocs);
+            this.docsEditor.setShowPrintMargin(false);
 
             this.renderGeneratorEditor();
 
             this.templateEditor.on("change", this.updateCurrentTemplate);
             this.codeEditor.on("change", this.updateCurrentCode);
             this.defaultsEditor.on("change", this.updateDefaultsEditor);
+            this.templateEditor.on("change", this.updateCurrentTemplate);
+
 
             this.refreshSidebar();
             //this.refreshGeneratedCode();
@@ -117,6 +138,19 @@ define([
                 e.preventDefault();
                 self.saveAppstate();
             });
+        },
+        toggleSidebar: function (event) {
+            $('.right-cell').toggleClass("hidden");
+        },
+        deleteTemplate: function (event){
+            var id = $(event.target).closest('.temp-tab').attr("id").replace('temp-','');
+            console.log(id);
+            delete this.currentGenerator.templates[id];
+            this.render();
+        },
+
+        updateCurrentDocs: function (){
+            console.log("Update the docs brah");
         },
         checkCodeGeneration: function (force){
             // console.log("Check code generation");
@@ -161,7 +195,7 @@ define([
 
 
         clickedCurrentTemplate: function(e) {
-            var temp = e.currentTarget.id.replace('temp-','');
+            var temp = e.currentTarget.id.replace('temp-',''); // We should change this to a data attr...
             this.renderTemplateEditor(temp);
         },
 
@@ -171,15 +205,60 @@ define([
             var gens = this.currentObj.plugins[pMG[0]][pMG[1]];
             _.each(gens, function(gen) {
                 if(gen.name == pMG[2]) {
+                    console.log(gens);
+
                     this.currentGenerator = gen;
                     this.currentPath = path;
-                    // console.log("Setting currentpath to", this.currentPath)
+
+                    // Safety
+                    if (gen.docs === undefined){
+                        gen.docs = ""
+                    }
+                    this.currentDocs = "";
+                    this.renderCurrentDocs();
                 }
             }, this);
-
             this.renderGeneratorEditor();
         },
+        renderCurrentDocs: function (){
+            console.log("render the docs");
+            console.log("Here are the current", this.currentDocs);
 
+            var docs = ""
+            $('#docsEditor').addClass("hidden");
+            $('#docsContainer').removeClass("hidden");
+
+            if (this.currentGenerator.docs === ""){
+                docs = "**Wow** bro you havn't defined **any** documentation for your codez. You should do that by clicking edit."
+            } else {
+                docs = this.currentGenerator.docs;
+            }
+
+            var converter = Markdown.getSanitizingConverter();
+            var mdhtml = converter.makeHtml(docs);
+            $('#docsContainer').html(mdhtml);
+            $('#docsContainer').removeClass();
+        },
+        editDocs: function (){
+            if (this.docsEditor == undefined){
+                console.log("Y U UNDEFINE");
+            } else {
+                $('#docsContainer').addClass("hidden");
+                $('#docsEditor').removeClass("hidden");
+                this.docsEditor.setValue(this.currentGenerator.docs);
+            }
+        },
+        saveDocs: function (){
+            console.log("Save the current docs");
+            var mdText = this.docsEditor.getValue();
+            this.currentGenerator.docs = mdText;
+            this.saveAppstate(true); // Silently save to appstate
+            this.renderCurrentDocs();
+
+            this.currentGenerator.docs = mdText;
+
+            console.log(appState);
+        },
         clickedNewGenerator: function(e) {
             var $el = $(e.currentTarget);
             $el.find('.create-button').hide();
@@ -315,6 +394,7 @@ define([
             this.currentObj.plugins[plugin][path[1]].push({
                 name: newGeneratorName,
                 code: "",
+                docs: "",
                 version: "0.1",
                 defaults: {},
                 templates: []
@@ -456,14 +536,17 @@ define([
             $('#loadModal').modal();
         },
 
-        saveAppstate: function(){
-
+        saveAppstate: function(silent){
             // this.saveTemplateEditor();
             // this.saveCodeEditor();
-
+            var silent = silent;
             function successHandler () {
-                var modal = $('#downloadModal').modal();
-                $(modal).find('#downloadEditor').text("Saved Successfully.");
+                console.log(silent);
+                if (silent !== true) {
+                    var modal = $('#downloadModal').modal();
+                    $(modal).find('#downloadEditor').text("Saved Successfully.");
+                    console.log("Saved successfully");
+                }
             }
 
             $.ajax({
@@ -498,25 +581,29 @@ define([
             p.metadata = {
                 name: currentPluginName,
                 version: "0.1",
-                description: $('#pluginDescription').val()
+                description: $('#pluginDescription').val(),
+                docs: p.docs
             }
             console.log("We about to create a new plugin", p);
 
-            // var repoAddr = DEBUG ? 'http://127.0.0.1:3000/' : "http://plugins.appcubator.com/";
-            var repoAddr = "http://plugins.appcubator.com/";
+            var repoAddr = DEBUG ? 'http://127.0.0.1:3000/' : "http://plugins.appcubator.com/";
+            // var repoAddr = "http://plugins.appcubator.com/";
 
             $.post(repoAddr + "plugins/create", p, function (res){
                 if (res.success){
                     console.log("Plugin created successfully.")
-                    console.log(res.plugin)
+                    console.log(res.plugin);
+                    $('#publishStatus').text("Plugin " + res.plugin.metadata.name + res.plugin.metadata.version + " created!");
                 } else {
                     console.log("Plugin already exists...making a new version...");
                     $.post(repoAddr + "plugins/update", p, function (res){
                         if (res.success !== true) {
-                            console.log("Failed to publish plugin");
+                            $('#publishStatus').text("Failed to publish.");
                         } else {
+                            console.log(res.plugin);
+
+                            $('#publishStatus').text("Plugin " + res.plugin.metadata.name + " updated to version " + res.plugin.metadata.version);
                             console.log("Plugin updated successfully.")
-                            console.log(res.plugin)
                         }
                     })
                 }

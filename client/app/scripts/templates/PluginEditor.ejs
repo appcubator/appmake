@@ -91,7 +91,7 @@
         <label> Description </label> <textarea class='form-control' id="pluginDescription" rows='3' placeholder="Enter a short description of your plugin."></textarea>
         </br> 
         <button id='finishPublish' class='btn btn-lg btn-success'> Publish </button>
-        <span id='publishStatus'> Waiting... </span>
+        <span id='publishStatus'> </span>
       </div>
     </div>
   </div>
@@ -205,11 +205,45 @@
             </div>
             </td>
             <td class="right-cell">
+
             <div id='generatedPanel'>
-            <h2 class="lead refreshGeneratedBtn"> Generated Code</h2>
-            <div class='col-md-12'>
-            <div id='generatedCode'></div>
-            </div>
+
+
+
+
+
+              <div class='col-md-12'>
+
+
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#home" data-toggle="tab">Generated</a></li>
+                <li><a href="#docs" data-toggle="tab">Docs</a></li>
+                <li><a href="#community" data-toggle="tab">Community</a></li>
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content">
+                <div class="tab-pane active" id="home"> <div id='generatedCode'></div> </div>
+                <div class="tab-pane" id="docs">
+                  </br>
+                  <div class="btn-group btn-group-sm">
+                    <button type="button" id='readDocsButton' class="btn btn-default">Read</button>
+                    <button type="button" id='editDocsButton' class="btn btn-default">Edit</button>
+                    <button type="button" id='saveDocsButton' class="btn btn-default">Save</button>
+                  </div> 
+
+                  </br> </br>
+
+                  <div id='docsContainer'>  </div>
+                  <div id='docsEditor' class='hidden'> </div>
+
+                </div>
+                <div class="tab-pane" id="community"> <h1 class='lead'> Coming soon! <h1></div>
+              </div>
+
+
+              
+              </div>
             </div>
           </td>
           </tr>
