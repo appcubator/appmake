@@ -577,15 +577,15 @@ define([
             var aState = this.currentObj;
             if (this.currentPath === undefined){
                 $('#errorModal').modal();
-                $($('#errorModal').find('#errorMessage')).text('Please select a generator to publish the cooresponding plugin.')
+                $('#errorModal').find('#errorMessage').text('Please select a generator to publish the cooresponding plugin.')
             }
             if (aState === undefined ) {
                 $('#errorModal').modal();
-                $($('#errorModal').find('#errorMessage')).text('Whoops. Appstate undefined.');
+                $('#errorModal').find('#errorMessage').text('Whoops. Appstate undefined.');
             } else {
                 var currentPluginName = this.currentPath.split('.')[0];
                 $('#publishModal').modal();
-                $($('#publishModal').find('#requestedPluginName')).val(currentPluginName);
+                $('#publishModal').find('#requestedPluginName').val(currentPluginName);
             } 
         },
         publishPluginToRepo: function(){
