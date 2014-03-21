@@ -505,7 +505,7 @@ define([
             try {
                 gen = this.expander.findGenData(this.currentObj.plugins, this.expander.parseGenID(path));
             } catch (e) {
-                if (e.name && (e.name === 'GenNotFound')) {
+                if (e.name && ((e.name === 'GenNotFound') || (e.name === 'GenPathSyntax'))) {
                     // This is only supposed to happen in the case where user types url manually and the generator doesn't exist.
                     this.router.navigate('/');
                 } else {
