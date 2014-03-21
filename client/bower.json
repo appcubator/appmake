@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.0.0",
   "dependencies": {
+    "pagedown": "0.0.1",
     "sass-bootstrap": "~3.0.0",
     "jquery": "~1.9.0",
     "underscore": "~1.4.3",
