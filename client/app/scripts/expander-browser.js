@@ -111,7 +111,7 @@ exports.factory = function(_safe_eval_) {
             module = tokens[1];
             name = tokens[2];
         } else {
-            throw "Invalid generator reference syntax. Must provide '[package.]module.name' .  Original: " + generatorName;
+            throw { name: 'GenPathSyntax', message: "Invalid generator reference syntax. Must provide '[package.]module.name' .  Original: " + generatorName };
         }
 
 
