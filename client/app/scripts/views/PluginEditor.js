@@ -556,30 +556,36 @@ define([
                     console.log('Saved successfully');
                 }
             }
+            var errorHandler = function (jqXHR, textStatus, errorThrown) {
+                var modal = $('#downloadModal').modal();
+                $(modal).find('#downloadEditor').text('Error saving: ' + textStatus+ '. See js log for details.');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            };
 
             $.ajax({
                 type: 'POST',
-                url: '/app/' + appId + '/state/force/',
+                url: '/app/' + appId + '/state/',
                 data: JSON.stringify(appState),
-                statusCode: {
-                    200: successHandler
-                },
+                statusCode: { 200: successHandler },
+                error: errorHandler,
                 dataType: 'JSON'
             });
-        }, 
+        },
         publishPlugin: function(){
             var aState = this.currentObj;
             if (this.currentPath === undefined){
-                $('#errorModal').modal()
+                $('#errorModal').modal();
                 $($('#errorModal').find('#errorMessage')).text('Please select a generator to publish the cooresponding plugin.')
             }
-            if (aState === undefined ){ 
-                $('#errorModal').modal()
-                $($('#errorModal').find('#errorMessage')).text('Whoops. Appstate undefined.')              
+            if (aState === undefined ) {
+                $('#errorModal').modal();
+                $($('#errorModal').find('#errorMessage')).text('Whoops. Appstate undefined.');
             } else {
                 var currentPluginName = this.currentPath.split('.')[0];
-                $('#publishModal').modal()
-                $($('#publishModal').find('#requestedPluginName')).val(currentPluginName);                
+                $('#publishModal').modal();
+                $($('#publishModal').find('#requestedPluginName')).val(currentPluginName);
             } 
         },
         publishPluginToRepo: function(){
