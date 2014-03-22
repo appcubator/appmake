@@ -352,7 +352,7 @@ define([
         setTemplateEditor: function(template, templateName){
             this.templateEditor.setValue(template);
 
-            if(templateName.indexOf('js') > -1) {
+            if(templateName.indexOf('js') > -1 || templateName.indexOf('code') > -1) {
                 this.templateEditor.getSession().setMode("ace/mode/javascript");
             }
 
