@@ -566,7 +566,7 @@ define([
 
             $.ajax({
                 type: 'POST',
-                url: '/app/' + appId + '/state/',
+                url: '/app/' + appId + '/state/force/',
                 data: JSON.stringify(appState),
                 statusCode: { 200: successHandler },
                 error: errorHandler,
