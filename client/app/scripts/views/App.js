@@ -22,8 +22,7 @@ define([
             this.router = options.router;
         },
         startPluginEditor: function(){
-            //this.pluginEditorView = new PluginEditorView({ model: this.model, el: $("body")});
-            this.router.navigate('/editor');
+            this.router.navigate('/');
         }
     });
 

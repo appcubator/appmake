@@ -7,6 +7,7 @@ var pluginSchema = new Schema({
 	name: String,
     version: String,
 	description: String,
+    docs: String,
     modules: [{
         name: String,
         generators: [{
@@ -28,6 +29,7 @@ var jsonToPlugin = function(json) {
     plugin.name = json.metadata.name;
     plugin.version = json.metadata.version;
     plugin.description = json.metadata.description;
+    plugin.docs = json.metadata.docs;
     plugin.modules = [];
     // convert the modules from one format to the other
     _.each(json, function(generators, moduleName) {
@@ -59,7 +61,8 @@ var pluginToJson = function(plugin) {
     json.metadata = {
         name: plugin.name,
         version: plugin.version,
-        description: plugin.description
+        description: plugin.description,
+        docs: plugin.docs
     };
     _.each(plugin.modules, function(module) {
         json[module.name] = JSON.parse(JSON.stringify(module.generators));

@@ -23,6 +23,13 @@ require.config({
         "jquery-hotkeys": {
             exports: "$",
             deps: ['jquery']
+        },
+        Markdown: {
+            exports: "Markdown",
+            deps: ['MDConverter', 'MDSanitizer']
+        },
+        MDSanitizer: {
+            deps: ['MDConverter']
         }
     },
     paths: {
@@ -32,7 +39,10 @@ require.config({
         underscore: '../bower_components/underscore/underscore',
 	    bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
         config: './config',
-        ace: '../bower_components/ace-builds/src/ace'
+        ace: '../bower_components/ace-builds/src/ace',
+        Markdown: '../bower_components/pagedown/Markdown.Editor',
+        MDConverter: '../bower_components/pagedown/Markdown.Converter',
+        MDSanitizer: '../bower_components/pagedown/Markdown.Sanitizer'    
     }
 });
 
@@ -43,9 +53,9 @@ require([
     'routes/AppRouter',
     'models/App',
     'views/App',
-    'jquery-hotkeys',
-    'ace'
-], function ($, config, Backbone, AppRouter, AppModel, AppView, ace) {
+    'ace',
+    'jquery-hotkeys'
+], function ($, config, Backbone, AppRouter, AppModel, AppView, ace, Markdown) {
 
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection

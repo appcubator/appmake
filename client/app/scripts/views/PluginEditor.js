@@ -10,10 +10,11 @@ define([
     'underscore',
     'backbone',
     'templates',
+    'Markdown',
     'ace',
     'bootstrap',
     'jquery-hotkeys'
-], function ($, _, Backbone,  JST) {
+], function ($, _, Backbone,  JST, Markdown) {
     'use strict';
     var PluginEditorView = Backbone.View.extend({
 
@@ -41,13 +42,21 @@ define([
             'submit .create-module-form': 'createNewModule',
             'click .create-generator': 'clickedNewGenerator',
             'submit .create-generator-form': 'createNewGenerator',
-            'click #finishPublish': 'publishPluginToRepo'
+            'click #finishPublish': 'publishPluginToRepo',
+            'click #toggleSidebar': 'toggleSidebar',
+            'click .deleteTemplateButton': 'deleteTemplate',
+            'click #showDocsButton': 'showDocs',
+            'click #showGeneratedCodeButton': 'showGenCode',
+            'click #readDocsButton': 'renderCurrentDocs',
+            'click #editDocsButton': 'editDocs',
+            'click #saveDocsButton': 'saveDocs'
         },
 
         initialize: function(options){
-            _.bindAll(this); 
+            _.bindAll(this);
             this.currentObj = appState;
             this.currentGenerator = null;
+            this.router = options.router;
 
 
             // This code is for the timer that controls code generation
@@ -60,17 +69,14 @@ define([
             if (options.path && options.path != "editor") {
 
                 var path = options.path;
-                var pMG = path.split('.');
-                var gens = this.currentObj.plugins[pMG[0]][pMG[1]];
-                _.each(gens, function(gen) {
-                    if(gen.name == pMG[2]) {
-                        this.currentGenerator = gen;
-                        this.currentPath = path;
-                        // console.log("Setting currentpath to", this.currentPath)
-                    }
-                }, this);
+                var gen = this.getGenFromPath(path);
+                this.currentGenerator = gen;
+                this.currentPath = path;
 
             }
+
+            // Documentation
+            this.currentDocs = '';
 
             this.render();
             this.generateInterval = setInterval(this.checkCodeGeneration, this.generateInterval);
@@ -81,34 +87,45 @@ define([
 
         render: function(){
             var app =  {
-                    currentObject: this.model.get('currentObject'),
-                    authenticated: this.model.get('authenticated'),
-                    currentPlugin: this.model.get('currentPlugin'),
-                    currentModule: this.model.get('currentModule'),
-                    currentGenerator: this.model.get('currentGenerator'),
-                    currentTemplate: this.model.get('currentTemplate'),
-                    browsingLocalGenerators: this.model.get('browsingLocalGenerators')
-            }
+                currentObject: this.model.get('currentObject'),
+                authenticated: this.model.get('authenticated'),
+                currentPlugin: this.model.get('currentPlugin'),
+                currentModule: this.model.get('currentModule'),
+                currentGenerator: this.model.get('currentGenerator'),
+                currentTemplate: this.model.get('currentTemplate'),
+                browsingLocalGenerators: this.model.get('browsingLocalGenerators')
+            };
 
-            var theme = "ace/theme/merbivore";
-        	this.$el.html(this.template({ app: app }));
+            var theme = 'ace/theme/merbivore';
+            this.$el.html(this.template({ app: app }));
             this.templateEditor = ace.edit('templateEditor');
             this.templateEditor.setTheme(theme);
+            this.templateEditor.setShowPrintMargin(false);
+
             // Detect the template mode (later)...
-            // =this.templateEditor.getSession().setMode("aceDir/mode/javascript");
+            // =this.templateEditor.getSession().setMode('aceDir/mode/javascript');
             this.codeEditor = ace.edit('codeEditor');
             this.codeEditor.setTheme(theme);
-            this.codeEditor.getSession().setMode("ace/mode/javascript");
+            this.codeEditor.getSession().setMode('ace/mode/javascript');
+            this.codeEditor.setShowPrintMargin(false);
+
 
             this.defaultsEditor = ace.edit('defaultsEditor');
             this.defaultsEditor.setTheme(theme);
-            this.defaultsEditor.getSession().setMode("ace/mode/json");
+            this.defaultsEditor.getSession().setMode('ace/mode/json');
+            this.defaultsEditor.setShowPrintMargin(false);
+
+            this.docsEditor = ace.edit('docsEditor');
+            this.docsEditor.setValue(this.currentDocs);
+            this.docsEditor.setShowPrintMargin(false);
 
             this.renderGeneratorEditor();
 
-            this.templateEditor.on("change", this.updateCurrentTemplate);
-            this.codeEditor.on("change", this.updateCurrentCode);
-            this.defaultsEditor.on("change", this.updateDefaultsEditor);
+            this.templateEditor.on('change', this.updateCurrentTemplate);
+            this.codeEditor.on('change', this.updateCurrentCode);
+            this.defaultsEditor.on('change', this.updateDefaultsEditor);
+            this.templateEditor.on('change', this.updateCurrentTemplate);
+
 
             this.refreshSidebar();
             //this.refreshGeneratedCode();
@@ -119,9 +136,9 @@ define([
                 self.saveAppstate();
             });
 
-            $("#pluginEditor").bind('keydown', function(e) {
+            $('#pluginEditor').bind('keydown', function(e) {
                 if (e.altKey || e.ctrlKey || e.shiftKey){
-                    return
+                    return;
                 } else {
                     self.generateWait = 0;
                 }
@@ -132,68 +149,117 @@ define([
                 self.saveAppstate();
             });
         },
+        toggleSidebar: function (event) {
+            $('.right-cell').toggleClass('hidden');
+        },
+        deleteTemplate: function (event){
+            var id = $(event.target).closest('.temp-tab').attr('id').replace('temp-','');
+            console.log(id);
+            delete this.currentGenerator.templates[id];
+            this.render();
+        },
+
+        updateCurrentDocs: function (){
+            console.log('Update the docs brah');
+        },
         checkCodeGeneration: function (force){
-            // console.log("Check code generation");
+            // console.log('Check code generation');
             // console.log(this.generateWait);
             // console.log(this.currentPath);
             this.generateWait++;
 
             // force the generation even if 
             if (this.currentPath !== undefined && (this.generateWait > this.maxWait || force)){
-                // console.log("Generate the damn code");
+                // console.log('Generate the damn code');
                 this.generateWait = 0;
 
-                $('#generatedCode').html("");
+                $('#generatedCode').html('');
                 try {
                     // This will force it to use defaults in the generator
-                    // console.log("Trying to generate code")
+                    // console.log('Trying to generate code')
                     var gPath = this.currentPath;
 
                     var generated = this.expander.expand(appState.plugins, {generate: gPath, data: {}});
 
 
-                    if(typeof generated == "object") {
-                        var str = $("<div>");
+                    if(typeof generated === 'object') {
+                        var str = $('<div>');
 
                         _.each(generated, function(val, key) {
-                            str.append($("<h4>").text(key));
-                            str.append($("<pre>").text(val));
+                            str.append($('<h4>').text(key));
+                            str.append($('<pre>').text(val));
                         });
-                         $('#generatedCode').html(str);
+                        $('#generatedCode').html(str);
                     }
-                    else if (typeof generated == "string") {
+                    else if (typeof generated === 'string') {
                         $('#generatedCode').html('<pre>' + generated + '</pre>');
                     }
 
 
                 }
                 catch (e) {
-                    $('#generatedCode').html("Could not be generated: "+ e);
+                    $('#generatedCode').html('Could not be generated: '+ e);
                 }
-            } 
+            }
         },
 
 
         clickedCurrentTemplate: function(e) {
-            var temp = e.currentTarget.id.replace('temp-','');
+            var temp = e.currentTarget.id.replace('temp-',''); // We should change this to a data attr...
             this.renderTemplateEditor(temp);
         },
 
         clickedCurrentGenerator: function(e) {
             var path = e.currentTarget.dataset.path;
-            var pMG = path.split('.');
-            var gens = this.currentObj.plugins[pMG[0]][pMG[1]];
-            _.each(gens, function(gen) {
-                if(gen.name == pMG[2]) {
-                    this.currentGenerator = gen;
-                    this.currentPath = path;
-                    // console.log("Setting currentpath to", this.currentPath)
-                }
-            }, this);
+            var gen = this.getGenFromPath(path);
+
+            this.currentGenerator = gen;
+            this.currentPath = path;
+
+            this.currentDocs = '';
+            this.renderCurrentDocs();
 
             this.renderGeneratorEditor();
         },
+        renderCurrentDocs: function (){
+            console.log('render the docs');
+            console.log('Here are the current', this.currentDocs);
 
+            var docs = '';
+            $('#docsEditor').addClass('hidden');
+            $('#docsContainer').removeClass('hidden');
+
+            if (this.currentGenerator.docs === ''){
+                docs = "**Wow** bro you havn't defined **any** documentation for your codez. You should do that by clicking edit."
+            } else {
+                docs = this.currentGenerator.docs || '';
+            }
+
+            var converter = Markdown.getSanitizingConverter();
+            var mdhtml = converter.makeHtml(docs);
+            $('#docsContainer').html(mdhtml);
+            $('#docsContainer').removeClass();
+        },
+        editDocs: function (){
+            if (this.docsEditor == undefined){
+                console.log("Y U UNDEFINE");
+            } else {
+                $('#docsContainer').addClass("hidden");
+                $('#docsEditor').removeClass("hidden");
+                this.docsEditor.setValue(this.currentGenerator.docs);
+            }
+        },
+        saveDocs: function (){
+            console.log("Save the current docs");
+            var mdText = this.docsEditor.getValue();
+            this.currentGenerator.docs = mdText;
+            this.saveAppstate(true); // Silently save to appstate
+            this.renderCurrentDocs();
+
+            this.currentGenerator.docs = mdText;
+
+            console.log(appState);
+        },
         clickedNewGenerator: function(e) {
             var $el = $(e.currentTarget);
             $el.find('.create-button').hide();
@@ -341,6 +407,7 @@ define([
             this.currentObj.plugins[plugin][path[1]].push({
                 name: newGeneratorName,
                 code: "",
+                docs: "",
                 version: "0.1",
                 defaults: {},
                 templates: []
@@ -427,47 +494,54 @@ define([
 
         updateDefaultsEditor: function() {
             var defs = {};
-            var s = $('#defaultsEditorContainer').find(".status");
+            var s = $('#defaultsEditorContainer').find('.status');
             try {
-                s.addClass("status status-success");
+                s.addClass('status status-success');
                 defs = jQuery.parseJSON(this.defaultsEditor.getValue());
 
                 s.removeClass();
-                s.addClass("status status-success");
+                s.addClass('status status-success');
 
             }
             catch(e) {
-                // console.log("Couldnt parse defaults");
+                // console.log('Couldnt parse defaults');
                 // console.log(e);
                 s.removeClass();
-                s.addClass("status status-warning")
+                s.addClass('status status-warning');
             }
             this.currentGenerator.defaults = defs;
             //this.refreshGeneratedCode()
         },
-        findGenByName: function(module, genName){
-            for (var i = 0; i < module.length; i++){
-                if (genName === module[i].name){
-                    return module[i];
+        getGenFromPath: function(path) {
+            var gen;
+            try {
+                gen = this.expander.findGenData(this.currentObj.plugins, this.expander.parseGenID(path));
+            } catch (e) {
+                if (e.name && ((e.name === 'GenNotFound') || (e.name === 'GenPathSyntax'))) {
+                    // This is only supposed to happen in the case where user types url manually and the generator doesn't exist.
+                    this.router.navigate('/');
+                } else {
+                    throw e;
                 }
             }
+            return gen;
         },
         pluginNameChanged: function() {
             var o = this.model.get('currentObject');
-            o = o.plugins[this.model.get('currentPlugin')];
-            // console.log(o);
-            // console.log("changed");
+            o = obj.plugins[this.model.get('currentPlugin')];
 
-            if(!o.metadata) o.metadata = {};
-            o.metadata.name = $('#nameofplugin').val();
+            if (!obj.metadata) {
+                obj.metadata = {};
+            }
+            obj.metadata.name = $('#nameofplugin').val();
         },
 
         pluginDescriptionChanged: function() {
             var o = this.model.get('currentObject');
-            o = o.plugins[this.model.get('currentPlugin')];
+            o = obj.plugins[this.model.get('currentPlugin')];
 
-            if(!o.metadata) o.metadata = {};
-            o.metadata.description = $('#descriptionofplugin').val();
+            if (!obj.metadata) obj.metadata = {};
+            obj.metadata.description = $('#descriptionofplugin').val();
         },
 
         getCurrentPluginList: function(){
@@ -482,71 +556,84 @@ define([
             $('#loadModal').modal();
         },
 
-        saveAppstate: function(){
-
+        saveAppstate: function(silent){
             // this.saveTemplateEditor();
             // this.saveCodeEditor();
-
+            var silent = silent;
             function successHandler () {
-                var modal = $('#downloadModal').modal();
-                $(modal).find('#downloadEditor').text("Saved Successfully.");
+                console.log(silent);
+                if (silent !== true) {
+                    var modal = $('#downloadModal').modal();
+                    $(modal).find('#downloadEditor').text('Saved Successfully.');
+                    console.log('Saved successfully');
+                }
             }
+            var errorHandler = function (jqXHR, textStatus, errorThrown) {
+                var modal = $('#downloadModal').modal();
+                $(modal).find('#downloadEditor').text('Error saving: ' + textStatus+ '. See js log for details.');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            };
 
             $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: '/app/' + appId + '/state/force/',
                 data: JSON.stringify(appState),
-                statusCode: {
-                    200: successHandler
-                },
-                dataType: "JSON"
+                statusCode: { 200: successHandler },
+                error: errorHandler,
+                dataType: 'JSON'
             });
-        }, 
+        },
         publishPlugin: function(){
             var aState = this.currentObj;
             if (this.currentPath === undefined){
-                $("#errorModal").modal()
-                $($("#errorModal").find("#errorMessage")).text("Please select a generator to publish the cooresponding plugin.")
+                $('#errorModal').modal();
+                $('#errorModal').find('#errorMessage').text('Please select a generator to publish the cooresponding plugin.')
             }
-            if (aState === undefined ){ 
-                $("#errorModal").modal()
-                $($("#errorModal").find("#errorMessage")).text("Whoops. Appstate undefined.")              
+            if (aState === undefined ) {
+                $('#errorModal').modal();
+                $('#errorModal').find('#errorMessage').text('Whoops. Appstate undefined.');
             } else {
-                var currentPluginName = this.currentPath.split(".")[0];
-                $('#publishModal').modal()
-                $($('#publishModal').find("#requestedPluginName")).val(currentPluginName);                
+                var currentPluginName = this.currentPath.split('.')[0];
+                $('#publishModal').modal();
+                $('#publishModal').find('#requestedPluginName').val(currentPluginName);
             } 
         },
         publishPluginToRepo: function(){
-            console.log("Publishing plugin to repo");
-            var currentPluginName = this.currentPath.split(".")[0];
+            console.log('Publishing plugin to repo');
+            var currentPluginName = this.currentPath.split('.')[0];
             var p = $.extend(true, this.currentObj.plugins[currentPluginName], {});
             p.metadata = {
                 name: currentPluginName,
-                version: "0.1",
-                description: $('#pluginDescription').val()
+                version: '0.1',
+                description: $('#pluginDescription').val(),
+                docs: p.docs
             }
-            console.log("We about to create a new plugin", p);
+            console.log('We about to create a new plugin', p);
 
-            // var repoAddr = DEBUG ? 'http://127.0.0.1:3000/' : "http://plugins.appcubator.com/";
-            var repoAddr = "http://plugins.appcubator.com/";
+            var repoAddr = DEBUG ? 'http://127.0.0.1:3000/' : 'http://plugins.appcubator.com/';
+            // var repoAddr = 'http://plugins.appcubator.com/';
 
-            $.post(repoAddr + "plugins/create", p, function (res){
+            $.post(repoAddr + 'plugins/create', p, function (res){
                 if (res.success){
-                    console.log("Plugin created successfully.")
-                    console.log(res.plugin)
+                    console.log('Plugin created successfully.')
+                    console.log(res.plugin);
+                    $('#publishStatus').text('Plugin ' + res.plugin.metadata.name + res.plugin.metadata.version + ' created!');
                 } else {
-                    console.log("Plugin already exists...making a new version...");
-                    $.post(repoAddr + "plugins/update", p, function (res){
+                    console.log('Plugin already exists...making a new version...');
+                    $.post(repoAddr + 'plugins/update', p, function (res){
                         if (res.success !== true) {
-                            console.log("Failed to publish plugin");
+                            $('#publishStatus').text('Failed to publish.');
                         } else {
-                            console.log("Plugin updated successfully.")
-                            console.log(res.plugin)
+                            console.log(res.plugin);
+
+                            $('#publishStatus').text('Plugin ' + res.plugin.metadata.name + ' updated to version ' + res.plugin.metadata.version);
+                            console.log('Plugin updated successfully.')
                         }
                     })
                 }
-            });         
+            });
         }
     });
     return PluginEditorView;

@@ -9,12 +9,8 @@ define([
 
     var AppRouter = Backbone.Router.extend({
 		routes: {
-            "": "index",
-            "editor/:module/:pkg/:mdl": "module",
+            "": "plugineditor",
             ":path": "plugineditor"
-            // "editor": "plugineditor",
-            // "generators/:pkg/:mdl/:gen": "generator",
-            // "package/:pkg": "pkg",
         },
 
         index: function() {
@@ -23,7 +19,7 @@ define([
         },
 
         plugineditor: function(path) {
-            this.pluginEditorView = new PluginEditorView({ model: app, el: $("body"), path: path});
+            this.pluginEditorView = new PluginEditorView({ model: app, el: $("body"), path: path, router: this});
         },
 
         pkg: function (packageName){

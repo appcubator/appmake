@@ -99,7 +99,6 @@ app.get('/plugins/list', cors(), function (req, res) {
         var unique = {};
         for (var i = 0; i < gens.length; i++){
             var pName = gens[i].name;
-
             if (unique[pName] === undefined){
                 unique[pName] = gens[i];
             } else {
