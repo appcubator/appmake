@@ -57,7 +57,7 @@ define([
             this.hasValidGenerator = false;
             this.expander = initExpander();
 
-            if (options.path) {
+            if (options.path && options.path != "editor") {
 
                 var path = options.path;
                 var pMG = path.split('.');
@@ -276,15 +276,27 @@ define([
             this.$el.find('#templateList').html(str);
 
             var tmp = this.currentGenerator.templates[this.currentTemplate];
-            this.setTemplateEditor(tmp);
+            this.setTemplateEditor(tmp, this.currentTemplate);
 
             $('.temp-tab.active').removeClass('active');
             $('#temp-'+currentTemplate).addClass('active');
 
         },
 
-        setTemplateEditor: function(template){
+        setTemplateEditor: function(template, templateName){
             this.templateEditor.setValue(template);
+
+            if(templateName.indexOf('js') > -1) {
+                this.templateEditor.getSession().setMode("ace/mode/javascript");
+            }
+
+            if(templateName.indexOf('html') > -1) {
+                this.templateEditor.getSession().setMode("ace/mode/html");
+            }
+
+            if(templateName.indexOf('css') > -1) {
+                this.templateEditor.getSession().setMode("ace/mode/css");
+            }
         },
 
         setCodeEditor: function(codeObj){
