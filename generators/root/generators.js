@@ -6,5 +6,5 @@ exports.app = require('./app.js').generators;
 exports.metadata = {
     name: 'root',
     description: 'stuff thats just chilling',
-    displayName: 'Root'
+    displayName: 'Simple Elements'
 };
