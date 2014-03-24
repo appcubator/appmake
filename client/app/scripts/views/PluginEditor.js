@@ -81,8 +81,9 @@ define([
             this.render();
             this.generateInterval = setInterval(this.checkCodeGeneration, this.generateInterval);
 
-            //setInterval(this.saveAppstate.bind(this), 5000);
-
+            window.onbeforeunload = function() {
+                return ('You may lose work if you haven not saved your progress.');
+            };
         },
 
         render: function(){
