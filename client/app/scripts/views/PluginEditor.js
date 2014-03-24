@@ -81,8 +81,9 @@ define([
             this.render();
             this.generateInterval = setInterval(this.checkCodeGeneration, this.generateInterval);
 
-            //setInterval(this.saveAppstate.bind(this), 5000);
-
+            window.onbeforeunload = function() {
+                return ('You may lose work if you haven not saved your progress.');
+            };
         },
 
         render: function(){
@@ -352,15 +353,17 @@ define([
         setTemplateEditor: function(template, templateName){
             this.templateEditor.setValue(template);
 
-            if(templateName.indexOf('js') > -1 || templateName.indexOf('code') > -1) {
+            if (!templateName) return;
+
+            if (templateName.indexOf('js') > -1 || templateName.indexOf('code') > -1) {
                 this.templateEditor.getSession().setMode("ace/mode/javascript");
             }
 
-            if(templateName.indexOf('html') > -1) {
+            if (templateName.indexOf('html') > -1) {
                 this.templateEditor.getSession().setMode("ace/mode/html");
             }
 
-            if(templateName.indexOf('css') > -1) {
+            if (templateName.indexOf('css') > -1) {
                 this.templateEditor.getSession().setMode("ace/mode/css");
             }
         },
