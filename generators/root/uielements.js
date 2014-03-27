@@ -11,8 +11,7 @@ generators.push({
     code: function(data, templates) {
         return { html: templates.html(data),
                  css: '',
-                 js: '',
-                 layout: data.layout };
+                 js: '' };
     },
     templates: {
         html: '<h1 class="<%= className %>" style="<%= style %>"><%= content %></h1>'
@@ -36,8 +35,7 @@ generators.push({
         /* expects: content, className, style */
         return { html: templates.html(data),
                  css: '',
-                 js: '',
-                 layout: data.layout };
+                 js: '' };
     },
     templates: {
         html: '<div class="<%= className %>" style="<%= style %>"><%= content %></div>'
@@ -61,8 +59,7 @@ generators.push({
     code: function(data, templates) {
         return { html: templates.html(data),
                  css: '',
-                 js: '',
-                 layout: data.layout };
+                 js: '' };
     },
     templates: {
         html: '<a href="<%= href %>"><img class="<%= className %>" style="<%= style %>" src="<%= src %>"></a>'
@@ -87,8 +84,7 @@ generators.push({
         /* expects: content, url, className, style */
         return { html: templates.html(data),
                  css: '',
-                 js: '',
-                 layout: data.layout };
+                 js: '' };
     },
     templates: {
         html: '<a href="<%= href %>" class="<%= className %>" style="<%= style %>"><%= content %></a>'
@@ -113,8 +109,7 @@ generators.push({
         /* expects: content, url, className, style */
         return { html: templates.html(data),
                  css: '',
-                 js: '',
-                 layout: data.layout };
+                 js: '' };
     },
     templates: {
         html: '<a href="<%= href %>" class="btn <%= className %>" style="<%= style %>"><%= content %></a>'
@@ -139,8 +134,7 @@ generators.push({
         data.style = data.style || '';
         return { html: templates.html(data),
                  css: '',
-                 js: '',
-                 layout: data.layout };
+                 js: '' };
     },
     templates: {
         html: '<hr class="<%= className %>" style="<%= style %>">'
@@ -166,8 +160,7 @@ generators.push({
         data.style += " width: 100%; height: 100%;";
         return { html: templates.html(data),
                  css: '',
-                 js: '',
-                 layout: data.layout };
+                 js: '' };
     },
     templates: {
         html: '<div class="<%= className %>" style="<%= style %>"></div>'
@@ -193,8 +186,7 @@ generators.push({
         /* expects: content, url, className, style */
         return { html: templates.html(data),
                  css: '',
-                 js: '',
-                 layout: data.layout };
+                 js: '' };
     },
     templates: {
         html:   ['<div id="slider-<%= cid %>" class="carousel slide">',
@@ -234,15 +226,13 @@ generators.push({
         if (data.pageLink) {
             obj = { html: templates.htmlForPage(data),
                     css: '',
-                    js: '',
-                    layout: data.layout };
+                    js: '' };
 
         }
         else {
             obj = { html: templates.htmlForCurrentPage(data),
                     css: '',
-                    js: '',
-                    layout: data.layout };
+                    js: '' };
         }
 
         return obj;

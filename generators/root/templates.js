@@ -294,7 +294,7 @@ generators.push({
             html: htmlStr,
             js: jsLines.join('\n'),
             css: cssLines.join('\n')
-        }
+        };
     },
 
     templates: {
