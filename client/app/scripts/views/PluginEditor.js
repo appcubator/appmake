@@ -150,9 +150,11 @@ define([
                 self.saveAppstate();
             });
         },
+        
         toggleSidebar: function (event) {
             $('.right-cell').toggleClass('hidden');
         },
+        
         deleteTemplate: function (event){
             var id = $(event.target).closest('.temp-tab').attr('id').replace('temp-','');
             console.log(id);
@@ -163,6 +165,7 @@ define([
         updateCurrentDocs: function (){
             console.log('Update the docs brah');
         },
+        
         checkCodeGeneration: function (force){
             // console.log('Check code generation');
             // console.log(this.generateWait);
@@ -204,6 +207,40 @@ define([
             }
         },
 
+        renameGenerator: function(generator, path) {
+            var name = util.packageModuleName(path).name;
+            var newName = prompt("Change the name of the generator to:", name);
+            if(newName == "" || newName == null) { return this.renameGenerator(generator, path); }
+
+            generator.name = newName;
+
+            this.refreshSidebar();
+
+            var newPath = util.packageModuleName(path).package + '.' + util.packageModuleName(path).package + '.' + newName;
+            console.log(newPath);
+            this.changePaths(path, newPath)
+        },
+
+        changePaths: function(path, newPath) {
+
+            function changePathsHelper(val) {
+
+                if(val.generate && val.generate == path) {
+                    val.generate = newPath;
+                }
+
+                _.each(val, function(subval, key) {
+                    if(subval == null || typeof subval == 'string') return;
+                    changePathsHelper(subval);
+                });
+
+            }
+
+            _.each(appState, function(val, key) {
+                if(val == null || typeof val == 'string') return;
+                changePathsHelper(val);
+            });
+        },
 
         clickedCurrentTemplate: function(e) {
             var temp = e.currentTarget.id.replace('temp-',''); // We should change this to a data attr...
@@ -214,6 +251,7 @@ define([
             var path = e.currentTarget.dataset.path;
             var gen = this.getGenFromPath(path);
 
+            if(this.currentPath == path) { this.renameGenerator(gen, path); }
             this.currentGenerator = gen;
             this.currentPath = path;
 
@@ -222,6 +260,7 @@ define([
 
             this.renderGeneratorEditor();
         },
+
         renderCurrentDocs: function (){
             console.log('render the docs');
             console.log('Here are the current', this.currentDocs);
@@ -261,6 +300,7 @@ define([
 
             console.log(appState);
         },
+
         clickedNewGenerator: function(e) {
             var $el = $(e.currentTarget);
             $el.find('.create-button').hide();
@@ -529,6 +569,7 @@ define([
             }
             return gen;
         },
+
         pluginNameChanged: function() {
             var o = this.model.get('currentObject');
             o = obj.plugins[this.model.get('currentPlugin')];

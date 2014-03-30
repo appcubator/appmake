@@ -42,7 +42,9 @@ require.config({
         ace: '../bower_components/ace-builds/src/ace',
         Markdown: '../bower_components/pagedown/Markdown.Editor',
         MDConverter: '../bower_components/pagedown/Markdown.Converter',
-        MDSanitizer: '../bower_components/pagedown/Markdown.Sanitizer'    
+        MDSanitizer: '../bower_components/pagedown/Markdown.Sanitizer',
+        "util": STATIC_URL + "js/libs/util/util",
+        "app": STATIC_URL + "js/application/main-app"
     }
 });
 
@@ -53,9 +55,11 @@ require([
     'routes/AppRouter',
     'models/App',
     'views/App',
+    'app/Generator',
     'ace',
-    'jquery-hotkeys'
-], function ($, config, Backbone, AppRouter, AppModel, AppView, ace, Markdown) {
+    'jquery-hotkeys',
+    'util'
+], function ($, config, Backbone, AppRouter, AppModel, AppView, Generator, ace, Markdown) {
 
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
@@ -96,6 +100,9 @@ require([
     var AppRouter = new AppRouter();
     var AppView = new AppView({ model: app, el: $('body'), router: AppRouter});
     AppRouter.appView = AppView;
+
+    window.G = new Generator(function(){ return appState.plugins; });
+
 
     Backbone.history.start();
 });
