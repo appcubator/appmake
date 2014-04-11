@@ -13,7 +13,8 @@ define([
     'Markdown',
     'ace',
     'bootstrap',
-    'jquery-hotkeys'
+    'jquery-hotkeys',
+    'util.path'
 ], function ($, _, Backbone,  JST, Markdown) {
     'use strict';
     var PluginEditorView = Backbone.View.extend({
@@ -157,7 +158,6 @@ define([
         
         deleteTemplate: function (event){
             var id = $(event.target).closest('.temp-tab').attr('id').replace('temp-','');
-            console.log(id);
             delete this.currentGenerator.templates[id];
             this.render();
         },
@@ -216,8 +216,7 @@ define([
 
             this.refreshSidebar();
 
-            var newPath = util.packageModuleName(path).package + '.' + util.packageModuleName(path).package + '.' + newName;
-            console.log(newPath);
+            var newPath = util.path(path).changeName(newName);
             this.changePaths(path, newPath)
         },
 
