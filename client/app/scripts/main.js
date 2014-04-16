@@ -44,6 +44,7 @@ require.config({
         MDConverter: '../bower_components/pagedown/Markdown.Converter',
         MDSanitizer: '../bower_components/pagedown/Markdown.Sanitizer',
         'util': SITE_STATIC_URL + 'js/libs/util/util',
+        "util.path": SITE_STATIC_URL + "js/libs/util/util.path",
         'app': SITE_STATIC_URL + 'js/application/main-app'
     }
 });
@@ -58,8 +59,10 @@ require([
     'app/Generator',
     'ace',
     'jquery-hotkeys',
-    'util'
-], function ($, config, Backbone, AppRouter, AppModel, AppView, Generator, ace, Markdown) {
+    'util',
+    'util.path'
+],
+function ($, config, Backbone, AppRouter, AppModel, AppView, Generator, ace, Markdown) {
 
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
