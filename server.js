@@ -87,6 +87,7 @@ app.get('/', function (req, res){
     fs.readFile(path.join(__dirname, 'client', 'app', 'index.html'), function(err, data) {
         if (err) throw err;
         data = data.toString().replace(/\{\{ STATIC_URL \}\}/g, process.env.STATIC_URL || '/client/app/');
+        data = data.replace(/\{\{ SITE_STATIC_URL \}\}/g, process.env.SITE_STATIC_URL || 'http://127.0.0.1:8000/static/');
         res.send(data);
     });
 });

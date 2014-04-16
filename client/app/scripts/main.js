@@ -34,7 +34,7 @@ require.config({
     },
     paths: {
         jquery: '../bower_components/jquery/jquery',
-        "jquery-hotkeys": "./jquery-hotkeys",
+        'jquery-hotkeys': './jquery-hotkeys',
         backbone: '../bower_components/backbone/backbone',
         underscore: '../bower_components/underscore/underscore',
 	    bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
@@ -43,8 +43,8 @@ require.config({
         Markdown: '../bower_components/pagedown/Markdown.Editor',
         MDConverter: '../bower_components/pagedown/Markdown.Converter',
         MDSanitizer: '../bower_components/pagedown/Markdown.Sanitizer',
-        "util": STATIC_URL + "js/libs/util/util",
-        "app": STATIC_URL + "js/application/main-app"
+        'util': SITE_STATIC_URL + 'js/libs/util/util',
+        'app': SITE_STATIC_URL + 'js/application/main-app'
     }
 });
 
@@ -96,12 +96,8 @@ require([
         });
     });
 
-    app = new AppModel({ currentObject: appState });
     var AppRouter = new AppRouter();
-    var AppView = new AppView({ model: app, el: $('body'), router: AppRouter});
-    AppRouter.appView = AppView;
-
-    window.G = new Generator(function(){ return appState.plugins; });
+    //window.G = new Generator(function(){ return appState.plugins; });
 
 
     Backbone.history.start();

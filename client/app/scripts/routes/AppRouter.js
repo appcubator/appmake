@@ -3,8 +3,8 @@
 define([
     'jquery',
     'backbone',
-    'views/PluginEditor'
-], function ($, Backbone, PluginEditorView) {
+    'views/Home'
+], function ($, Backbone, HomeView) {
     'use strict';
 
     var AppRouter = Backbone.Router.extend({
@@ -14,7 +14,7 @@ define([
 
         index: function() {
             console.log('Router initialized.');
-            console.log(_.clone(appState));
+            new HomeView({ el: $('#home') });
         },
     });
 

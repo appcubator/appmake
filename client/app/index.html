@@ -30,8 +30,11 @@
 </style>
 
 <body>
+        <div id="home">
+        </div>
         <script type="text/javascript">
         STATIC_URL = '{{ STATIC_URL }}';
+        SITE_STATIC_URL = '{{ SITE_STATIC_URL }}';
         </script>
         <script data-main="{{ STATIC_URL }}scripts/main" src="{{ STATIC_URL }}bower_components/requirejs/require.js"></script>
 </body>
