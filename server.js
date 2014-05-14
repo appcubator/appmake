@@ -2,7 +2,8 @@ var expander = require('./frontend/expander').init(),
     postExpand = require('./frontend/postExpand'),
     fs = require('fs'),
     _ = require('underscore'),
-    writer = require('./backend/writer');
+    writer = require('./backend/writer'),
+    url = require('url');
 
 var path = require('path');
 var Plugin = require('./models/Plugin').Plugin;
@@ -112,6 +113,34 @@ app.get('/plugins/list', cors(), function (req, res) {
 		res.json(_.map(unique, function(g) { return g.toNormalJSON(); }));
 	});
 });
+
+app.get('/plugins/search', cors(), function (req, res) {
+
+    var url_parts = url.parse(req.url, true);
+    var query = url_parts.query.q;
+    var val = new RegExp(query, "i");
+
+    Plugin.find({ name: val }, function (err, gens) {
+        if (err) {
+            console.log(err);
+        }
+        var unique = {};
+        for (var i = 0; i < gens.length; i++){
+            var pName = gens[i].name;
+            if (unique[pName] === undefined){
+                unique[pName] = gens[i];
+            } else {
+                oldGen = unique[pName];
+                if (parseFloat(oldGen.version) < parseFloat(gens[i].version)){
+                    unique[pName] = gens[i];
+                }
+            }
+        }
+        res.json(_.map(unique, function(g) { return g.toNormalJSON(); }));
+    });
+
+});
+
 
 app.post("/plugins/create", cors(), function (req, res) {
 

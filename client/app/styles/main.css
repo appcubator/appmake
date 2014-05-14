@@ -377,6 +377,7 @@ body {
   line-height: 1.42857;
   color: #333333;
   background-color: white;
+  height: 100%;
 }
 
 /* line 34, ../../app/bower_components/sass-bootstrap/lib/_scaffolding.scss */
@@ -7654,6 +7655,7 @@ td.visible-print {
 /* Space out content a bit */
 /* line 31, ../../app/styles/main.scss */
 body {
+  height: 100%;
   font-family: 'verb';
   padding: 0px;
   background: #eeeeee;
@@ -7882,6 +7884,7 @@ body {
 
 html {
     background-color: #161616;
+    height: 100%;
 }
 #pluginNavigator {
     height: 100%;
@@ -7968,7 +7971,7 @@ html {
 }
 
 .dir.shrunk {
-    height:32px;
+    height:3s2px;
     overflow: hidden;
 }
 
