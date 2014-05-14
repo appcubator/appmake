@@ -151,11 +151,11 @@ define([
                 self.saveAppstate();
             });
         },
-        
+
         toggleSidebar: function (event) {
             $('.right-cell').toggleClass('hidden');
         },
-        
+
         deleteTemplate: function (event){
             var id = $(event.target).closest('.temp-tab').attr('id').replace('temp-','');
             delete this.currentGenerator.templates[id];
@@ -165,14 +165,14 @@ define([
         updateCurrentDocs: function (){
             console.log('Update the docs brah');
         },
-        
+
         checkCodeGeneration: function (force){
             // console.log('Check code generation');
             // console.log(this.generateWait);
             // console.log(this.currentPath);
             this.generateWait++;
 
-            // force the generation even if 
+            // force the generation even if
             if (this.currentPath !== undefined && (this.generateWait > this.maxWait || force)){
                 // console.log('Generate the damn code');
                 this.generateWait = 0;
@@ -221,7 +221,6 @@ define([
         },
 
         changePaths: function(path, newPath) {
-
             function changePathsHelper(val) {
 
                 if(val.generate && val.generate == path) {
@@ -268,12 +267,13 @@ define([
             $('#docsEditor').addClass('hidden');
             $('#docsContainer').removeClass('hidden');
 
-            if (this.currentGenerator.docs === ''){
-                docs = "**Wow** bro you havn't defined **any** documentation for your codez. You should do that by clicking edit."
-            } else {
-                docs = this.currentGenerator.docs || '';
-            }
 
+            if (this.currentGenerator.docs === ''){
+                this.currentGenerator.docs = "**Define documentation for this generator**";
+            } else {
+                 || '';
+            }
+            var docs = this.currentGenerator.docs
             var converter = Markdown.getSanitizingConverter();
             var mdhtml = converter.makeHtml(docs);
             $('#docsContainer').html(mdhtml);
@@ -628,6 +628,7 @@ define([
                 dataType: 'JSON'
             });
         },
+
         publishPlugin: function(){
             var aState = this.currentObj;
             if (this.currentPath === undefined){
@@ -641,7 +642,7 @@ define([
                 var currentPluginName = this.currentPath.split('.')[0];
                 $('#publishModal').modal();
                 $('#publishModal').find('#requestedPluginName').val(currentPluginName);
-            } 
+            }
         },
         publishPluginToRepo: function(){
             console.log('Publishing plugin to repo');

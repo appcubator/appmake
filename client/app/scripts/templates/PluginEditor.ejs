@@ -89,7 +89,7 @@
       <div class="modal-body">
         <label> Name: </label> <input disabled class='form-control input-lg' id="requestedPluginName"> </input> </br>
         <label> Description </label> <textarea class='form-control' id="pluginDescription" rows='3' placeholder="Enter a short description of your plugin."></textarea>
-        </br> 
+        </br>
         <button id='finishPublish' class='btn btn-lg btn-success'> Publish </button>
         <span id='publishStatus'> </span>
       </div>
@@ -137,33 +137,22 @@
 <!-- End  -->
 
 
-
-
-
-
-
 <div class='navbar'>
-				<h3>Appcubator</h3>
-				<span class='' id='actionBar'>
-					<div class="btn-group float-right">
-					  <button id='loadButton' type="button" class="btn btn-default btn-sm">
-					  	Load
-					  </button>
-					  <button id='previewButton' type="button" class="btn btn-default btn-sm">Preview</button>
-					  <button id='downloadButton' type="button" class="btn btn-default btn-sm">Download</button>
-					</div>
-					<div class='btn-group float-right'>
-					  <button id='saveButton' type="button" class="btn btn-default btn-sm">Save</button>
-					  <button id='publishButton' type="button" class="btn btn-success btn-sm">Publish</button>
-					</div>
-
-          <button id='toggleSidebar' type="button" class="btn btn-default btn-sm">Toggle Sidebar </button>
-
-				</span>
-<!-- 				<span class='float-right' id='searchBar'>
-					<input type="text" class="form-control">
-				    <button class="btn btn-default" type="button">Go!</button>
-				</span> -->
+    <h3>Appcubator</h3>
+    <span class='' id='actionBar'>
+    	<div class="btn-group float-right">
+    	  <button id='loadButton' type="button" class="btn btn-default btn-sm">
+    	  	Load
+    	  </button>
+    	  <button id='previewButton' type="button" class="btn btn-default btn-sm">Preview</button>
+    	  <button id='downloadButton' type="button" class="btn btn-default btn-sm">Download</button>
+    	</div>
+    	<div class='btn-group float-right'>
+    	  <button id='saveButton' type="button" class="btn btn-default btn-sm">Save</button>
+    	  <button id='publishButton' type="button" class="btn btn-success btn-sm">Publish</button>
+    	</div>
+        <button id='toggleSidebar' type="button" class="btn btn-default btn-sm">Toggle Sidebar </button>
+    </span>
 </div>
 
 <div id='pluginEditor' class='container-fluid'>
@@ -209,11 +198,7 @@
             <div id='generatedPanel'>
 
 
-
-
-
               <div class='col-md-12'>
-
 
               <ul class="nav nav-tabs">
                 <li class="active"><a href="#home" data-toggle="tab">Generated</a></li>
@@ -226,11 +211,14 @@
                 <div class="tab-pane active" id="home"> <div id='generatedCode'></div> </div>
                 <div class="tab-pane" id="docs">
                   </br>
-                  <div class="btn-group btn-group-sm">
-                    <button type="button" id='readDocsButton' class="btn btn-default">Read</button>
-                    <button type="button" id='editDocsButton' class="btn btn-default">Edit</button>
-                    <button type="button" id='saveDocsButton' class="btn btn-default">Save</button>
-                  </div> 
+
+                    <button type="button" id='saveDocsButton' class="btn btn-default pull-right">
+                        <span class="glyphicon glyphicon glyphicon-floppy-disk"></span>
+                    </button>
+
+                    <button type="button" id='editDocsButton' class="btn btn-default pull-right">
+                        <span class="glyphicon glyphicon glyphicon-pencil"></span>
+                    </button>
 
                   </br> </br>
 
@@ -242,7 +230,6 @@
               </div>
 
 
-              
               </div>
             </div>
           </td>
