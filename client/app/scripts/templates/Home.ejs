@@ -7,7 +7,9 @@
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-8">
-            <input id='repoSearchInput' class="form-control input-lg " type="text" placeholder="Search by description...">
+            <form id="pluging-search-form">
+              <input id='repoSearchInput' class="form-control input-lg " type="text" placeholder="Search by description...">
+            </form>
         </div>
         <div class="col-md-1">
             <h3 class='lead'> or <h3>
@@ -16,5 +18,10 @@
             <span>
                  <button class='btn btn-lg btn-default'> View all generators </button> 
             </span>
-        </div> 
+        </div>
+        
+        <div class="col-md-12">
+          <ul class="search-list" id="search-list">
+          </ul>
+        </div>
       </div><!-- endrow -->
