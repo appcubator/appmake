@@ -13,7 +13,8 @@ define([
         template: JST['app/scripts/templates/Home.ejs'],
         
         events: {
-            "#pluging-search-form submit" : "searchSubmitted"
+            "submit #pluging-search-form" : "searchSubmitted",
+            "keydown #repoSearchInput" : "searchInputChanged"
         },
 
         render: function(){
@@ -47,14 +48,34 @@ define([
             });
         },
 
+        searchInputChanged: function(e) {
+            if ($('#repoSearchInput').val().length) {
+                $('#search-button').val("Search");
+            }
+            else {
+                $('#search-button').val("View All Generators");
+
+            }
+        },
+
         renderList: function(list) {
-            console.log(list);
             var $list = $('#search-list');
             $list.html('');
 
-            _.each(function(val, ind) {
-                $list.append(val.name);
-            })
+            if(list.length == 0) {
+                $list.append("No results found.");
+            }
+
+            var template = [ "<li class='plugin-row'><a href='/plugins/<%= name %>/'>",
+                "<span class='name'><%= name %></span>",
+                "<span class='version'><%= version %></span>",
+                "<div class='description'><%= description %></div>",
+            "</a></li>"].join('\n');
+
+            _.each(list, function(val, ind) {
+                $list.append(_.template(template, val.metadata));
+            });
+
         },
 
         renderError: function() {

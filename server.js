@@ -119,7 +119,7 @@ app.get('/plugins/search', cors(), function (req, res) {
     var url_parts = url.parse(req.url, true);
     var query = url_parts.query.q;
     var val = new RegExp(query, "i");
-
+    console.log(query)
     Plugin.find({ name: val }, function (err, gens) {
         if (err) {
             console.log(err);

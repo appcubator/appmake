@@ -271,7 +271,7 @@ define([
             if (this.currentGenerator.docs === ''){
                 this.currentGenerator.docs = "**Define documentation for this generator**";
             } else {
-                 || '';
+               //  || '';
             }
             var docs = this.currentGenerator.docs
             var converter = Markdown.getSanitizingConverter();
