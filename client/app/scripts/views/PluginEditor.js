@@ -34,6 +34,7 @@ define([
             'keyup #descriptionofplugin' : 'pluginDescriptionChanged',
 
             'click .generator': 'clickedCurrentGenerator',
+            'dblclick .generator': 'renameGenerator',
             'click .temp-tab':  'clickedCurrentTemplate',
             'click .create-tab' : 'clickedAddTemplate',
             'submit #newTemplateForm': 'createNewTemplate',
@@ -60,6 +61,7 @@ define([
             this.router = options.router;
 
 
+
             // This code is for the timer that controls code generation
             this.generateInterval = 1400;
             this.maxWait = 1;
@@ -80,13 +82,29 @@ define([
             this.currentDocs = '';
 
             this.render();
+            // this.enableContextMenu();
             this.generateInterval = setInterval(this.checkCodeGeneration, this.generateInterval);
 
             window.onbeforeunload = function() {
                 return ('You may lose work if you haven not saved your progress.');
             };
         },
+        enableContextMenu: function (){
+            // Enable context menus
+            var $contextMenu = $("#contextMenu");
+            $("body").on("contextmenu", function(e) {
+                $contextMenu.css({
+                    display: "block",
+                    left: e.pageX,
+                    top: e.pageY
+                });
+                return false;
+            });
 
+            $contextMenu.on("click", "a", function() {
+                $contextMenu.hide();
+            });
+        },
         render: function(){
             var app =  {
                 currentObject: this.model.get('currentObject'),
@@ -207,7 +225,10 @@ define([
             }
         },
 
-        renameGenerator: function(generator, path) {
+        renameGenerator: function(e) {
+            var path = e.currentTarget.dataset.path;
+            var generator = this.getGenFromPath(path);
+
             var name = util.packageModuleName(path).name;
             var newName = prompt("Change the name of the generator to:", name);
             if(newName == "" || newName == null) { return this.renameGenerator(generator, path); }
@@ -249,7 +270,7 @@ define([
             var path = e.currentTarget.dataset.path;
             var gen = this.getGenFromPath(path);
 
-            if(this.currentPath == path) { this.renameGenerator(gen, path); }
+            // if(this.currentPath === path) { this.renameGenerator(gen, path); }
             this.currentGenerator = gen;
             this.currentPath = path;
 
@@ -359,7 +380,7 @@ define([
                 '<span id="createTemplateGroup" style="display:none;">',
                   '<form class="input-group" id="newTemplateForm">',
                     '<span class="input-group-btn">',
-                     ' <button class="btn btn-default" id="createNewTemplateButton" type="button">Create</button>',
+                     ' <button class="btn btn-small btn-success" id="createNewTemplateButton" type="button">Create</button>',
                     '</span>',
                     '<input type="text" placeholder="template name"id="newTemplateNameInput" class="form-control">',
                   '</form>',
@@ -372,7 +393,7 @@ define([
             if(this.currentGenerator.templates == {} || this.currentGenerator.templates.undefined == "") { str = "<li class='small'>No Templates</li>"; }
             else {
                 str = _.map(keys, function(key) {
-                    return "<li class='temp-tab' id='temp-"+key+"'>"+key+" <span class='deleteTemplateButton glyphicon glyphicon-remove'></span> </li>";
+                    return "<li class='temp-tab' id='temp-"+key+"'> <span class='temp-tab-label'>"+key+"</span> <span class='deleteTemplateButton glyphicon glyphicon-remove'></span> </li>";
                 }).join('\n');
             }
 
@@ -461,7 +482,7 @@ define([
 
         downloadJSON: function(event){
             var modal = $('#downloadModal').modal();
-            var o = this.model.serialize();
+            var o = this.model.get("currentObject").serialize();
             $(modal).find('#downloadEditor').text(o);
         },
 
@@ -515,6 +536,7 @@ define([
                 else {
                     $el.addClass('shrunk');
                 }
+
             });
 
 
@@ -629,18 +651,33 @@ define([
 
         publishPlugin: function(){
             var aState = this.currentObj;
+            console.log("PUBLISH PLUGIN CALLED");
+
+
             if (this.currentPath === undefined){
+            console.log("currentPath undefined");
+
                 $('#errorModal').modal();
                 $('#errorModal').find('#errorMessage').text('Please select a generator to publish the cooresponding plugin.')
-            }
-            if (aState === undefined ) {
-                $('#errorModal').modal();
-                $('#errorModal').find('#errorMessage').text('Whoops. Appstate undefined.');
             } else {
-                var currentPluginName = this.currentPath.split('.')[0];
-                $('#publishModal').modal();
-                $('#publishModal').find('#requestedPluginName').val(currentPluginName);
+                if (aState === undefined ) {
+                    console.log("astate undefined");
+
+                    $('#errorModal').modal();
+                    $('#errorModal').find('#errorMessage').text('Whoops. Appstate undefined.');
+                } else {    
+                        var currentPluginName = this.currentPath.split(".")[2];
+                        /// Check if the plugin name is taken, and suggest others
+
+                        var currentPluginName = this.currentPath.split(".")[0];
+                        console.log("publishtorepo");
+                        $('#publishModal').modal();
+                        $('#publishModal').find('#requestedPluginName').val(currentPluginName);    
+
+                    
+                }    
             }
+            
         },
         publishPluginToRepo: function(){
             console.log('Publishing plugin to repo');

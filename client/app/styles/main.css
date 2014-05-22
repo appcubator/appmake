@@ -8030,9 +8030,6 @@ html {
     margin-right: 4px;
 }
 
-.left-panel {
-    width: 700px;
-}
 
 #editorPanel {
     background-color: #161616;
@@ -8065,7 +8062,6 @@ html {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     line-height: 26px;
-    min-width: 50px;
     color: #b0b0b0;
     text-align: center;
     font-weight: bold;
@@ -8189,6 +8185,7 @@ html {
 
 body {
   overflow-y: hidden;
+  background: #161616;
 }
 
 /* custom scrollbars */
@@ -8223,10 +8220,12 @@ body {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4d4d4d), color-stop(100%, #333333));
   border: 1px solid #1f1f1f;
   border-top: 1px solid #666666;
-  border-left: 1px solid #666666; }
-
+  border-left: 1px solid #666666; }  
 /* custom scrollbars done */
 
+
+
+/*docs editor scrollbars end */
 .hidden {
   margin-left: -20px;
 }
@@ -8285,4 +8284,60 @@ body {
 
 }
 
+#newPluginNameInput, #newPluginNameInput:focus,
+.newModuleNameInput, .newModuleNameInput:focus,
+.newGeneratorNameInput, .newGeneratorNameInput:focus
+#newTemplateNameInput, #newTemplateNameInput:focus   {
+  color: white;
+  background: rgba(83, 84, 85, 0);
+  border: none;
+  outline:none;
+  font-size: auto;
+}
 
+#newModuleNameInput, #newModuleNameInput:focus {
+  color: white;
+  background: rgba(83, 84, 85, 1);
+  border: none;
+  outline:none;
+  font-size: auto;
+}
+
+.temp-tab {
+  display: inline;
+  position:relative;
+  background-color: #616060;
+}
+
+.deleteTemplateButton {
+  position: absolute;
+  top:0px;
+  right:0px;
+  padding-top: 10px;
+  padding-right: 18px;
+}
+.temp-tab-label {
+  padding-right: 20px;
+}
+
+#templateList {
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+.shrunk {
+  height: 33px;
+}
+
+#newTemplateNameInput {
+  padding-left:10px;
+}
+
+#generatedPanelInner {
+  padding-left:0px;
+}
+
+#contextMenu {
+  position: absolute;
+  display:none;
+  z-index: 100000;
+}
