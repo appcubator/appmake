@@ -120,9 +120,11 @@ if (require.main === module) {
         case "plugin":
             switch (process.argv[3]) {
                 case "create":
-                    createPluginsDir("HelloWorld");
-
-
+                    if (process.argv.length < 5){
+                        console.log("Not enough arguments. USAGE: appmake plugin create <name>");
+                    } else {
+                        createPluginsDir(process.argv[4]);
+                    }
                     break;
                 case "install":
                     process.stdout.write("Plugin: Installing plugin in /plugins/...\n");
@@ -192,7 +194,7 @@ if (require.main === module) {
 function makeStartPlugin(pluginName){
 
     var pluginNameDir = path.join(".", "plugins", pluginName);
-    console.log("MAKING START PLUGIN IN: ", pluginNameDir);
+    console.log("- Creating new plugin in ", pluginNameDir);
 
     var codeFileDir = path.join(pluginNameDir, "code.js");
     var defaultsDir = path.join(pluginNameDir, "defaults.json");
@@ -206,24 +208,18 @@ function makeStartPlugin(pluginName){
     fs.writeFile(path.join(templatesDir, "simple"), "<h1> Hey there! </h1>", function(err) {
         if(err) {
             console.log(err);
-        } else {
-            console.log("The file was saved!");
         }
     }); 
 
     fs.writeFile(codeFileDir, "Hey there!", function(err) {
         if(err) {
             console.log(err);
-        } else {
-            console.log("The file was saved!");
         }
     }); 
 
     fs.writeFile(defaultsDir, "Hey there!", function(err) {
         if(err) {
             console.log(err);
-        } else {
-            console.log("The file was saved!");
         }
     }); 
 
