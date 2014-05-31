@@ -10,7 +10,16 @@ var parser = require('./frontend/parser'),
     temp = require('temp'),
     tar = require('tar'),
     _ = require('underscore'),
-    fstream = require('fstream');
+    fstream = require('fstream'),
+    mkdirp = require('mkdirp'),
+    util = require("util"),
+    sys = require('sys'),
+    exec = require('child_process').exec;
+
+// Child process; 
+var child;
+  
+
 
 
 if (parseFloat(process.version.substr(3)) < 10.21) {
@@ -32,7 +41,11 @@ if (require.main === module) {
                 '       Runs an HTTP Server at port 3000\n\n'+
 
                 '    ./appmake.js deploy <app_dir> \n\n' +
-                '       Deploys the app in app_dir to the Appcubator cloud.\n\n';
+                '       Deploys the app in app_dir to the Appcubator cloud.\n\n' + 
+
+                '    ./appmake.js plugin install [name || repo@github.com] <json_file> \n\n' +
+                '       Installs an Appcubator plugin into the current app, recompiles the app.\n\n';
+
 
     if (process.argv.length < 3) {
         process.stdout.write(USAGE);
@@ -103,6 +116,40 @@ if (require.main === module) {
             server.run(parseInt(process.argv[3] || '3000'));
             break;
 
+
+        case "plugin":
+            switch (process.argv[3]) {
+                case "create":
+                    createPluginsDir("HelloWorld");
+
+
+                    break;
+                case "install":
+                    process.stdout.write("Plugin: Installing plugin in /plugins/...\n");
+                    
+
+
+                    // Copy the plugin components into x.json 
+
+
+
+                    break
+                case "remove":
+                    process.stdout.write("Plugin: Uninstalling plugin... \n");                               
+                    // Remove the plugin source code from x.json
+
+                    break
+            }
+            if (process.argv.length < 4){
+                process.stdout.write("Not enough arguments for plugin:\n");
+                process.stdout.write(USAGE);
+            }
+
+
+
+            break;
+
+
         case "deploy":
             temp.track();
             if (process.argv.length < 4) {
@@ -131,12 +178,8 @@ if (require.main === module) {
                         r.on('error', function(err){
                             console.log(err);
                         });
-
                     });
-
-
                 });
-
             });
             break;
 
@@ -145,3 +188,79 @@ if (require.main === module) {
             break;
     }
 }
+
+function makeStartPlugin(pluginName){
+
+    var pluginNameDir = path.join(".", "plugins", pluginName);
+    console.log("MAKING START PLUGIN IN: ", pluginNameDir);
+
+    var codeFileDir = path.join(pluginNameDir, "code.js");
+    var defaultsDir = path.join(pluginNameDir, "defaults.json");
+    var templatesDir = path.join(pluginNameDir, "templates");
+
+    var err = fs.mkdirSync(path.join(pluginNameDir, "templates"));
+    if (err){
+        console.log(error)
+    }
+
+    fs.writeFile(path.join(templatesDir, "simple"), "<h1> Hey there! </h1>", function(err) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log("The file was saved!");
+        }
+    }); 
+
+    fs.writeFile(codeFileDir, "Hey there!", function(err) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log("The file was saved!");
+        }
+    }); 
+
+    fs.writeFile(defaultsDir, "Hey there!", function(err) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log("The file was saved!");
+        }
+    }); 
+
+}
+
+
+function createPluginsDir(pluginName){
+
+    var err = fs.mkdir("./plugins", function (err){
+        fs.mkdir(path.join(".", "plugins", pluginName), function (err){
+            if (err){
+                console.log("Error: This plugin already exists. Use 'appmake update <name>' to update your plugins.");
+            } else {
+                makeStartPlugin(pluginName);
+            }    
+        });
+    });
+
+    return null;
+}
+
+
+
+
+
+
+function cloneFromGitIntoDirectory(githubAddress, pluginName){
+
+
+    return null;
+}
+
+
+    // Make a new directory with the given name and init a git repo. 
+
+
+
+    // Create the template directory
+
+    // 
