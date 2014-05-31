@@ -14,6 +14,7 @@ var parser = require('./frontend/parser'),
     mkdirp = require('mkdirp'),
     util = require("util"),
     sys = require('sys'),
+    http = require('http'),
     exec = require('child_process').exec;
 
 // Child process; 
@@ -129,18 +130,60 @@ if (require.main === module) {
                 case "install":
                     process.stdout.write("Plugin: Installing plugin in /plugins/...\n");
                     
+                    if (process.argv.length < 5){
+                        console.log("Not enough arguments. USAGE: appmake plugin install <name>");
+                        return;
+                    }
 
+                    var local = true;
+                    var host = local ? "127.0.0.1" : "productionServer";
+                    var port = 3000;
+                    var path = "/plugins/" + process.argv[4]; 
+//                    Get the address of the plugin
+                    var options = {
+                      method: "GET",
+                      host: host,
+                      port: port,
+                      path: path
+                    };
+                    callback = function(response) {
+                      var str = '';
+                      //another chunk of data has been recieved, so append it to `str`
+                      response.on('data', function (chunk) {
+                        str += chunk;
+                      });
 
-                    // Copy the plugin components into x.json 
+                      //the whole response has been recieved, so we just print it out here
+                      response.on('end', function () {
+                        console.log(str);
+                      });
+                    }
 
-
+                    http.get(options, callback).end();
 
                     break
-                case "remove":
+
+                case "publish":
+                    process.stdout.write("Publish the plugin...");
+
+                    // Parse directory and turn it into a plugin object.
+
+
+
+
+                case "uninstall":
                     process.stdout.write("Plugin: Uninstalling plugin... \n");                               
                     // Remove the plugin source code from x.json
 
                     break
+
+
+
+
+
+                case "enable":
+                    break;
+
             }
             if (process.argv.length < 4){
                 process.stdout.write("Not enough arguments for plugin:\n");
@@ -191,37 +234,79 @@ if (require.main === module) {
     }
 }
 
+
+    
+
+
+
 function makeStartPlugin(pluginName){
 
     var pluginNameDir = path.join(".", "plugins", pluginName);
     console.log("- Creating new plugin in ", pluginNameDir);
 
-    var codeFileDir = path.join(pluginNameDir, "code.js");
-    var defaultsDir = path.join(pluginNameDir, "defaults.json");
-    var templatesDir = path.join(pluginNameDir, "templates");
 
-    var err = fs.mkdirSync(path.join(pluginNameDir, "templates"));
-    if (err){
-        console.log(error)
-    }
+    var mdls = ["uielements", "routes", "models"];
 
-    fs.writeFile(path.join(templatesDir, "simple"), "<h1> Hey there! </h1>", function(err) {
-        if(err) {
-            console.log(err);
+    var err;
+    for (var i = 0; i < mdls.length; i++){
+        var mdlDir = path.join(pluginNameDir, mdls[i]);
+        err = fs.mkdirSync(mdlDir);
+        if (err){
+            console.log(error);
+        } else {
+
+            var genName = "gen";
+            var genDir = path.join(mdlDir, genName)
+
+            err = fs.mkdirSync(genDir);
+            if (err){
+                console.log(error);
+            } else {
+
+
+                var codeFileDir = path.join(genDir, "code.js");
+                var defaultsDir = path.join(genDir, "defaults.json");
+                var templatesDir = path.join(genDir, "templates");
+
+
+                var err = fs.mkdirSync(templatesDir);
+                if (err){
+                    console.log(error)
+                }
+
+                fs.writeFile(path.join(templatesDir, "simple"), "<h1> Hey there! </h1>", function(err) {
+                    if(err) {
+                        console.log(err);
+                    }
+                }); 
+
+                fs.writeFile(codeFileDir, "Hey there!", function(err) {
+                    if(err) {
+                        console.log(err);
+                    }
+                }); 
+
+                fs.writeFile(defaultsDir, "Hey there!", function(err) {
+                    if(err) {
+                        console.log(err);
+                    }
+                }); 
+
+
+
+
+
+            }
+
+
+
+
+
+
         }
-    }); 
+    } 
 
-    fs.writeFile(codeFileDir, "Hey there!", function(err) {
-        if(err) {
-            console.log(err);
-        }
-    }); 
 
-    fs.writeFile(defaultsDir, "Hey there!", function(err) {
-        if(err) {
-            console.log(err);
-        }
-    }); 
 
 }
 
