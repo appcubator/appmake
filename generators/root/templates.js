@@ -67,6 +67,27 @@ generators.push({
 });
 
 generators.push({
+    name: 'uiestateToLess',
+    version: '0.1',
+    code: function(data, templates) {
+        console.log('i');
+        var uiestate = data.uiestate;
+        console.log(uiestate.headerTexts);
+        console.log(uiestate.texts);
+        var className = function(clsName) {
+            return clsName.split(/\s/).join('.');
+        };
+        return templates.lessScaffold({
+            uie_state: uiestate,
+            className: className
+        });
+    },
+    templates: {
+        lessScaffold: require('./css_template').tmpl
+    }
+});
+
+generators.push({
     name: 'header',
     version: '0.1',
     code: function(data, templates) {
